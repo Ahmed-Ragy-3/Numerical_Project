@@ -8,3 +8,6 @@ Gauss Jordan
 LU Decomposition
 Jacobi iterative method
 Gauss Seidel iterative method
+
+
+References:
