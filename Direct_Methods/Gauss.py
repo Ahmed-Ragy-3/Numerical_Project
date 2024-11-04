@@ -6,5 +6,7 @@ class Gauss(Approach):
       pass
    
    def solve(self):
-      pass
-   
+      # pass
+      matrix = []
+      forwardElimination(matrix)
+      return backwardSubstitution(matrix)

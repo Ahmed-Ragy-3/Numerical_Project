@@ -1,8 +1,10 @@
 from ..Approach import Approach
 
-class Seidel(Approach):
+class LU(Approach):
    def __init__(self):
-      pass
+      # pass
+      self.L = []
+      self.U = []
    
    def solve(self):
       pass

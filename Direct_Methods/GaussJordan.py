@@ -6,4 +6,8 @@ class GaussJordan(Approach):
       pass
    
    def solve(self):
-      pass
+      # pass
+      matrix = []
+      forwardElimination(matrix)
+      backwardElimination(matrix)
+      return forwardSubstitution(matrix)

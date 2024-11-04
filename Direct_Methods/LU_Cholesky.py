@@ -7,3 +7,6 @@ class Cholesky(Approach):
    
    def solve(self):
       pass
+   
+   def checkSymmetric() -> bool:
+      pass
