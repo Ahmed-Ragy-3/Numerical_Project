@@ -1,24 +1,29 @@
 #                                                      بسم الله الرحمن الرحيم
 
 # Example Usage
-from Direct import forwardElimination
+from Direct import *
 
 
 matrix = [
-    [2, 3, 1, 9],
-    [4, 6, 2, 18],
-    [1, 16, 1, 66],
+    [2, 0, 0],
+    [0, 0, 0],
+    [0, 0, 4],
 ]
+b = [4, 0, 4]
 
-# Run forward elimination
-result, factors, row_order = forwardElimination(matrix)
+result = forwardSubstitution(matrix, b)
 
-print("After elimination:")
+# # Run forward elimination
+# result, factors, row_order = forwardElimination(matrix)
+
+# print("After elimination:")
 for row in result:
     print(row)
 
-print("\nFactors used in forward elimination:")
-print(factors)
+# print("\nFactors used in forward elimination:")
+# print(factors)
 
-print("\nRow order after pivoting:")
-print([r + 1 for r in row_order])  # Adding 1 to match the 1-based row indices
+# print("\nRow order after pivoting:")
+# print([r + 1 for r in row_order])  # Adding 1 to match the 1-based row indices
+
+

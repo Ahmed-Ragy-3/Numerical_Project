@@ -1,10 +1,21 @@
 import copy
 import math
 
-significant_figures = 4
+significant_digits = 4
+
+subscripts = {0: '₀', 1: '₁', 2: '₂', 3: '₃', 4: '₄', 5: '₅', 6: '₆', 7: '₇', 8: '₈', 9: '₉'}
+
+def subscript(num):
+   ret = ""
+   if num == 0:
+      return subscripts[0]  # Handle zero case
+   while num != 0:
+      ret += subscripts[num % 10]
+      num //= 10
+   return ''.join(reversed(ret))
 
 def roundBy(num):
-   return round(num, significant_figures - int(math.floor(math.log10(abs(num)))) - 1)
+   return round(num, significant_digits - int(math.floor(math.log10(abs(num)))) - 1)
 
 def forwardElimination(matrix):
    matrixClone = copy.deepcopy(matrix)
@@ -44,9 +55,20 @@ def forwardElimination(matrix):
 def backwardElimination():
    pass
 
-
-def forwardSubstitution():
-   pass
+# ragy
+def forwardSubstitution(matrix, b):
+   matrix_copy = copy.deepcopy(matrix)
+   answer = []
+   for i in range(0, len(matrix)):
+      if matrix[i][i] == 0:
+         if b[i] != 0:
+            return None
+         else:
+            answer.append(f"x{subscript(i + 1)}")
+      else:
+         answer.append(roundBy(b[i] / matrix[i][i]))
+   
+   return answer
 
 
 def backwardSubstitution():
