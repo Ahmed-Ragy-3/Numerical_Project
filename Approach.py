@@ -7,4 +7,3 @@ class Approach:
       Abstract method that must be implemented by subclasses
       """
       pass
-   
