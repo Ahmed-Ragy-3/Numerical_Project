@@ -1,20 +1,17 @@
 #                                                      بسم الله الرحمن الرحيم
 
-from Direct_Methods.Direct import forwardElimination 
-from Direct_Methods.Direct import pivot 
-
 # Example Usage
+from Direct import forwardElimination
+
+
 matrix = [
     [2, 3, 1, 9],
     [4, 6, 2, 18],
-    [1, 1, 1, 6],
+    [1, 16, 1, 66],
 ]
 
-factors = []
-row_order = list(range(len(matrix)))
-
 # Run forward elimination
-result, factors, row_order = forwardElimination(matrix, factors, row_order)
+result, factors, row_order = forwardElimination(matrix)
 
 print("After elimination:")
 for row in result:

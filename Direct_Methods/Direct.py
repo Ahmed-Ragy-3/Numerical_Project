@@ -1,31 +1,44 @@
-def forwardElimination(matrix, factors, row_order):
-   rows = len(matrix)
-   for i in range(rows):
+import copy
+import math
 
+significant_figures = 4
+
+def roundBy(num):
+   return round(num, significant_figures - int(math.floor(math.log10(abs(num)))) - 1)
+
+def forwardElimination(matrix):
+   matrixClone = copy.deepcopy(matrix)
+   factors = []
+   row_order = list(range(len(matrixClone)))
+   rows = len(matrixClone)
+   for i in range(rows - 1):
+      
       # Pivoting
-      pivot(i, matrix, row_order)
+      pivot(i, matrixClone, row_order)
 
       # Forward elimination
       for j in range(i + 1, rows):
-         if matrix[i][i] == 0:
+         if matrixClone[j][i] == 0.0:
+            factors.append(0.0)
             continue
-         factor = matrix[j][i] / matrix[i][i]
+         factor = matrixClone[j][i] / matrixClone[i][i]
+         factor = roundBy(factor)
 
          # Eliminate the element
-         for k in range(i, len(matrix[j])):
-            matrix[j][k] -= factor * matrix[i][k]
-            
-         matrix[j][i] = 0 # set to zero even after elimination
+         for k in range(i+1, len(matrixClone[j])):
+            matrixClone[j][k] -= factor * matrixClone[i][k]
+         
+         matrixClone[j][i] = 0 # set to zero even after elimination
          
          # for debuging
-         for row in matrix:
+         for row in matrixClone:
             print(row)
          print("\n")
 
          # Store the factor
-         factors.append(float(factor))
+         factors.append(factor)
 
-   return matrix, factors, row_order
+   return matrixClone, factors, row_order
 
 
 def backwardElimination():
