@@ -5,6 +5,11 @@ significant_digits = 4
 
 subscripts = {0: '₀', 1: '₁', 2: '₂', 3: '₃', 4: '₄', 5: '₅', 6: '₆', 7: '₇', 8: '₈', 9: '₉'}
 
+def printMatrix(matrix):
+    for row in matrix:
+        print(row)
+    print("\n")
+
 def subscript(num):
    ret = ""
    if num == 0:
@@ -15,44 +20,51 @@ def subscript(num):
    return ''.join(reversed(ret))
 
 def roundBy(num):
+   if num == 0:
+      return 0
    return round(num, significant_digits - int(math.floor(math.log10(abs(num)))) - 1)
 
-def forwardElimination(matrix):
-   matrixClone = copy.deepcopy(matrix)
-   factors = []
-   row_order = list(range(len(matrixClone)))
-   rows = len(matrixClone)
-   for i in range(rows - 1):
-      
-      # Pivoting
-      pivot(i, matrixClone, row_order)
+def forwardElimination(matrixA, vectorB):
+    matrixClone = copy.deepcopy(matrixA)
+    vectorBClone = copy.deepcopy(vectorB)
+    multipliers = []
+    rows_order = list(range(len(matrixClone)))
+    rows = len(matrixClone)
+    
+    for r in range(rows - 1):
+        
+        pivot_forward(r, matrixClone, rows_order, vectorBClone)
+ 
+        for i in range(r + 1, rows):
 
-      # Forward elimination
-      for j in range(i + 1, rows):
-         if matrixClone[j][i] == 0.0:
-            factors.append(0.0)
-            continue
-         factor = matrixClone[j][i] / matrixClone[i][i]
-         factor = roundBy(factor)
+            if matrixClone[i][r] == 0.0:
+                multipliers.append(0.0)
+                continue
+ 
+            multiplier = matrixClone[i][r]/matrixClone[r][r]
+            multiplier = roundBy(multiplier)
+            multipliers.append(multiplier)
+ 
+            for j in range(r + 1, rows):
+                matrixClone[i][j] -= matrixClone[r][j] * multiplier
+                matrixClone[i][j] = roundBy(matrixClone[i][j])
+            
+            vectorBClone[i] -= vectorBClone[r] * multiplier
+            vectorBClone[i] = roundBy(vectorBClone[i])
 
-         # Eliminate the element
-         for k in range(i+1, len(matrixClone[j])):
-            matrixClone[j][k] -= factor * matrixClone[i][k]
-         
-         matrixClone[j][i] = 0 # set to zero even after elimination
-         
-         # for debuging
-         for row in matrixClone:
-            print(row)
-         print("\n")
+            matrixClone[i][r] = 0.0
+ 
+   #      printMatrix(matrixClone)
+ 
+   #  printMatrix(matrixClone)
+   #  print(vectorBClone)
+   #  print(multipliers)
+   #  print(rows_order)
 
-         # Store the factor
-         factors.append(factor)
-
-   return matrixClone, factors, row_order
-
+    return matrixClone, vectorBClone, multipliers, rows_order
 
 def backwardElimination():
+   # use pivot_backward
    pass
 
 # ragy
@@ -70,22 +82,36 @@ def forwardSubstitution(matrix, b):
    
    return answer
 
-
 def backwardSubstitution():
    pass
 
-
-def pivot(row, matrix, row_order):
-   # Find index of row with the largest absolute value
-   n = len(matrix)
-   max_row = row
-   for i in range(row + 1, n):
-      if abs(matrix[i][row]) > abs(matrix[max_row][row]):
+def pivot_forward(row, matrixA, row_order, vectorB):
+    n = len(matrixA)
+    max_row = row
+    
+    for i in range(row + 1, n):
+        if abs(matrixA[i][row]) > abs(matrixA[max_row][row]):
             max_row = i
-   
-   if max_row != row:
-      # Swap rows
-      matrix[row], matrix[max_row] = matrix[max_row], matrix[row]
-      # update row_order array
-      row_order[row], row_order[max_row] = row_order[max_row], row_order[row]
-      # print(f"Swapped row {row + 1} with row {max_row + 1}")
+
+    if max_row != row:
+        matrixA[row], matrixA[max_row] = matrixA[max_row], matrixA[row]
+        vectorB[row], vectorB[max_row] = vectorB[max_row], vectorB[row]
+        
+        row_order[row], row_order[max_row] = row_order[max_row], row_order[row]
+        # Uncomment to see swap details
+        # print(f"Swapped row {row + 1} with row {max_row + 1}")
+
+def pivot_backward(row, matrixA, row_order, vectorB):
+    max_row = row
+    
+    for i in range(row - 1, -1, -1):
+        if abs(matrixA[i][row]) > abs(matrixA[max_row][row]):
+            max_row = i
+
+    if max_row != row:
+        matrixA[row], matrixA[max_row] = matrixA[max_row], matrixA[row]
+        vectorB[row], vectorB[max_row] = vectorB[max_row], vectorB[row]
+        
+        row_order[row], row_order[max_row] = row_order[max_row], row_order[row]
+        # Uncomment to see swap details
+        # print(f"Swapped row {row + 1} with row {max_row + 1}")

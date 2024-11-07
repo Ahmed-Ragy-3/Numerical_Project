@@ -4,26 +4,26 @@
 from Direct import *
 
 
-matrix = [
-    [2, 0, 0],
-    [0, 0, 0],
-    [0, 0, 4],
-]
-b = [4, 0, 4]
+# matrix = [
+#     [2, 0, 0],
+#     [0, 0, 0],
+#     [0, 0, 4],
+# ]
+# b = [4, 0, 4]
 
-result = forwardSubstitution(matrix, b)
-
-# # Run forward elimination
-# result, factors, row_order = forwardElimination(matrix)
-
-# print("After elimination:")
-for row in result:
-    print(row)
-
-# print("\nFactors used in forward elimination:")
-# print(factors)
-
-# print("\nRow order after pivoting:")
-# print([r + 1 for r in row_order])  # Adding 1 to match the 1-based row indices
+# result = forwardSubstitution(matrix, b)
 
 
+# m = [
+#     [25.0, 5.0, 1.0],
+#     [64.0, 8.0, 1.0],
+#     [144.0, 12.0, 1.0]
+# ]
+
+# b = [
+#     106.8,
+#     177.2,
+#     279.2
+# ]
+
+# forwardElimination(m, b)

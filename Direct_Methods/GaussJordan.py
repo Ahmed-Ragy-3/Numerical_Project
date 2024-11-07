@@ -7,6 +7,6 @@ class GaussJordan(Approach):
       self.b = b
    
    def solve(self):
-      matrix = forwardElimination(self.matrix)
-      matrix = backwardElimination(matrix)
-      return forwardSubstitution(matrix), matrix
+      matrixA, vectorB = forwardElimination(self.matrix, self.b)
+      matrixA, vectorB = backwardElimination(matrixA, vectorB)
+      return forwardSubstitution(matrixA, vectorB), matrixA
