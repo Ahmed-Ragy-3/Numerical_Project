@@ -17,7 +17,7 @@ from Direct import *
 # m = [
 #     [25.0, 5.0, 1.0],
 #     [64.0, 8.0, 1.0],
-#     [144.0, 12.0, 1.0]
+#     [144.0, 12.0, 1.0],
 # ]
 
 # b = [
@@ -26,4 +26,8 @@ from Direct import *
 #     279.2
 # ]
 
-# forwardElimination(m, b)
+# A, B, multipliers, order = forwardElimination(m, b)
+# printMatrix(A)
+# print(B)
+# print(multipliers)
+# print(order)
