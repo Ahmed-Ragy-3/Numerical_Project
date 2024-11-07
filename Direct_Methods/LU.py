@@ -1,10 +1,17 @@
-from ..Approach import Approach
+import numpy as np
+from abc import ABC, abstractmethod
+from Approach import Approach
+from Direct import forwardElimination, backwardElimination, forwardSubstitution
 
-class LU(Approach):
-   def __init__(self):
-      # pass
-      self.L = []
-      self.U = []
-   
-   def solve(self):
-      pass
+class LU(Approach,ABC):
+    @abstractmethod
+    def solve(self):
+        pass
+
+    @abstractmethod
+    def getMatrixL(self):
+        pass
+
+    @abstractmethod
+    def getMatrixU(self):
+        pass
