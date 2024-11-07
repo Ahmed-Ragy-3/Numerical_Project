@@ -14,20 +14,20 @@ from Direct import *
 # result = forwardSubstitution(matrix, b)
 
 
-# m = [
-#     [25.0, 5.0, 1.0],
-#     [64.0, 8.0, 1.0],
-#     [144.0, 12.0, 1.0],
-# ]
+m = [
+    [1.0, 1.0, -1.0],
+    [1.0, -1.0, 2.0],
+    [2.0, 1.0, 1.0],
+]
 
-# b = [
-#     106.8,
-#     177.2,
-#     279.2
-# ]
+b = [
+    7.0,
+    3.0,
+    9.0
+]
 
-# A, B, multipliers, order = forwardElimination(m, b)
-# printMatrix(A)
-# print(B)
-# print(multipliers)
-# print(order)
+A, B, multipliers, order = forwardElimination(m, b)
+printMatrix(A)
+printVector(B)
+print(multipliers)
+print(order)
