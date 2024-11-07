@@ -27,6 +27,7 @@ b = [
 ]
 
 A, B, multipliers, order = forwardElimination(m, b)
+A, B = backwardElimination(A, B)
 printMatrix(A)
 printVector(B)
 print(multipliers)

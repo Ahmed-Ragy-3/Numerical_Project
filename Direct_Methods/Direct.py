@@ -61,8 +61,42 @@ def forwardElimination(matrixA, vectorB):
 
    return matrixClone, vectorBClone, multipliers, rows_order
 
-def backwardElimination(matrixA, vectorB):
-   pass
+def backwardElimination(u, b):
+   n = len(u)
+   for i in range(n-1, -1, -1):
+      j = i
+      while j < n and u[i][j] == 0:
+         j += 1
+      if (j == n or u[i][j] == 0):
+         continue
+      pivot = u[i][j]
+
+      u[i][j] = 1
+
+      """ u[i] = u[i]/pivot
+      b[i] = b[i]/pivot without sig fig"""
+
+      for k in range(j+1, n):
+         u[i][k] = roundBy(u[i][k] / pivot)
+
+      b[i] = roundBy(b[i] / pivot)
+
+      for r in range(i-1, -1, -1):
+         mult = roundBy(u[r][j]/u[i][j])
+         if (mult == 0):
+               continue
+         b[r] = roundBy(b[r]-mult*b[i])
+         for c in range(j, n):
+               if (c == j):
+                  u[r][c] = 0
+                  continue
+               u[r][c] = roundBy(u[r][c]-mult*u[r][c])
+
+      """ without sig fig for r in range (i-1,-1,-1):
+         mult = u[r][j]/u[i][j]
+         b[r] = b[r]-mult*b[i]
+         u[r] = u[r]-mult*u[i] """
+   return u, b
 
 # ragy
 def forwardSubstitution(matrix, b):
@@ -73,7 +107,7 @@ def forwardSubstitution(matrix, b):
          if b[i] != 0:
             return None
          else:
-            answer.append(f"x{subscript(i + 1)}")
+            answer.append(f"x{subscript(i + 1)}") # no need for this
       else:
          answer.append(roundBy(b[i] / matrix[i][i]))
    
