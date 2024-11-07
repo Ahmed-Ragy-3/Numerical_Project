@@ -9,7 +9,7 @@ def round_to_sig_figs(x, sig_figs):
         return round(x, sig_figs - magnitude)
 
 
-def backwardElimination(u, b, sig_fig):
+def backwardElimination(u, b, sig_fig=20):
     n = len(u)
     for i in range(n-1, -1, -1):
         j = i
