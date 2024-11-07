@@ -1,6 +1,6 @@
 import numpy as np
 
-from backElimination import backwardElimination
+from Direct import backwardElimination
 
 # Test function for backward elimination
 
@@ -60,7 +60,7 @@ def test_backwardElimination():
         print()
 
         # Apply backward elimination
-        backwardElimination(u, b, sig_fig)
+        u,b = backwardElimination(u, b, sig_fig)
 
         # Print results
         print("After Backward Elimination\n")

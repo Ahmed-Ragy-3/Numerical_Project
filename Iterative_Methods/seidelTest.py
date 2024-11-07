@@ -1,49 +1,5 @@
 import numpy as np
-
-
-def round_to_sig_figs(x, sig_figs):
-    if x == 0:
-        return 0
-    else:
-        magnitude = int(np.ceil(np.log10(abs(x))))
-        return round(x, sig_figs - magnitude)
-
-
-def iterative_solver(A, b, sig_figs=20, initial_guess=None, tolerance=0, max_iterations=100, isJacobi=False):
-    method = "Jacobi" if isJacobi else "Gauss-Seidel"
-
-    n = len(b)
-    x = np.zeros_like(
-        b, dtype=np.float64) if initial_guess is None else initial_guess.copy()
-
-    for k in range(max_iterations):
-        x_old = x.copy()
-
-        for i in range(n):
-            sum = 0
-            for j in range(n):
-                if (j == i):
-                    continue
-                if (isJacobi):
-                    sum += A[i][j]*x_old[j]
-                else:
-                    sum += A[i][j]*x[j]
-
-            x[i] = round_to_sig_figs((b[i] - sum) / A[i, i], sig_figs)
-
-        # Calculate relative error with a small constant to avoid division by zero
-        matrix_error = np.abs((x - x_old) / (x + 1e-10))
-        error = np.max(matrix_error)
-
-        if error < tolerance:
-            """ print(f"Converged after {k + 1} iterations using {method} method.") """
-            return x,k+1
-
-    """ print(f"Reached maximum iterations without convergence using {
-          method} method.") """
-    return x,k+1
-
-
+from GaussSeidel import Seidel
 def test_iterative_solver():
     # Define test cases as tuples of (A matrix, b vector, initial guess, tolerance, max_iterations, sig_figs)
     test_cases = [
@@ -100,23 +56,20 @@ def test_iterative_solver():
         
         
     ]
-
+    p = Seidel()
     for i, (A, b, sig_figs, initial_guess, tolerance, max_iterations) in enumerate(test_cases):
         print(f"Test Case {i + 1}")
         print("Coefficient matrix A:\n", A)
         print("Right-hand side vector b:\n", b)
 
         # Test with Gauss-Seidel method
-        print("\nGauss-Seidel Method:")
-        solution_seidel = iterative_solver(A, b, sig_figs, initial_guess=initial_guess, tolerance=tolerance,
+        print("\nGauss-Seidel Method:\n")
+        a,b,x = p.solve(A, b, sig_figs, initial_guess=initial_guess, tolerance=tolerance,
                                            max_iterations=max_iterations)
-        print("Solution:", solution_seidel)
+        print("Solution:")
+        print(x)
 
-        # Test with Jacobi method
-        print("\nJacobi Method:")
-        solution_jacobi = iterative_solver(A, b, sig_figs, initial_guess=initial_guess, tolerance=tolerance,
-                                           max_iterations=max_iterations, isJacobi=True)
-        print("Solution:", solution_jacobi)
+        
 
         print("-" * 50)  # Separator for readability
 

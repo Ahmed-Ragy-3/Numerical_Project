@@ -1,4 +1,4 @@
-from ..Approach import Approach
+from ..Iterative_Methods.Approach import Approach
 
 class LU(Approach):
    def __init__(self):

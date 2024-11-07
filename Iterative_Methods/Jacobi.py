@@ -1,4 +1,4 @@
-from ..Approach import Approach
+from .Approach import Approach
 
 class Jacobi(Approach):
    def __init__(self):
