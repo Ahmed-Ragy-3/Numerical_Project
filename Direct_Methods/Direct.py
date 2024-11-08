@@ -85,35 +85,39 @@ def pivot_forward(row, matrixA, row_order, vectorB):
 def forwardSubstitution(matrix, b): # backward elimination are necessary (and forward elimination in case of Gauss-Jordan)
     answer = []  # Will hold the results
     rows = len(matrix)
+    
+    for i in range(rows):
+        if(matrix[i][i] == 0):
+            answer.append(f"x{subscript(i)}")
+        else:
+            answer.append(0)
 
     for i in range(rows):
-        ans = b[i]
 
         if matrix[i][i] == 0:  # Check for zero pivot
-            if b[i] != 0:  # Contradiction in the system (no solution)
+            if b[i] != 0:  #(no solution)
                 return None
             else:  # Infinite solutions case
-                # Create an expression for the row if non-pivot elements are non-zero
-                expression = f"x{subscript(i + 1)}"
-                for j in range(i + 1, rows):
-                    if matrix[i][j] != 0:
-                        expression += f" - ({matrix[i][j]} * x{subscript(j + 1)})"
-                answer.append(expression)
-                continue
+                for j in range(rows):
+                    if(j == i):
+                        continue
+                    else:
+                        if(matrix[i][j] == 0):
+                            continue
+                        else:
+                            if(isinstance(answer[j], str)):
+                                answer[i] = f"{answer[i]} - " + f"({matrix[i][j]})" + f"x{subscript(j)}"
         else:
-            expression = f"{b[i]}"
-            for j in range(i):
-                if isinstance(answer[j], str):  # Symbolic expression
-                    expression += f" - ({matrix[i][j]} * {answer[j]})"
+            answer[i] = b[i]
+            for j in range(rows):
+                if(j == i):
+                    continue
                 else:
-                    expression += f" - {matrix[i][j] * answer[j]}"
-
-            # If any of the previous rows has symbolic expressions, append the expression
-            if any(isinstance(el, str) for el in answer[:i]):
-                answer.append(f"({expression}) / {matrix[i][i]}")
-            else:
-                answer.append(eval(expression) / matrix[i][i])
-
+                    if(matrix[i][j] == 0):
+                        continue
+                    else:
+                        if(isinstance(answer[j], str)):
+                            answer[i] = f"{answer[i]} - " + f"({matrix[i][j]})" + f"x{subscript(j)}"
     return answer
  
 def backwardSubstitution():
