@@ -1,6 +1,6 @@
 import math
 
-significant_digits = 10
+significant_digits = 20
 
 subscripts = {0: '₀', 1: '₁', 2: '₂', 3: '₃', 4: '₄', 5: '₅', 6: '₆', 7: '₇', 8: '₈', 9: '₉'}
 
@@ -10,9 +10,25 @@ def printMatrix(matrix):
    print()
 
 def printVector(vector):
-   for z in vector:
-      print(f"[{z:.2f}]")
    print()
+   for z in vector:
+      if isinstance(z, str):
+         print(f"[{z}]")
+      else:
+         print(f"[{z:.2f}]")
+   print()
+   
+def print_matrix_vector(u, b):
+    # Print the matrix u with proper formatting
+    print("Matrix u:")
+    for row in u:
+        print(f"[{', '.join([f'{num:.1f}' if isinstance(num, float)
+              and num == int(num) else str(num) for num in row])}]")
+
+    # Print the vector b with proper formatting
+    print("\nVector b:")
+    print(f"[{', '.join([f'{num:.1f}' if isinstance(num, float)
+          and num == int(num) else str(num) for num in b])}]")
 
 def subscript(num):
    ret = ""
