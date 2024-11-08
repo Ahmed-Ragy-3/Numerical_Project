@@ -82,7 +82,7 @@ def pivot_forward(row, matrixA, row_order, vectorB):
         # Uncomment to see swap details
         # print(f"Swapped row {row + 1} with row {max_row + 1}")
 
-def forwardSubstitution(matrix, b): # backward elimination are necessary (and forward elimination in case of Gauss-Jordan)
+def forwardSubstitution(matrix, b): # could be called substitution
     answer = []  # Will hold the results
     rows = len(matrix)
     
@@ -118,6 +118,13 @@ def forwardSubstitution(matrix, b): # backward elimination are necessary (and fo
                     else:
                         if(isinstance(answer[j], str)):
                             answer[i] = f"{answer[i]} - " + f"({matrix[i][j]})" + f"x{subscript(j)}"
+                            
+    for i in range(rows):
+        if(matrix[i][i] != 0):
+            if(isinstance(answer[i], str)):
+                answer[i] = f"({answer[i]}) / {matrix[i][i]}" 
+            else:
+                answer[i] /= matrix[i][i]
     return answer
  
 def backwardSubstitution():
