@@ -9,15 +9,6 @@ def printMatrix(matrix):
       print(" ".join(f"{val:.2f}" for val in row))
    print()
 
-def printVector(vector):
-   print()
-   for z in vector:
-      if isinstance(z, str):
-         print(f"[{z}]")
-      else:
-         print(f"[{z:.2f}]")
-   print()
-   
 def print_matrix_vector(u, b):
     # Print the matrix u with proper formatting
     print("Matrix u:")
@@ -32,8 +23,10 @@ def print_matrix_vector(u, b):
 
 def subscript(num):
    ret = ""
+   
    if num == 0:
       return subscripts[0]  # Handle zero case
+   
    while num != 0:
       ret += subscripts[num % 10]
       num //= 10
