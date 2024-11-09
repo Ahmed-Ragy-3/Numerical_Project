@@ -1,6 +1,6 @@
 import numpy as np
 
-from commonFunctions import roundBy
+from commonFunctions import *
 
 def forwardElimination(matrixA, vectorB):
     multipliers = []
@@ -29,7 +29,8 @@ def forwardElimination(matrixA, vectorB):
 
             matrixA[i, r] = 0.0
     
-    multipliers = np.array(multipliers, dtype=np.float64)
+    multipliers = np.array(multipliers, dtype=float)
+    rows_order = np.array(rows_order, dtype=int)
 
     return matrixA, vectorB, multipliers, rows_order
 
@@ -50,16 +51,13 @@ def pivot_forward(row, matrixA, row_order, vectorB):
         
         # Swap row order
         row_order[[row, max_row]] = row_order[[max_row, row]]
-        
-        # Uncomment to see swap details
-        # print(f"Swapped row {row + 1} with row {max_row + 1}")
 
 test_cases = [
     {
-        "A": np.array([[2, 1, -1],
-                       [4, -2, 1],
-                       [-2, 1, 3]], dtype=float),
-        "b": np.array([5, 3, -4], dtype=float)
+        "A": np.array([[1, 3, 1],
+                       [2, 7, 3],
+                       [2, 4, 1]], dtype=float),
+        "b": np.array([100, 500, -100], dtype=float)
     },
     {
         "A": np.array([[1, 2, 3],
@@ -70,45 +68,35 @@ test_cases = [
     {
         "A": np.array([[3, -1, 2],
                        [1, 3, -2],
-                       [2, -4, 1]], dtype=float),
+                       [2, 0, 1]], dtype=float),
         "b": np.array([8, 4, 3], dtype=float)
     },
     {
         "A": np.array([[0, 3, -1],
                        [1, -2, 3],
-                       [4, 1, 0]], dtype=float),
-        "b": np.array([7, 4, 2], dtype=float)
-    },
-    {
-        "A": np.array([[0, 0, 2],
-                       [1, -1, 1],
-                       [3, 0, -2]], dtype=float),
-        "b": np.array([9, 3, 7], dtype=float)
+                       [0, 0, 0]], dtype=float),
+        "b": np.array([7, 4, 0], dtype=float)
     }
 ]
 
-
-# Assuming the forward elimination function modifies matrixA and vectorB in place
 for idx, case in enumerate(test_cases, 1):
-    A = case["A"].copy()  # Copy to avoid modifying original test cases
+    A = case["A"].copy()
     b = case["b"].copy()
-    print(f"Test Case {idx}:")
+    print(f"{'\033[33m'}Test Case {idx}:{'\033[0m'}")
     print("Original Matrix A:")
     print(A)
     print("Original Vector b:")
     print(b)
     
-    # Perform forward elimination
     A, b, m, o = forwardElimination(A, b)
     
-    # Print the modified matrix and vector after forward elimination
-    print("After Forward Elimination:")
-    print("Matrix A:")
-    print(A)
-    print("Vector b:")
-    print(b)
-    print("multipliers:")
-    print(m)
-    print("order:")
-    print(o)
+    print(f"{'\033[33m'}After Forward Elimination:{'\033[0m'}")
+    print(f"{'\033[33m'}Matrix A:{'\033[0m'}")
+    print(np.array2string(A, separator=', '))
+    print(f"{'\033[33m'}Vector b:{'\033[0m'}")
+    print(np.array2string(b, separator=', '))
+    print(f"{'\033[33m'}multipliers:{'\033[0m'}")
+    print(np.array2string(m, separator=', '))
+    print(f"{'\033[33m'}order:{'\033[0m'}")
+    print(np.array2string(o, separator=', '))
     print("\n" + "-"*30 + "\n")
