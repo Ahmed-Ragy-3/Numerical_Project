@@ -1,5 +1,5 @@
 from commonFunctions import printVector, subscript
-
+import numpy as np
 
 def forwardSubstitution(matrix, b): # could be called substitution
     answer = []
