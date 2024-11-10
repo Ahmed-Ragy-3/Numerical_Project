@@ -1,4 +1,4 @@
-from ..Iterative_Methods.Approach import Approach
+from Approach import Approach
 
 
 class Cholesky(Approach):

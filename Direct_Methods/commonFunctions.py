@@ -1,4 +1,5 @@
 import math
+import numpy as np
 
 significant_digits = 4
 
@@ -36,3 +37,11 @@ def roundBy(num):
    if num == 0:
       return 0
    return round(num, significant_digits - int(math.floor(math.log10(abs(num)))) - 1)
+
+
+def round_to_sig_figs(x, sig_figs):
+    if x == 0:
+        return 0
+    else:
+        magnitude = int(np.ceil(np.log10(abs(x))))
+        return round(x, sig_figs - magnitude)

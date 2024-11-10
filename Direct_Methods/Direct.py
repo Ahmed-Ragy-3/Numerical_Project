@@ -54,12 +54,6 @@ def pivot_forward(row, matrixA, row_order, vectorB):
         row_order[[row, max_row]] = row_order[[max_row, row]]
 
 
-def round_to_sig_figs(x, sig_figs):
-    if x == 0:
-        return 0
-    else:
-        magnitude = int(np.ceil(np.log10(abs(x))))
-        return round(x, sig_figs - magnitude)
 
 
 def backwardElimination(u, b, sig_fig=20):

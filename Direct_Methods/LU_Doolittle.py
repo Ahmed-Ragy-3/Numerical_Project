@@ -1,5 +1,5 @@
-from ..Iterative_Methods.Approach import Approach
-from .Direct import forwardElimination
+from Approach import Approach
+
 
 class Doolittle(Approach):
    def __init__(self):

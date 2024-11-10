@@ -1,5 +1,5 @@
-from ..Iterative_Methods.Approach import Approach
-from .Direct import forwardElimination, backwardSubstitution
+from Approach import Approach
+from Direct import forwardElimination, backwardSubstitution
 
 class Gauss(Approach):
    def __init__(self):

@@ -1,5 +1,5 @@
-from ..Iterative_Methods.Approach import Approach
-from .Direct import forwardElimination, backwardElimination, forwardSubstitution
+from Approach import Approach
+from Direct import forwardElimination, backwardElimination, forwardSubstitution
 
 class GaussJordan(Approach):
    def __init__(self):
