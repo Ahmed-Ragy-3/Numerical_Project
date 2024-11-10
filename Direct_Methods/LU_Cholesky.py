@@ -2,13 +2,14 @@ import numpy as np
 from LU import LU
 from Direct import forwardSubstitution,backwardSubstitution
 class Cholesky(LU):
-    def __init__(self, A, b):
+    def __init__(self, A, b,sig_figs=20):
         self.b = b
         self.A = np.array(A, dtype=float)
         self.n = self.A.shape[0]
         self.L = np.zeros((self.n, self.n), dtype=float)
         self.U = np.zeros((self.n, self.n), dtype=float)
         self.result = np.zeros(self.n, dtype=float)
+        self.self_figs = sig_figs
 
     def decompose(self):
         # Check if the matrix is symmetric
@@ -27,8 +28,8 @@ class Cholesky(LU):
 
     def solve(self):
         self.decompose()
-        y = forwardSubstitution(self.L, self.b)
-        print("Y",y)
+        #y = forwardSubstitution(self.L, self.b)
+       # print("Y",y)
        # return backwardSubstitution(self.U, y) # uncomment after implement this method
 
     def checkSymmetric(self) -> bool:
