@@ -1,5 +1,6 @@
 import numpy as np
 from LU import LU
+from commonFunctions import round_to_sig_figs
 from Direct import forwardSubstitution,backwardSubstitution
 class Cholesky(LU):
     def __init__(self, A, b,sig_figs=20):
@@ -9,7 +10,7 @@ class Cholesky(LU):
         self.L = np.zeros((self.n, self.n), dtype=float)
         self.U = np.zeros((self.n, self.n), dtype=float)
         self.result = np.zeros(self.n, dtype=float)
-        self.self_figs = sig_figs
+        self.sig_figs = sig_figs
 
     def decompose(self):
         # Check if the matrix is symmetric
@@ -22,6 +23,7 @@ class Cholesky(LU):
                     else:
                         self.L[i][j] = (self.A[i][j] - sum_val) / self.L[j][j]
             # Set U = L.T
+            self.L = np.vectorize(lambda x: round_to_sig_figs(x, self.sig_figs))(self.L)
             self.U = self.L.T
         else:
             raise ValueError("Matrix is not symmetric. Cholesky decomposition requires a symmetric matrix.")

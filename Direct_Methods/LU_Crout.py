@@ -1,5 +1,6 @@
 import numpy as np
 from LU import LU
+from commonFunctions import round_to_sig_figs
 from Direct import forwardSubstitution,backwardSubstitution
 class Crout(LU):
     def __init__(self, A, b,sig_figs=20):
@@ -8,7 +9,7 @@ class Crout(LU):
         self.n = self.A.shape[0]
         self.L = np.zeros((self.n, self.n), dtype=float)
         self.U = np.eye(self.n, dtype=float)  # creates a matrix with ones on the main diagonal
-        self.self_figs = sig_figs
+        self.sig_figs = sig_figs
 
     def decompose(self):
         # Crout's decomposition process
@@ -17,6 +18,9 @@ class Crout(LU):
                 self.L[i, j] = self.A[i, j] - np.dot(self.L[i, :j], self.U[:j, j])
             for k in range(j + 1, self.n):
                 self.U[j, k] = (self.A[j, k] - np.dot(self.L[j, :j], self.U[:j, k])) / self.L[j, j]
+
+        self.L = np.vectorize(lambda x: round_to_sig_figs(x, self.sig_figs))(self.L)
+        self.U = np.vectorize(lambda x: round_to_sig_figs(x, self.sig_figs))(self.U)
 
     def solve(self):
         self.decompose()

@@ -56,16 +56,16 @@ def test_iterative_solver():
         
         
     ]
-    p = Seidel()
+
     for i, (A, b, sig_figs, initial_guess, tolerance, max_iterations) in enumerate(test_cases):
+        p = Seidel(A,b,sig_figs,initial_guess,tolerance,max_iterations)
         print(f"Test Case {i + 1}")
         print("Coefficient matrix A:\n", A)
         print("Right-hand side vector b:\n", b)
 
         # Test with Gauss-Seidel method
         print("\nGauss-Seidel Method:\n")
-        a,b,x = p.solve(A, b, sig_figs, initial_guess=initial_guess, tolerance=tolerance,
-                                           max_iterations=max_iterations)
+        a,b,x = p.solve()
         print("Solution:")
         print(x)
 

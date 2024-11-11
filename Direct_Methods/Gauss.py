@@ -1,12 +1,17 @@
+import numpy as np
+
 from Approach import Approach
 from Direct import forwardElimination, backwardSubstitution
 
 class Gauss(Approach):
-   def __init__(self):
-      pass
+   def __init__(self,A, b, sig_figs=20):
+      self.A = np.array(A,dtype=float)
+      self.b = np.array(b,dtype=float)
+      self.sig_figs = sig_figs
+
    
-   def solve(self,A, b, sig_figs=20, initial_guess=None, tolerance=0, max_iterations=100):
-      # pass
+   def solve(self):
+      # pass and handle A
       matrix = []
       forwardElimination(matrix)
       return backwardSubstitution(matrix)
