@@ -34,8 +34,9 @@ class Cholesky(LU):
        # print("Y",y)
        # return backwardSubstitution(self.U, y) # uncomment after implement this method
 
-    def checkSymmetric(self) -> bool:
-        return np.array_equal(self.A, self.A.T)
+    def checkSymmetric(self) -> bool: # to be used by solver class bofore solving
+        eigenValues = np.linalg.eigvals(self.A) #get eigen values to check for positive definite
+        return np.array_equal(self.A, self.A.T) and np.all(eigenValues>0)
 
     def getMatrixL(self):
         return self.L

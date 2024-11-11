@@ -5,7 +5,7 @@ from LU_Crout import Crout
 A = np.array([[4, -2, 1], [-2, 4, -2], [1, -2, 3]], dtype=float)
 b = np.array([1, 2, 3], dtype=float)
 
-crout = Crout(A, b)
+crout = Crout(A, b,6)
 
 crout.solve()
 print(crout.getMatrixL())
