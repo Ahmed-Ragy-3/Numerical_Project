@@ -1,7 +1,6 @@
-
-
 import numpy as np
 
+#اهههههههههههههه
 
 def forwardElimination(arr):
     pass

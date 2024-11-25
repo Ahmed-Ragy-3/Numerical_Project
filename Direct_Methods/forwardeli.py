@@ -89,26 +89,26 @@ test_cases = [
 
 
 # Assuming the forward elimination function modifies matrixA and vectorB in place
-for idx, case in enumerate(test_cases, 1):
-    A = case["A"].copy()  # Copy to avoid modifying original test cases
-    b = case["b"].copy()
-    print(f"Test Case {idx}:")
-    print("Original Matrix A:")
-    print(A)
-    print("Original Vector b:")
-    print(b)
+# for idx, case in enumerate(test_cases, 1):
+#     A = case["A"].copy()  # Copy to avoid modifying original test cases
+#     b = case["b"].copy()
+#     print(f"Test Case {idx}:")
+#     print("Original Matrix A:")
+#     print(A)
+#     print("Original Vector b:")
+#     print(b)
     
-    # Perform forward elimination
-    A, b, m, o = forwardElimination(A, b)
+#     # Perform forward elimination
+#     A, b, m, o = forwardElimination(A, b)
     
-    # Print the modified matrix and vector after forward elimination
-    print("After Forward Elimination:")
-    print("Matrix A:")
-    print(A)
-    print("Vector b:")
-    print(b)
-    print("multipliers:")
-    print(m)
-    print("order:")
-    print(o)
-    print("\n" + "-"*30 + "\n")
+#     # Print the modified matrix and vector after forward elimination
+#     print("After Forward Elimination:")
+#     print("Matrix A:")
+#     print(A)
+#     print("Vector b:")
+#     print(b)
+#     print("multipliers:")
+#     print(m)
+#     print("order:")
+#     print(o)
+#     print("\n" + "-"*30 + "\n")
