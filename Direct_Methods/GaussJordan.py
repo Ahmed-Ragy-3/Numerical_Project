@@ -12,5 +12,5 @@ class GaussJordan(Approach):
    def solve(self):
       matrixA, vectorB = forwardElimination(self.A, self.B)
       matrixA, vectorB = backwardElimination(matrixA, vectorB)
-      self.answer = forwardSubstitution(matrixA, vectorB)
+      self.answer = forwardSubstitution(matrixA, vectorB, reduced=True)
       return self.answer
