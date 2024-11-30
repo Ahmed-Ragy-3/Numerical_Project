@@ -1,7 +1,7 @@
 import numpy as np
 from commonFunctions import *
 
-# How to use 
+# How to use
 #   create instance of ForwardElimination with matrixA and VectorB(optional)
 #   then type : instance.eliminate()
 #   returns in order : matrixA vectorB(if given) multipliersVector rows_orderVector

@@ -1,5 +1,5 @@
 import numpy as np
-from Direct import backwardElimination
+from commonFunctions import backwardElimination
 from backElimiationTest import print_matrix_vector
 u = np.array([[1.5, -0.5, 0.25],
              [0, 2.3, -0.7],

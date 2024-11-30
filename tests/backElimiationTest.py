@@ -1,6 +1,6 @@
 import numpy as np
 
-from Direct import backwardElimination
+from commonFunctions import backwardElimination
 
 # Test function for backward elimination
 
