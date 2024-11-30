@@ -1,5 +1,5 @@
-from ..Approach import Approach
-
+from approach import Approach
+# from Approach import Approach
 
 class Cholesky(Approach):
    def __init__(self):
@@ -10,3 +10,5 @@ class Cholesky(Approach):
    
    def checkSymmetric() -> bool:
       pass
+
+print("test")

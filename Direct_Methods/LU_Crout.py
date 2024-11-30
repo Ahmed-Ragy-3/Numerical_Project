@@ -1,4 +1,4 @@
-from ..Approach import Approach
+from ..approach import Approach
 
 class Crout(Approach):
    def __init__(self):
