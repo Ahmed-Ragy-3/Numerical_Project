@@ -1,7 +1,7 @@
 import numpy as np
 from LU import LU
-from commonFunctions import round_to_sig_figs
-from Direct import forwardSubstitution,backwardSubstitution
+# from commonFunctions import 
+from commonFunctions import forwardSubstitution,backwardSubstitution, round_to_sig_figs
 class Crout(LU):
     def __init__(self, A, b,sig_figs=20):
         self.b = b
@@ -26,7 +26,7 @@ class Crout(LU):
         self.decompose()
         #y = forwardSubstitution(self.L, self.b)
         #print("Y = ",y)
-      #  return backwardSubstitution(self.U, y)
+        #return backwardSubstitution(self.U, y)
 
     def getMatrixL(self):
         return self.L

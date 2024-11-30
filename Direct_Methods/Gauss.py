@@ -1,7 +1,7 @@
 import numpy as np
 
 from Approach import Approach
-from Direct import forwardElimination, backwardSubstitution
+from commonFunctions import forwardElimination, backwardSubstitution
 
 class Gauss(Approach):
    def __init__(self,A, b, sig_figs=20):
