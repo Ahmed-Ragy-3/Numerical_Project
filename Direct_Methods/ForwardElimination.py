@@ -139,6 +139,13 @@ test_cases_with_col_shifts = [
 {"A": np.array([[0, 0, 1],
                 [0, 0, 0],
                 [2, 0, 0]], dtype=float)},
+{
+        "A": np.array([[0, 5, 2,3],
+                       [0,1, 2, 3],
+                       [0,0,0,0],
+                       [0,0,0,1]], dtype=float),
+        "b": np.array([5,1,0,1], dtype=float)
+    }
 ]
 
 

@@ -1,5 +1,6 @@
 import numpy as np
 
+
 from commonFunctions import *
 
 def forwardElimination(matrixA, vectorB):
@@ -8,11 +9,9 @@ def forwardElimination(matrixA, vectorB):
     rows = matrixA.shape[0]
 
     for r in range(rows - 1):
-        
         pivot_forward(r, matrixA, rows_order, vectorB)
 
         for i in range(r + 1, rows):
-            
             if matrixA[i, r] == 0.0:
                 multipliers.append(0.0)
                 continue
@@ -20,7 +19,6 @@ def forwardElimination(matrixA, vectorB):
             multiplier = matrixA[i, r] / matrixA[r, r]
             multiplier = roundBy(multiplier)
             multipliers.append(multiplier)
-            
             matrixA[i, r+1:] -= matrixA[r, r+1:] * multiplier
             matrixA[i, r+1:] = np.vectorize(roundBy)(matrixA[i, r+1:])
 
@@ -28,7 +26,6 @@ def forwardElimination(matrixA, vectorB):
             vectorB[i] = roundBy(vectorB[i])
 
             matrixA[i, r] = 0.0
-    
     multipliers = np.array(multipliers, dtype=float)
     rows_order = np.array(rows_order, dtype=int)
 
@@ -37,7 +34,7 @@ def forwardElimination(matrixA, vectorB):
 def pivot_forward(row, matrixA, row_order, vectorB):
     n = matrixA.shape[0]
     max_row = row
-    
+
     for i in range(row + 1, n):
         if abs(matrixA[i, row]) > abs(matrixA[max_row, row]):
             max_row = i
@@ -45,12 +42,13 @@ def pivot_forward(row, matrixA, row_order, vectorB):
     if max_row != row:
         # Swap rows in the matrix
         matrixA[[row, max_row], :] = matrixA[[max_row, row], :]
-        
+
         # Swap elements in the vector
         vectorB[[row, max_row]] = vectorB[[max_row, row]]
-        
+
         # Swap row order
         row_order[[row, max_row]] = row_order[[max_row, row]]
+
 
 test_cases = [
     {
