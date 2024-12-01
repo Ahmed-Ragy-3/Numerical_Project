@@ -134,9 +134,9 @@ def main():
 
 
 def get_test_case(test_case_number):
-    # 1- With Gauss Elimination and Gauss Jordan → Report the time taken by both methods.
-    # 2- With LU decomposition Forms (Doolittle - Crout  - Cholesky ) → Report the time taken by them.
-    # Note : Use precision = 4
+   # 1- With Gauss Elimination and Gauss Jordan → Report the time taken by both methods.
+   # 2- With LU decomposition Forms (Doolittle - Crout  - Cholesky ) → Report the time taken by them.
+   # Note : Use precision = 4
    if test_case_number == 1:
       A = np.array([
          [2, 1, 1, 1, 1],
@@ -147,9 +147,9 @@ def get_test_case(test_case_number):
       ], dtype=float)
       b = np.array([4, 5, 6, 7, 8], dtype=float)
 
-    # Solve the equations with Jacobi and Gauss Seidel → Report the convergence of both
-    # and compare the time of convergence and number of iterations (if exist)
-    # Default precision - max number of iteration = 100 - Absolute Relative Error = 0.00001
+      # Solve the equations with Jacobi and Gauss Seidel → Report the convergence of both
+      # and compare the time of convergence and number of iterations (if exist)
+      # Default precision - max number of iteration = 100 - Absolute Relative Error = 0.00001
    elif test_case_number == 2:
       A = np.array([
          [8, 3, 2],
@@ -158,7 +158,7 @@ def get_test_case(test_case_number):
       ], dtype=float)
       b = np.array([13, 7, 9], dtype=float)
 
-    # With Gauss Seidel - max number of iteration = 100 - default precision - relative error = 0.0005
+      # With Gauss Seidel - max number of iteration = 100 - default precision - relative error = 0.0005
    elif test_case_number == 3:
       A = np.array([
          [2, 3, -1, 4, -1, 5, 6],
@@ -171,7 +171,7 @@ def get_test_case(test_case_number):
       ], dtype=float)
       b = np.array([10, 5, 3, 8, -2, 6, -1], dtype=float)
 
-    # With Gauss elimination  - default precision
+      # With Gauss elimination  - default precision
    elif test_case_number == 4:
       A = np.array([
          [2, 3, -1, 4, -1],
@@ -182,8 +182,8 @@ def get_test_case(test_case_number):
       ], dtype=float)
       b = np.array([10, 5, 3, 8, -2], dtype=float)
 
-    # 1- Using Gauss Elimination, Precision = 6
-    # 2- Using Gauss Elimination, Precision = 3
+      # 1- Using Gauss Elimination, Precision = 6
+      # 2- Using Gauss Elimination, Precision = 3
    elif test_case_number == 5:
       A = np.array([
          [3, -0.1, -0.2],
@@ -192,7 +192,7 @@ def get_test_case(test_case_number):
       ], dtype=float)
       b = np.array([7.85, -19.3, 71.4], dtype=float)
 
-    # Using Gauss Jordan & Doolittle Decomposition - default precision
+      # Using Gauss Jordan & Doolittle Decomposition - default precision
    elif test_case_number == 6:
       A = np.array([
          [0, 2, 5],
@@ -201,9 +201,9 @@ def get_test_case(test_case_number):
       ], dtype=float)
       b = np.array([1, 1, 2], dtype=float)
 
-    # With Jacobi and Gauss Seidel —> Report the convergence of both and 
-    # compare the time of convergence and number of iterations (if exist)
-    # Default precision - max number of iteration = 50 - Absolute Relative Error = 0.00001
+      # With Jacobi and Gauss Seidel —> Report the convergence of both and 
+      # compare the time of convergence and number of iterations (if exist)
+      # Default precision - max number of iteration = 50 - Absolute Relative Error = 0.00001
    elif test_case_number == 7:
       A = np.array([
          [2, 1, 6],
