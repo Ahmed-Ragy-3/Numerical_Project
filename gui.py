@@ -274,7 +274,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.iterativeOptions.setVisible(False)
         if (self.method == "Jacobi" or self.method == "Gauss Seidel" or self.tableWidget.rowCount() == 0):
             self.create_matrix()
-        self.method = "Gauss-Jordan"
+        self.method = "Gauss Jordan"
         self.setSolve()
 
 
