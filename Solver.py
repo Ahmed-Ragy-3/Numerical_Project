@@ -102,25 +102,29 @@ class Solver:
             raise ValueError(f"Invalid solving strategy: {approach}")
    
    def solve(self):
-      output = "Unique Solution\n"
       if self.approach is None:
          output = "Method is not selected yet"
          return output
-      
+      output = "The Matrix:\n"
+      output += " "+str(self.matrix).replace("[", "").replace("]", "").replace(".,"," ").replace(".", "").replace(",", "")
+      output += "\n\nThe Vector:\n"
+      output += " "+str(self.b.reshape(-1, 1)).replace("[", "").replace("]", "").replace(".,"," ").replace(".", "").replace(",", "")
+
       self.check_solvability()
-      
+      output += "\n\nSolvability: "
       if self.solvability == "None":
-         output = "No Solution"
+         output += "No Solution"
          return output
       elif self.solvability == "Infinite":
-         output = "Infinite number of solutions"
+         output += "Infinite number of solutions"
          return output
-      
+      output += "Unique Solution\n\n"
+      output += "The Answer:\n"
       answer = self.approach.solve()
       i = 0
       for ans in answer:
          output += f"x{commonfunctions.subscript(i + 1)} = "
-         output += str(answer[i])
+         output += str(commonfunctions.round_to_sig_figs(answer[i], self.significant_digits))
          i += 1
          output += "\n"
       
