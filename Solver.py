@@ -1,5 +1,6 @@
 import numpy as np
 import copy
+import pandas as pd
 import Gauss, GaussJordan, LU_Crout, LU_Doolittle, LU_Cholesky
 import Jacobi, GaussSeidel
 import commonfunctions
@@ -11,7 +12,7 @@ class Solver:
       self.b = None
       self.answer = []
       self.approach = None
-      self.significant_digits = 12
+      self.significant_digits = 1
       self.max_iterations = 50
       self.tolerance = 1e-5
       self.initial_guess = None
@@ -20,31 +21,42 @@ class Solver:
       
    def setMatrix(self, matrix):
       self.matrix = copy.deepcopy(matrix)
+      if self.str_approach is not None:
+         self.setSolvingStrategy(self.str_approach)
       return self
-   
+
    def setB(self, b):
       self.b = copy.deepcopy(b)
+      if self.str_approach is not None:
+         self.setSolvingStrategy(self.str_approach)
       return self
       
    
    def setSignificantDigits(self, significant_digits):
       self.significant_digits = significant_digits
+      if self.str_approach is not None:
+         self.setSolvingStrategy(self.str_approach)
       return self
       
     
    # For Iterative methods
    def setMaxIterations(self, max_iterations):
       self.max_iterations = max_iterations
+      self.setSolvingStrategy(self.str_approach)
       return self
       
    
    def setTolerance(self, tolerance):
       self.tolerance = tolerance
+      if self.str_approach is not None:
+         self.setSolvingStrategy(self.str_approach)
       return self
       
    
    def setInitialGuess(self, initial_guess):
       self.initial_guess = copy.deepcopy(initial_guess)
+      if self.str_approach is not None:
+         self.setSolvingStrategy(self.str_approach)
       return self
       
    
@@ -53,6 +65,8 @@ class Solver:
       self.matrix = copy.deepcopy(matrix)
       self.b = copy.deepcopy(b)
       self.significant_digits = significant_digits
+      if self.str_approach is not None:
+         self.setSolvingStrategy(self.str_approach)
    
    def check_solvability(self):
       matrixChecker = copy.deepcopy(self.matrix)
@@ -107,16 +121,21 @@ class Solver:
             self.approach = GaussSeidel.GaussSeidel(self.matrix, self.b, self.significant_digits,
                                     self.max_iterations, self.tolerance, self.initial_guess)
          case _:
-            raise ValueError(f"Invalid solving strategy: {approach}")
+            print("يجماعة غيرو اسم الفانكشن الاول")
    
    def solve(self):
       if self.approach is None:
          output = "Method is not selected yet"
          return output
+      
       output = "The Matrix:\n"
-      output += " "+str(self.matrix).replace("[", "").replace("]", "").replace(".,"," ").replace(".", "").replace(",", "")
+      for row in self.matrix:
+         output += " ".join(f"{value:.{self.significant_digits}f}" for value in row) + "\n"
+      
       output += "\n\nThe Vector:\n"
-      output += str(self.b.reshape(-1, 1)).replace("[", "").replace("]", "").replace(".,"," ").replace(".", "").replace(",", "")
+      for row in self.b.reshape(-1, 1):
+         output += " ".join(f" {value:.{self.significant_digits}f}" for value in row) + "\n"
+      # output += str(self.b.reshape(-1, 1)).replace("[", "").replace("]", "").replace(".,"," ").replace(". ", " ").replace(",", "")
 
       self.check_solvability()
       output += "\n\nSolvability: "
@@ -140,9 +159,9 @@ class Solver:
       
       if self.str_approach == "Jacobi" or self.str_approach == "Gauss Seidel":
          output += f"\nNumber of Iterations: {str(answer[1])}\n\n"
-         for ans in answer:
+         for ans in answer[0]:
             output += f"x{commonfunctions.subscript(i + 1)} = "
-            output += str(commonfunctions.round_to_sig_figs(answer[0][i], self.significant_digits))
+            output += str(commonfunctions.round_to_sig_figs(ans[i], self.significant_digits))
             i += 1
             output += "\n"
       
@@ -152,15 +171,20 @@ class Solver:
          L = answer[0]
          U = answer[1]
          output += "\nThe Upper triangular Matrix:\n"
-         output += " " + str(L).replace("[", "").replace("]", "").replace(".,"," ").replace(".", "").replace(",", "")
+         for row in U:
+            output += " ".join(f"{value:.{self.significant_digits}f}" for value in row) + "\n"
          
          output += "\n\nThe Lower triangular Matrix:\n"
-         output += " " + str(L).replace("[", "").replace("]", "").replace(".,"," ").replace(".", "").replace(",", "")
+         #output += pd.DataFrame(U)
+         for row in L:
+            output += " ".join(f"{value:.{self.significant_digits}f}" for value in row) + "\n"
+         # output += " " + str(U).replace("[", "").replace("]", "").replace(".,"," ").replace(". ", " ").replace(",", "")
+         # output = output.replace("-0.0 ", "0.0 ")
          output += "\n\n"
          
-         for ans in answer:
+         for ans in answer[2]:
             output += f"x{commonfunctions.subscript(i + 1)} = "
-            output += str(commonfunctions.round_to_sig_figs(answer[2][i], self.significant_digits))
+            output += str(commonfunctions.round_to_sig_figs(ans, self.significant_digits))
             i += 1
             output += "\n"
             
@@ -179,12 +203,12 @@ class Solver:
 
 def main():
    #test case
-   A, b = get_test_case(6)
+   A, b = get_test_case(5)
    
    solver = Solver()
    solver.setMatrix(A)
    solver.setB(b)
-   solver.setSignificantDigits(20)
+   # solver.setSignificantDigits(20)
    solver.setSolvingStrategy("Doolittle")
    solver.check_solvability()
 
@@ -261,7 +285,7 @@ def get_test_case(test_case_number):
       ], dtype=float)
       b = np.array([1, 1, 2], dtype=float)
 
-      # With Jacobi and Gauss Seidel —> Report the convergence of both and 
+      # With Jacobi and Gauss Seidel —> Report the convergence of both and
       # compare the time of convergence and number of iterations (if exist)
       # Default precision - max number of iteration = 50 - Absolute Relative Error = 0.00001
    elif test_case_number == 7:
