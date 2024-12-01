@@ -1,6 +1,6 @@
 from ..Approach import Approach
 import numpy as np
-from .Direct import forwardElimination, backwardElimination, forwardSubstitution
+from commonFunctions import forwardElimination, backwardElimination, forwardSubstitution
 
 class GaussJordan(Approach):
    

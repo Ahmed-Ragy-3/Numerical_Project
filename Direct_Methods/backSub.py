@@ -1,6 +1,30 @@
 import numpy as np
 from commonFunctions import subscript
-from Direct import backwardElimination
+# from Direct import backwardElimination
+
+def pivoting(U) :
+   n = len(U)
+   freeVar  = [False] * n
+   pivot = np.zeros((n, 2))
+   transitions = 0
+   
+   for i in range(n) :
+      j = i
+      while j < n and U[i][j] == 0:
+        if i==0 or (i == n-1 and transitions == 0):
+            freeVar[j] = True
+        elif j - transitions > 0 and j != n-1:
+            freeVar[j] = True
+        j += 1
+        transitions += 1
+      if j == n:
+        pivot[i,0] = -1
+        pivot[i,1] = -1
+        continue
+      pivot[i, 0] = i
+      pivot[i, 1] = j
+
+   return pivot, freeVar
 
 def print_matrix(matrix):
     for r in matrix:
@@ -20,22 +44,20 @@ def stringify(coeff, free_variables):
             answer[r] += f"{c}" + f"𝑥{subscript(r + 1)}" if r != 0 else ""
     
     return answer
-    
+
+
 def advanced_back_sub(matrix, b):
 
     n = len(matrix)
-    free_variables = [False] * n     # boolean
+    pivots , free_variables = pivoting(matrix)     # boolean
     coefficients = []
     
+    print(pivots)
+    print(free_variables)
     # initialize
     for i in range(n):
         coefficients.append([0] * (n - i))
         coefficients[i][0] = b[i]
-
-        if matrix[i][i] == 0:
-            if b[i] != 0:
-                return None
-            free_variables[i] = True
     
     print_matrix(coefficients)
     # To multiply a list or matrix by a constant, it should be numpy
@@ -50,8 +72,8 @@ def advanced_back_sub(matrix, b):
                 continue
             
             for var in range(row + 1, len(coefficients[col])):
-                print(f"row = {row}, col = {col}, var = {var}")
-                print(f"m = {matrix[row][var]}")
+                # print(f"row = {row}, col = {col}, var = {var}")
+                # print(f"m = {matrix[row][var]}")
                 coefficients[row][col] -= matrix[row][var] * coefficients[var][col]
                 
     
@@ -79,13 +101,11 @@ def advanced_back_sub(matrix, b):
     # pass
 
 
-def backwardSubstitution(matrix, b, reduced=False):
+def infinite_substitution(matrix, b):
+    # matrix should be reduced
     n = len(matrix)
     answer = [""] * n
     free_variables = dict()     # index: x1
-    
-    if not reduced:
-        backwardElimination(matrix, b)
     
     # print_matrix(matrix)
     # print_matrix(b)
@@ -93,35 +113,27 @@ def backwardSubstitution(matrix, b, reduced=False):
     # answer[2] = x3
     # answer[3] = x4
     # answer[0] = "1 - matrix[i][j]{answer[j]} - matrix[i][j]{answer[j]}"
-             
+
     # 1 2 2 8    1
     # 0 1 4 2    0
     # 0 0 0 1    0
     # 0 0 0 0    0
     
-    not_free = []
-    for i in range(n):
-        answer[i] = str(convert_int(b[i]))
-        reach_end = True
-        for j in range(i, n):
-            if matrix[i][j] != 0:
-                not_free.append(j)
-                reach_end = False
-                break
-        
-        if reach_end and b[i] != 0:
-            return None
-    
     # print(not_free)
+    _ , free = pivoting(matrix)
+    print("free = ", free)
+    
     for i in range(n):
-        if i not in not_free:
+        if free[i]:
             free_variables[i] = "𝑥" + subscript(i + 1)
             answer[i] = free_variables[i]
+        else:
+            answer[i] = b[i]
             
     if len(free_variables) == 0:
         return b
     
-    # print(free_variables)
+    print(free_variables)
     
     for i in range(n):
         if i in free_variables:
@@ -130,7 +142,7 @@ def backwardSubstitution(matrix, b, reduced=False):
             if matrix[i][j] != 0 and answer[j] != 0:
                 answer[i] += f" - {convert_int(matrix[i][j])}{answer[j]}"
                 answer[i] = str.replace(answer[i], "- -","+ ")
-            
+    
     return answer
 
 def convert_int(num):
@@ -139,18 +151,10 @@ def convert_int(num):
     return num
 
 m = np.array([
-    [0, 3, 1, 3],
-    [0, 1, 6, 2],
-    [0, 0, 0, 0],
-    [0, 0, 0, 1]
+    [1, 3, 1, 3],
+    [0, 0, 6, 2],
+    [0, 0, 0, 1],
+    [0, 0, 0, 0]
 ], dtype=float)
 
-b = np.array([1, 1, 0, 3], dtype=float)
-
-result = advanced_back_sub(m, b)
-print(result)
-
-# if result == None:
-#     print("no solution")
-# else:
-#     printVector(result)
+# b = np.array([1, 1, 3, 0], dtype=float)
