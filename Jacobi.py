@@ -1,6 +1,6 @@
 # from Approach import Approach
 import numpy as np
-from ..Helpers.iterativeSolver import iterative_solver
+from iterativeSolver import iterative_solver
 
 class Jacobi:
    def __init__(self, matrix, b, sig_digs, max_iterations=100, tol=0, initial=None):

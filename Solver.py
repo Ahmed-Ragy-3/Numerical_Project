@@ -1,14 +1,14 @@
 import numpy as np
 import copy
-from DirectMethods import Gauss, GaussJordan, LU_Crout, LU_Doolittle, LU_Cholesky
-from IterativeMethods import Jacobi, GaussSeidel
+import Gauss, GaussJordan, LU_Crout, LU_Doolittle, LU_Cholesky
+import Jacobi, GaussSeidel
 
-from Helpers.forwardElimination import forward_elimination
+from forwardElimination import forward_elimination
 
 class Solver:
    def __init__(self):
-      self.matrix = np.array()
-      self.b = np.array()
+      self.matrix = None
+      self.b = None
       self.answer = []
       self.approach = None
       self.significant_digits = 12
@@ -22,7 +22,7 @@ class Solver:
       return self
    
    def setB(self, b):
-      self.B = copy.deepcopy(b)
+      self.b = copy.deepcopy(b)
       return self
       
    
@@ -60,9 +60,9 @@ class Solver:
       rows = self.matrix.shape[0]
       zeroRows = []
       
-      for i in rows:
+      for i in range(rows):
          zeroRow = True
-         for j in rows:
+         for j in range(rows):
             if matrixChecker[i][j] != 0:
                zeroRow = False
                break
@@ -83,20 +83,20 @@ class Solver:
    def setSolvingStrategy(self, approach : str) -> None:
       match approach:
          case "Gauss":
-            self.approach = Gauss(self.matrix, self.b, self.significant_digits)
+            self.approach = Gauss.Gauss(self.matrix, self.b, self.significant_digits)
          case "Gauss Jordan":
-            self.approach = GaussJordan(self.matrix, self.b, self.significant_digits)
-         case "LU_Doolittle":
-            self.approach = LU_Doolittle(self.matrix, self.b, self.significant_digits)
+            self.approach = GaussJordan.GaussJordan(self.matrix, self.b, self.significant_digits)
+         case "Doolittle":
+            self.approach = LU_Doolittle.Doolittle(self.matrix, self.b, self.significant_digits)
          case "Cholesky":
-            self.approach = LU_Cholesky(self.matrix, self.b, self.significant_digits)
-         case "LU_Crout":
-            self.approach = LU_Crout(self.matrix, self.b, self.significant_digits)
+            self.approach = LU_Cholesky.Cholesky(self.matrix, self.b, self.significant_digits)
+         case "Crout":
+            self.approach = LU_Crout.Crout(self.matrix, self.b, self.significant_digits)
          case "Jacobi":
-            self.approach = Jacobi(self.matrix, self.b, self.significant_digits,
+            self.approach = Jacobi.Jacobi(self.matrix, self.b, self.significant_digits,
                                    self.max_iterations, self.tolerance, self.initial_guess)
          case "Gauss Seidel":
-            self.approach = GaussSeidel(self.matrix, self.b, self.significant_digits,
+            self.approach = GaussSeidel.GaussSeidel(self.matrix, self.b, self.significant_digits,
                                     self.max_iterations, self.tolerance, self.initial_guess)
          case _:
             raise ValueError(f"Invalid solving strategy: {approach}")
@@ -107,24 +107,119 @@ class Solver:
       self.check_solvability()
       if self.solvability == "None":
          return "No Solution"
+      elif self.solvability == "Infinite":
+         return "Infinite number of solution"
+      
       return self.approach.solve()
    
-   
 
-A = np.array([[2, -1, -2],
-              [-4, 6, 3],
-              [-4, -2, 8]], dtype=float)
-b = np.array([-3, 9, 2], dtype=float)
 
 def main():
-
+   #test case
+   A, b = get_test_case(3)
+   
+   
    solver = Solver()
+   solver.setMatrix(A)
+   solver.setB(b)
+   solver.setSignificantDigits(20)
    solver.setSolvingStrategy("Gauss")
-   solver.setMatrix(A).setB(b)
    solver.check_solvability()
 
    print(solver.solvability)
-   solver.solve()
+   print(solver.solve())
+   
+
+
+
+
+def get_test_case(test_case_number):
+    # 1- With Gauss Elimination and Gauss Jordan → Report the time taken by both methods.
+    # 2- With LU decomposition Forms (Doolittle - Crout  - Cholesky ) → Report the time taken by them.
+    # Note : Use precision = 4
+   if test_case_number == 1:
+      A = np.array([
+         [2, 1, 1, 1, 1],
+         [1, 2, 1, 1, 1],
+         [1, 1, 2, 1, 1],
+         [1, 1, 1, 2, 1],
+         [1, 1, 1, 1, 2]
+      ], dtype=float)
+      b = np.array([4, 5, 6, 7, 8], dtype=float)
+
+    # Solve the equations with Jacobi and Gauss Seidel → Report the convergence of both
+    # and compare the time of convergence and number of iterations (if exist)
+    # Default precision - max number of iteration = 100 - Absolute Relative Error = 0.00001
+   elif test_case_number == 2:
+      A = np.array([
+         [8, 3, 2],
+         [1, 5, 1],
+         [2, 1, 6]
+      ], dtype=float)
+      b = np.array([13, 7, 9], dtype=float)
+
+    # With Gauss Seidel - max number of iteration = 100 - default precision - relative error = 0.0005
+   elif test_case_number == 3:
+      A = np.array([
+         [2, 3, -1, 4, -1, 5, 6],
+         [1, 2, 3, -1, 4, 1, -5],
+         [3, 1, -2, 3, -4, 2, -1],
+         [4, 3, 1, 2, -3, 4, 5],
+         [1, -2, 3, 1, 2, -3, 4],
+         [2, -1, 4, 2, -1, 3, -2],
+         [3, 2, 2, -3, 4, -5, 6]
+      ], dtype=float)
+      b = np.array([10, 5, 3, 8, -2, 6, -1], dtype=float)
+
+    # With Gauss elimination  - default precision
+   elif test_case_number == 4:
+      A = np.array([
+         [2, 3, -1, 4, -1],
+         [1, 2, 3, -1, 4],
+         [3, 1, -2, 3, -4],
+         [4, 3, 1, 2, 0],
+         [1, -2, 3, 1, 2]
+      ], dtype=float)
+      b = np.array([10, 5, 3, 8, -2], dtype=float)
+
+    # 1- Using Gauss Elimination, Precision = 6
+    # 2- Using Gauss Elimination, Precision = 3
+   elif test_case_number == 5:
+      A = np.array([
+         [3, -0.1, -0.2],
+         [0.1, 7, -0.3],
+         [0.3, -0.2, 10]
+      ], dtype=float)
+      b = np.array([7.85, -19.3, 71.4], dtype=float)
+
+    # Using Gauss Jordan & Doolittle Decomposition - default precision
+   elif test_case_number == 6:
+      A = np.array([
+         [0, 2, 5],
+         [2, 1, 1],
+         [3, 1, 0]
+      ], dtype=float)
+      b = np.array([1, 1, 2], dtype=float)
+
+    # With Jacobi and Gauss Seidel —> Report the convergence of both and 
+    # compare the time of convergence and number of iterations (if exist)
+    # Default precision - max number of iteration = 50 - Absolute Relative Error = 0.00001
+   elif test_case_number == 7:
+      A = np.array([
+         [2, 1, 6],
+         [8, 3, 2],
+         [1, 5, 1]
+      ], dtype=float)
+      b = np.array([9, 13, 7], dtype=float)
+
+   else:
+      raise ValueError("Invalid test case number. Please choose a number between 1 and 7.")
+    
+   return A, b
+   
+   
    
 if __name__ == "__main__":
    main()
+   
+   

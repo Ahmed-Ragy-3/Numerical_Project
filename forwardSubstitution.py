@@ -2,6 +2,8 @@ import numpy as np
 from commonfunctions import round_to_sig_figs
 
 def forward_substitution(matrix, b, sig_figs, reduced=False):
+   if reduced:
+      return b
    """
    Solves the system of linear equations Lx = b using forward substitution.
    

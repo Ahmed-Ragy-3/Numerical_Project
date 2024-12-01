@@ -1,11 +1,11 @@
 import numpy as np
-from ..Helpers.forwardSubstitution import forward_substitution
-from ..Helpers.backwardSubstitution import backward_substitution
+from forwardSubstitution import forward_substitution
+from backwardSubstitution import backward_substitution
 
 class Doolittle:
    def __init__(self, A, b, sig_figs=20):
-      self.A = np.array(A, dtype=float)
-      self.b = np.array(b, dtype=float)
+      self.A = A
+      self.b = b
       self.sig_figs = sig_figs
       self.L = None
       self.U = None

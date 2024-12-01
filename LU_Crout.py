@@ -1,11 +1,11 @@
 import numpy as np
-from ..Helpers.backwardSubstitution import backward_substitution
-from ..Helpers.forwardSubstitution import forward_substitution
+from backwardSubstitution import backward_substitution
+from forwardSubstitution import forward_substitution
 
 class Crout:
    def __init__(self, A, b, sig_figs=20):
       self.b = b
-      self.A = np.array(A, dtype=float)
+      self.A = A
       self.n = self.A.shape[0]
       self.L = None
       self.U = None
