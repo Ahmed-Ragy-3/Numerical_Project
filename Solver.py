@@ -16,6 +16,7 @@ class Solver:
       self.tolerance = 1e-5
       self.initial_guess = None
       self.solvability = None
+      self.str_approach = None
       
    def setMatrix(self, matrix):
       self.matrix = copy.deepcopy(matrix)
@@ -83,19 +84,26 @@ class Solver:
    def setSolvingStrategy(self, approach : str) -> None:
       match approach:
          case "Gauss":
+            self.str_approach = "Gauss"
             self.approach = Gauss.Gauss(self.matrix, self.b, self.significant_digits)
          case "Gauss Jordan":
+            self.str_approach = "Gauss Jordan"
             self.approach = GaussJordan.GaussJordan(self.matrix, self.b, self.significant_digits)
          case "Doolittle":
+            self.str_approach = "Doolittle"
             self.approach = LU_Doolittle.Doolittle(self.matrix, self.b, self.significant_digits)
          case "Cholesky":
+            self.str_approach = "Cholesky"
             self.approach = LU_Cholesky.Cholesky(self.matrix, self.b, self.significant_digits)
          case "Crout":
+            self.str_approach = "Crout"
             self.approach = LU_Crout.Crout(self.matrix, self.b, self.significant_digits)
          case "Jacobi":
+            self.str_approach = "Jacobi"
             self.approach = Jacobi.Jacobi(self.matrix, self.b, self.significant_digits,
                                    self.max_iterations, self.tolerance, self.initial_guess)
          case "Gauss Seidel":
+            self.str_approach = "Gauss Seidel"
             self.approach = GaussSeidel.GaussSeidel(self.matrix, self.b, self.significant_digits,
                                     self.max_iterations, self.tolerance, self.initial_guess)
          case _:
@@ -122,6 +130,20 @@ class Solver:
       output += "The Answer:\n"
       answer = self.approach.solve()
       i = 0
+      
+      if self.str_approach == "Jacobi" or self.str_approach == "Gauss Seidel":
+         output += f"\nNumber of Iterations: {str(answer[1])}\n\n"
+         for ans in answer:
+            output += f"x{commonfunctions.subscript(i + 1)} = "
+            output += str(commonfunctions.round_to_sig_figs(answer[0][i], self.significant_digits))
+            i += 1
+            output += "\n"
+      
+         return output
+          
+      #elif self.str_approach == "Doolittle" or self.str_approach == "Cholesky" or self.str_approach == "Crout":
+
+      
       for ans in answer:
          output += f"x{commonfunctions.subscript(i + 1)} = "
          output += str(commonfunctions.round_to_sig_figs(answer[i], self.significant_digits))
@@ -134,13 +156,13 @@ class Solver:
 
 def main():
    #test case
-   A, b = get_test_case(3)
+   A, b = get_test_case(5)
    
    solver = Solver()
    solver.setMatrix(A)
    solver.setB(b)
    solver.setSignificantDigits(20)
-   solver.setSolvingStrategy("Gauss")
+   solver.setSolvingStrategy("Jacobi")
    solver.check_solvability()
 
    # print(solver.solvability)
