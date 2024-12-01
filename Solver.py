@@ -116,7 +116,7 @@ class Solver:
       output = "The Matrix:\n"
       output += " "+str(self.matrix).replace("[", "").replace("]", "").replace(".,"," ").replace(".", "").replace(",", "")
       output += "\n\nThe Vector:\n"
-      output += " "+str(self.b.reshape(-1, 1)).replace("[", "").replace("]", "").replace(".,"," ").replace(".", "").replace(",", "")
+      output += str(self.b.reshape(-1, 1)).replace("[", "").replace("]", "").replace(".,"," ").replace(".", "").replace(",", "")
 
       self.check_solvability()
       output += "\n\nSolvability: "
@@ -126,9 +126,16 @@ class Solver:
       elif self.solvability == "Infinite":
          output += "Infinite number of solutions"
          return output
+      
       output += "Unique Solution\n\n"
       output += "The Answer:\n"
-      answer = self.approach.solve()
+      
+      try:
+         answer = self.approach.solve()
+      except:
+        return "Can't be solved using " + self.str_approach
+         
+      
       i = 0
       
       if self.str_approach == "Jacobi" or self.str_approach == "Gauss Seidel":
@@ -140,8 +147,24 @@ class Solver:
             output += "\n"
       
          return output
-          
-      #elif self.str_approach == "Doolittle" or self.str_approach == "Cholesky" or self.str_approach == "Crout":
+         
+      elif self.str_approach == "Doolittle" or self.str_approach == "Cholesky" or self.str_approach == "Crout":
+         L = answer[0]
+         U = answer[1]
+         output += "\nThe Upper triangular Matrix:\n"
+         output += " " + str(L).replace("[", "").replace("]", "").replace(".,"," ").replace(".", "").replace(",", "")
+         
+         output += "\n\nThe Lower triangular Matrix:\n"
+         output += " " + str(L).replace("[", "").replace("]", "").replace(".,"," ").replace(".", "").replace(",", "")
+         output += "\n\n"
+         
+         for ans in answer:
+            output += f"x{commonfunctions.subscript(i + 1)} = "
+            output += str(commonfunctions.round_to_sig_figs(answer[2][i], self.significant_digits))
+            i += 1
+            output += "\n"
+            
+         return output
 
       
       for ans in answer:
@@ -156,13 +179,13 @@ class Solver:
 
 def main():
    #test case
-   A, b = get_test_case(5)
+   A, b = get_test_case(6)
    
    solver = Solver()
    solver.setMatrix(A)
    solver.setB(b)
    solver.setSignificantDigits(20)
-   solver.setSolvingStrategy("Jacobi")
+   solver.setSolvingStrategy("Doolittle")
    solver.check_solvability()
 
    # print(solver.solvability)

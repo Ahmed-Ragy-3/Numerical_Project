@@ -36,7 +36,7 @@ class Doolittle:
 
       y = forward_substitution(self.L, self.b, self.sig_figs)
       
-      return backward_substitution(self.U, y, self.sig_figs)
+      return self.L, self.U, backward_substitution(self.U, y, self.sig_figs)
 
    def getMatrixL(self):
       return self.L
