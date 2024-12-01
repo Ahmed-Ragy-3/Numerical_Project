@@ -2,7 +2,7 @@ import numpy as np
 import copy
 import Gauss, GaussJordan, LU_Crout, LU_Doolittle, LU_Cholesky
 import Jacobi, GaussSeidel
-
+import commonfunctions
 from forwardElimination import forward_elimination
 
 class Solver:
@@ -102,22 +102,35 @@ class Solver:
             raise ValueError(f"Invalid solving strategy: {approach}")
    
    def solve(self):
+      output = "Unique Solution\n"
       if self.approach is None:
-         return "Method is not selected yet"
-      self.check_solvability()
-      if self.solvability == "None":
-         return "No Solution"
-      elif self.solvability == "Infinite":
-         return "Infinite number of solution"
+         output = "Method is not selected yet"
+         return output
       
-      return self.approach.solve()
+      self.check_solvability()
+      
+      if self.solvability == "None":
+         output = "No Solution"
+         return output
+      elif self.solvability == "Infinite":
+         output = "Infinite number of solutions"
+         return output
+      
+      answer = self.approach.solve()
+      i = 0
+      for ans in answer:
+         output += f"x{commonfunctions.subscript(i + 1)} = "
+         output += str(answer[i])
+         i += 1
+         output += "\n"
+      
+      return output
    
 
 
 def main():
    #test case
    A, b = get_test_case(3)
-   
    
    solver = Solver()
    solver.setMatrix(A)
@@ -126,11 +139,9 @@ def main():
    solver.setSolvingStrategy("Gauss")
    solver.check_solvability()
 
-   print(solver.solvability)
+   # print(solver.solvability)
    print(solver.solve())
    
-
-
 
 
 def get_test_case(test_case_number):
@@ -211,7 +222,6 @@ def get_test_case(test_case_number):
          [1, 5, 1]
       ], dtype=float)
       b = np.array([9, 13, 7], dtype=float)
-
    else:
       raise ValueError("Invalid test case number. Please choose a number between 1 and 7.")
     
