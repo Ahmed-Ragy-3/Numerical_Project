@@ -280,7 +280,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.methodDrawer.setVisible(False)
         self.directOptions.setVisible(False)
         self.iterativeOptions.setVisible(False)
-        self.method = "LU_Doolittle"
+        self.method = "Doolittle"
         self.setSolve()
         self.create_matrix()
 
