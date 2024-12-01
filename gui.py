@@ -22,7 +22,12 @@ def subscript(num):
         ret += subscripts[num % 10]
         num //= 10
     return ''.join(reversed(ret))
-
+def isFloat(value):
+    try:
+        float(value)  # Try converting to a float
+        return True
+    except :
+        return False
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
@@ -39,13 +44,12 @@ class MainWindow(QtWidgets.QMainWindow):
         buttonsWidth = int(self.width() / 5)
         self.method = None # store the choosen method
 
-        self.significantFiguresNumber.setValidator(QIntValidator(1,99))
+        self.significantFiguresNumber.setValidator(QIntValidator(1,20))
         self.significantFiguresNumber.setVisible(True)
         self.significantFiguresLabel.setVisible(True)
-        self.toleranceNumber.setValidator(QIntValidator(1,99))
         self.toleranceNumber.setVisible(False)
         self.toleranceLabel.setVisible(False)
-        self.iterationsNumber.setValidator(QIntValidator(1,99))
+        self.iterationsNumber.setValidator(QIntValidator(1,999))
         self.iterationsNumber.setVisible(False)
         self.iterationsLabel.setVisible(False)
 
@@ -108,7 +112,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def create_matrix(self):
 
         rows = self.numberOfEquations.text()
-        if not rows.isdigit() or int(rows) == 0:
+        if not rows.isdigit() or int(rows) == 0 or self.method == None:
             self.tableWidget.clear()
             self.tableWidget.setRowCount(0)
             self.tableWidget.setColumnCount(0)
@@ -199,9 +203,13 @@ class MainWindow(QtWidgets.QMainWindow):
         sigFigs = self.significantFiguresNumber.text()
         tolrence = self.toleranceNumber.text()
         itertations = self.iterationsNumber.text()
+        try:
+            tolrence = float(itertations)
+        except:
+            tolrence = None
         if sigFigs.isdigit():
             solver.setSignificantDigits(int(sigFigs))
-        if tolrence.isdigit():
+        if isFloat(tolrence):
             solver.setTolerance(int(tolrence))
         if itertations.isdigit():
             solver.setMaxIterations(int(itertations))
@@ -281,7 +289,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.methodDrawer.setVisible(False)
         self.directOptions.setVisible(False)
         self.iterativeOptions.setVisible(False)
-        self.method = "LU_Crout"
+        self.method = "Crout"
         self.setSolve()
         self.create_matrix()
 
