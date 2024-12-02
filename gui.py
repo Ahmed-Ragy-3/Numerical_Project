@@ -269,6 +269,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.tableWidget.setColumnCount(0)
             self.create_matrix()
 
+        self.prevMethod = self.method = "Gauss"
 
 
 
@@ -286,6 +287,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.tableWidget.setColumnCount(0)
             self.create_matrix()
 
+        self.prevMethod = self.method = "Gauss Jordan"
 
 
 
@@ -304,6 +306,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.tableWidget.setColumnCount(0)
             self.create_matrix()
 
+        self.prevMethod = self.method = "Doolittle"
 
 
 
@@ -319,7 +322,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.tableWidget.setRowCount(0)
             self.tableWidget.setColumnCount(0)
             self.create_matrix()
-
+        self.prevMethod = self.method = "Crout"
 
 
 
@@ -335,6 +338,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.tableWidget.setRowCount(0)
             self.tableWidget.setColumnCount(0)
             self.create_matrix()
+        self.prevMethod = self.method = "Cholesky"
 
 
 
@@ -351,7 +355,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.tableWidget.setRowCount(0)
             self.tableWidget.setColumnCount(0)
             self.create_matrix()
-
+        self.prevMethod = self.method = "Jacobi"
         self.toleranceNumber.setVisible(True)
         self.toleranceLabel.setVisible(True)
         self.iterationsNumber.setVisible(True)
@@ -372,7 +376,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.tableWidget.setRowCount(0)
             self.tableWidget.setColumnCount(0)
             self.create_matrix()
-
+        self.prevMethod = self.method = "Gauss Seidel"
+        
         self.toleranceNumber.setVisible(True)
         self.toleranceLabel.setVisible(True)
         self.iterationsNumber.setVisible(True)
