@@ -207,13 +207,13 @@ class MainWindow(QtWidgets.QMainWindow):
         tolrence = self.toleranceNumber.text()
         itertations = self.iterationsNumber.text()
         try:
-            tolrence = float(itertations)
+            tolrence = float(tolrence)
         except:
             tolrence = None
         if sigFigs.isdigit():
             solver.setSignificantDigits(int(sigFigs))
         if isFloat(tolrence):
-            solver.setTolerance(int(tolrence))
+            solver.setTolerance(float(tolrence))
         if itertations.isdigit():
             solver.setMaxIterations(int(itertations))
         if (self.method == "Jacobi" or self.method == "Gauss Seidel"):
@@ -355,7 +355,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.tableWidget.setRowCount(0)
             self.tableWidget.setColumnCount(0)
             self.create_matrix()
-        self.prevMethod = self.method = "Jacobi"
+            
+
         self.toleranceNumber.setVisible(True)
         self.toleranceLabel.setVisible(True)
         self.iterationsNumber.setVisible(True)
@@ -376,8 +377,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.tableWidget.setRowCount(0)
             self.tableWidget.setColumnCount(0)
             self.create_matrix()
-        self.prevMethod = self.method = "Gauss Seidel"
-        
+
+
         self.toleranceNumber.setVisible(True)
         self.toleranceLabel.setVisible(True)
         self.iterationsNumber.setVisible(True)
