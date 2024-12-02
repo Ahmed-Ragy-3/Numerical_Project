@@ -4,6 +4,8 @@ from crypt import methods
 from PyQt6 import QtWidgets, uic,QtCore
 from PyQt6.QtGui import QIntValidator, QBrush, QColor
 import numpy as np
+from fontTools.varLib.models import nonNone
+from pandas.core.methods.describe import select_describe_func
 
 from Solver import Solver
 
@@ -43,6 +45,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setMinimumWidth(900)
         buttonsWidth = int(self.width() / 5)
         self.method = None # store the choosen method
+        self.prevMethod = None
 
         self.significantFiguresNumber.setValidator(QIntValidator(1,20))
         self.significantFiguresNumber.setVisible(True)
@@ -112,7 +115,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def create_matrix(self):
 
         rows = self.numberOfEquations.text()
-        if not rows.isdigit() or int(rows) == 0 or self.method == None:
+        if not rows.isdigit() or int(rows) == 0:
             self.tableWidget.clear()
             self.tableWidget.setRowCount(0)
             self.tableWidget.setColumnCount(0)
@@ -258,11 +261,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.methodDrawer.setVisible(False)
         self.directOptions.setVisible(False)
         self.iterativeOptions.setVisible(False)
-        if (self.method == "Jacobi" or self.method == "Gauss Seidel" or self.tableWidget.rowCount() == 0):
+        self.solve.setEnabled(True)
+        if (self.prevMethod == "Jacobi" or self.prevMethod == "Gauss Seidel" or self.prevMethod == None):
+            self.prevMethod =  self.method = "Gauss"
+            self.tableWidget.clear()
+            self.tableWidget.setRowCount(0)
+            self.tableWidget.setColumnCount(0)
             self.create_matrix()
-        self.setSolve()
-        self.method = "Gauss"
-        self.setSolve()
+
 
 
 
@@ -272,10 +278,15 @@ class MainWindow(QtWidgets.QMainWindow):
         self.methodDrawer.setVisible(False)
         self.directOptions.setVisible(False)
         self.iterativeOptions.setVisible(False)
-        if (self.method == "Jacobi" or self.method == "Gauss Seidel" or self.tableWidget.rowCount() == 0):
+        self.solve.setEnabled(True)
+        if (self.prevMethod == "Jacobi" or self.prevMethod == "Gauss Seidel" or self.prevMethod == None):
+            self.prevMethod = self.method = "Gauss Jordan"
+            self.tableWidget.clear()
+            self.tableWidget.setRowCount(0)
+            self.tableWidget.setColumnCount(0)
             self.create_matrix()
-        self.method = "Gauss Jordan"
-        self.setSolve()
+
+
 
 
 
@@ -285,20 +296,31 @@ class MainWindow(QtWidgets.QMainWindow):
         self.methodDrawer.setVisible(False)
         self.directOptions.setVisible(False)
         self.iterativeOptions.setVisible(False)
-        if (self.method == "Jacobi" or self.method == "Gauss Seidel" or self.tableWidget.rowCount() == 0):
+        self.solve.setEnabled(True)
+        if (self.prevMethod == "Jacobi" or self.prevMethod == "Gauss Seidel" or self.prevMethod == None):
+            self.prevMethod = self.method = "Doolittle"
+            self.tableWidget.clear()
+            self.tableWidget.setRowCount(0)
+            self.tableWidget.setColumnCount(0)
             self.create_matrix()
-        self.method = "Doolittle"
-        self.setSolve()
+
+
+
 
     def toggleCroutDecompositionButton(self):
         self.methodButton.setText("Crout Decomposition")
         self.methodDrawer.setVisible(False)
         self.directOptions.setVisible(False)
         self.iterativeOptions.setVisible(False)
-        if (self.method == "Jacobi" or self.method == "Gauss Seidel" or self.tableWidget.rowCount() == 0):
+        self.solve.setEnabled(True)
+        if (self.prevMethod == "Jacobi" or self.prevMethod == "Gauss Seidel" or self.prevMethod == None):
+            self.prevMethod = self.method = "Crout"
+            self.tableWidget.clear()
+            self.tableWidget.setRowCount(0)
+            self.tableWidget.setColumnCount(0)
             self.create_matrix()
-        self.method = "Crout"
-        self.setSolve()
+
+
 
 
     def toggleCholeskyDecompositionButton(self):
@@ -306,10 +328,15 @@ class MainWindow(QtWidgets.QMainWindow):
         self.methodDrawer.setVisible(False)
         self.directOptions.setVisible(False)
         self.iterativeOptions.setVisible(False)
-        if (self.method == "Jacobi" or self.method == "Gauss Seidel" or self.tableWidget.rowCount() == 0):
+        self.solve.setEnabled(True)
+        if (self.prevMethod == "Jacobi" or self.prevMethod == "Gauss Seidel" or self.prevMethod == None):
+            self.prevMethod = self.method = "Cholesky"
+            self.tableWidget.clear()
+            self.tableWidget.setRowCount(0)
+            self.tableWidget.setColumnCount(0)
             self.create_matrix()
-        self.method = "Cholesky"
-        self.setSolve()
+
+
 
 
     def toggleJacobiButton(self):
@@ -317,14 +344,19 @@ class MainWindow(QtWidgets.QMainWindow):
         self.methodDrawer.setVisible(False)
         self.directOptions.setVisible(False)
         self.iterativeOptions.setVisible(False)
-        if (self.method != "Gauss Seidel" or self.tableWidget.rowCount() == 0):
+        self.solve.setEnabled(True)
+        if (self.prevMethod != "Gauss Seidel" or self.prevMethod == None):
+            self.prevMethod = self.method = "Jacobi"
+            self.tableWidget.clear()
+            self.tableWidget.setRowCount(0)
+            self.tableWidget.setColumnCount(0)
             self.create_matrix()
-        self.method = "Jacobi"
+
         self.toleranceNumber.setVisible(True)
         self.toleranceLabel.setVisible(True)
         self.iterationsNumber.setVisible(True)
         self.iterationsLabel.setVisible(True)
-        self.setSolve()
+
 
 
 
@@ -333,16 +365,21 @@ class MainWindow(QtWidgets.QMainWindow):
         self.methodDrawer.setVisible(False)
         self.directOptions.setVisible(False)
         self.iterativeOptions.setVisible(False)
+        self.solve.setEnabled(True)
         if (self.method != "Jacobi" or self.tableWidget.rowCount() == 0):
+            self.prevMethod = self.method = "Gauss Seidel"
+            self.tableWidget.clear()
+            self.tableWidget.setRowCount(0)
+            self.tableWidget.setColumnCount(0)
             self.create_matrix()
-        self.method = "Gauss Seidel"
+
         self.toleranceNumber.setVisible(True)
         self.toleranceLabel.setVisible(True)
         self.iterationsNumber.setVisible(True)
         self.iterationsLabel.setVisible(True)
         self.significantFiguresNumber.setVisible(True)
         self.significantFiguresLabel.setVisible(True)
-        self.setSolve()
+
 
 
     def openSolutionWindow(self, solutionString):
