@@ -153,8 +153,8 @@ class Solver:
       
       try:
          answer = self.approach.solve()
-      except:
-         # print(output)
+      except Exception as e:
+         print(e)
          return "Can't be solved using " + self.str_approach
       
       end_time = time.perf_counter()
@@ -216,7 +216,7 @@ def main():
    solver.setMatrix(A)
    solver.setB(b)
    # solver.setSignificantDigits(20)
-   solver.setSolvingStrategy("Jacobi")
+   solver.setSolvingStrategy("Doolittle")
    solver.check_solvability()
 
    # print(solver.solvability)

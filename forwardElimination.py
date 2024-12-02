@@ -175,6 +175,31 @@ def pivot(matrix, b, rows_order, row):
         if b is not None:
             b[[row, max_row]] = b[[max_row, row]]
         rows_order[[row, max_row]] = rows_order[[max_row, row]]
+        
+
+
+# def pivot(self, row):
+#     max_row = row
+#     allZeros = True
+    
+#     for i in range(row, self.rows):
+#         if self.matrixA[i, row] != 0:
+#             allZeros = False
+#             break
+#     if allZeros :
+#         max_row = self.__findPivotRow(row)
+#     else:
+#         for i in range(row + 1, self.rows):
+#             if abs(self.matrixA[i, row]) > abs(self.matrixA[max_row, row]):
+#                 max_row = i
+
+#     if max_row != row :
+#         self.matrixA[[row, max_row], :] = self.matrixA[[max_row, row], :]
+        
+#         # if self.vectorBExist:
+#         self.vectorB[[row, max_row]] = self.vectorB[[max_row, row]]
+        
+#         self.rows_order[[row, max_row]] = self.rows_order[[max_row, row]]
 
 
 def forward_elimination(matrixA, vectorB, sig_figs=None):
