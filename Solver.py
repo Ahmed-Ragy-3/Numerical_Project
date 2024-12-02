@@ -4,6 +4,7 @@ import pandas as pd
 import Gauss, GaussJordan, LU_Crout, LU_Doolittle, LU_Cholesky
 import Jacobi, GaussSeidel
 import commonfunctions
+import time
 from forwardElimination import forward_elimination
 
 class Solver:
@@ -121,7 +122,7 @@ class Solver:
             self.approach = GaussSeidel.GaussSeidel(self.matrix, self.b, self.significant_digits,
                                     self.max_iterations, self.tolerance, self.initial_guess)
          case _:
-            print("يجماعة غيرو اسم الفانكشن الاول")
+            print("8ayro asm el method")
    
    def solve(self):
       if self.approach is None:
@@ -147,21 +148,27 @@ class Solver:
          return output
       
       output += "Unique Solution\n\n"
-      output += "The Answer:\n"
+      
+      start_time = time.perf_counter()
       
       try:
          answer = self.approach.solve()
       except:
-        return "Can't be solved using " + self.str_approach
-         
+         # print(output)
+         return "Can't be solved using " + self.str_approach
+      
+      end_time = time.perf_counter()
+      output += f"The Answer: (takes {(end_time - start_time) * 1000:.8f} ms)\n"
+      # print(end_time - start_time)
+      
       
       i = 0
       
       if self.str_approach == "Jacobi" or self.str_approach == "Gauss Seidel":
          output += f"\nNumber of Iterations: {str(answer[1])}\n\n"
          for ans in answer[0]:
-            output += f"x{commonfunctions.subscript(i + 1)} = "
-            output += str(commonfunctions.round_to_sig_figs(ans[i], self.significant_digits))
+            output += f"𝑥{commonfunctions.subscript(i + 1)} = "
+            output += str(commonfunctions.round_to_sig_figs(ans, self.significant_digits))
             i += 1
             output += "\n"
       
@@ -183,7 +190,7 @@ class Solver:
          output += "\n\n"
          
          for ans in answer[2]:
-            output += f"x{commonfunctions.subscript(i + 1)} = "
+            output += f"𝑥{commonfunctions.subscript(i + 1)} = "
             output += str(commonfunctions.round_to_sig_figs(ans, self.significant_digits))
             i += 1
             output += "\n"
@@ -192,7 +199,7 @@ class Solver:
 
       
       for ans in answer:
-         output += f"x{commonfunctions.subscript(i + 1)} = "
+         output += f"𝑥{commonfunctions.subscript(i + 1)} = "
          output += str(commonfunctions.round_to_sig_figs(answer[i], self.significant_digits))
          i += 1
          output += "\n"
@@ -203,13 +210,13 @@ class Solver:
 
 def main():
    #test case
-   A, b = get_test_case(5)
+   A, b = get_test_case(6)
    
    solver = Solver()
    solver.setMatrix(A)
    solver.setB(b)
    # solver.setSignificantDigits(20)
-   solver.setSolvingStrategy("Doolittle")
+   solver.setSolvingStrategy("Jacobi")
    solver.check_solvability()
 
    # print(solver.solvability)
