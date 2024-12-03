@@ -11,9 +11,9 @@ class GaussJordan:
    
    def solve(self):
       forward_elimination(self.A, self.B, self.sig_figs)
-      print("After forward elimination")
-      print(self.A)
+      # print("After forward elimination")
+      # print(self.A)
       backward_elimination(self.A, self.B, sig_fig=self.sig_figs)
-      print("After backward elimination")
-      print(self.A)
+      # print("After backward elimination")
+      # print(self.A)
       return forward_substitution(self.A, self.B, sig_figs=self.sig_figs, reduced=True)

@@ -1,5 +1,5 @@
 import numpy as np
-from commonfunctions import round_to_sig_figs
+import commonfunctions
 
 def forward_substitution(matrix, b, sig_figs, reduced=False):
    if reduced:
@@ -27,6 +27,6 @@ def forward_substitution(matrix, b, sig_figs, reduced=False):
       
       # Compute x[i]
       answer[i] = (b[i] - np.dot(matrix[i, :i], answer[:i])) / matrix[i, i]
-      answer[i] = round_to_sig_figs(answer[i], sig_figs)
+      answer[i] = commonfunctions.round_to_sig_figs(answer[i], sig_figs)
    
    return answer

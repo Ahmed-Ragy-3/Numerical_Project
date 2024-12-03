@@ -1,5 +1,5 @@
 import numpy as np
-from commonfunctions import round_to_sig_figs
+import commonfunctions
 
 def backward_substitution(matrix, b, sig_figs):
    """
@@ -22,6 +22,6 @@ def backward_substitution(matrix, b, sig_figs):
       
       # Calculate the value of x[i]
       answer[i] = (b[i] - np.dot(matrix[i, i + 1:], answer[i + 1:])) / matrix[i, i]
-      answer[i] = round_to_sig_figs(answer[i], sig_figs)
+      answer[i] = commonfunctions.round_to_sig_figs(answer[i], sig_figs)
    
    return answer

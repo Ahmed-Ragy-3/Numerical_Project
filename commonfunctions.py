@@ -3,7 +3,18 @@ import numpy as np
 
 significant_digits = 4
 
+output = ""
+
 subscripts = {0: '₀', 1: '₁', 2: '₂', 3: '₃', 4: '₄', 5: '₅', 6: '₆', 7: '₇', 8: '₈', 9: '₉'}
+
+
+def stringify_matrix(matrix, sig_figs):
+   ret = ""
+   for row in matrix:
+      ret += " ".join(f"{value:.{sig_figs}f}" for value in row) + "\n"
+
+   return ret
+
 
 def subscript(num):
    ret = ""

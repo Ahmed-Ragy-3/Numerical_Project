@@ -7,13 +7,15 @@ import commonfunctions
 import time
 from forwardElimination import forward_elimination
 
+
+
 class Solver:
    def __init__(self):
       self.matrix = None
       self.b = None
       self.answer = []
       self.approach = None
-      self.significant_digits = 1
+      self.significant_digits = 15
       self.max_iterations = 50
       self.tolerance = 1e-5
       self.initial_guess = None
@@ -72,7 +74,8 @@ class Solver:
    def check_solvability(self):
       matrixChecker = copy.deepcopy(self.matrix)
       vectorChecker = copy.deepcopy(self.b)
-      forward_elimination(matrixChecker, vectorChecker)
+      forward_elimination(matrixChecker, vectorChecker, self.significant_digits)
+      commonfunctions.output = ""
       rows = self.matrix.shape[0]
       zeroRows = []
       
@@ -125,101 +128,95 @@ class Solver:
             print("8ayro asm el method")
    
    def solve(self):
-      if self.approach is None:
-         output = "Method is not selected yet"
-         return output
-      
-      output = "The Matrix:\n"
-      for row in self.matrix:
-         output += " ".join(f"{value:.{self.significant_digits}f}" for value in row) + "\n"
-      
-      output += "\n\nThe Vector:\n"
-      for row in self.b.reshape(-1, 1):
-         output += " ".join(f" {value:.{self.significant_digits}f}" for value in row) + "\n"
-      # output += str(self.b.reshape(-1, 1)).replace("[", "").replace("]", "").replace(".,"," ").replace(". ", " ").replace(",", "")
-
       self.check_solvability()
-      output += "\n\nSolvability: "
-      if self.solvability == "None":
-         output += "No Solution"
-         return output
-      elif self.solvability == "Infinite":
-         output += "Infinite number of solutions"
-         return output
+      if self.approach is None:
+         commonfunctions.output = "Method is not selected yet"
+         return commonfunctions.output
+      commonfunctions.output += "The Matrix:\n"
+      commonfunctions.output += commonfunctions.stringify_matrix(self.matrix, self.significant_digits)
       
-      output += "Unique Solution\n\n"
+      commonfunctions.output += "\n\nThe Vector:\n"
+      for row in self.b.reshape(-1, 1):
+         commonfunctions.output += " ".join(f" {value:.{self.significant_digits}f}" for value in row) + "\n"
+
+      commonfunctions.output += "\n\nSolvability: "
+      if self.solvability == "None":
+         commonfunctions.output += "No Solution"
+         return commonfunctions.output
+      elif self.solvability == "Infinite":
+         commonfunctions.output += "Infinite number of solutions"
+         return commonfunctions.output
+      
+      commonfunctions.output += "Unique Solution\n\n"
       
       start_time = time.perf_counter()
       
       try:
          answer = self.approach.solve()
+         commonfunctions.output = commonfunctions.output.replace("- -", "+ ")
       except Exception as e:
          print(e)
          return "Can't be solved using " + self.str_approach
       
       end_time = time.perf_counter()
-      output += f"The Answer: (takes {(end_time - start_time) * 1000:.8f} ms)\n"
+      commonfunctions.output += f"\nThe Answer: (takes {(end_time - start_time) * 1000:.8f} ms)\n"
       # print(end_time - start_time)
       
       
       i = 0
       
       if self.str_approach == "Jacobi" or self.str_approach == "Gauss Seidel":
-         output += f"\nNumber of Iterations: {str(answer[1])}\n\n"
+         commonfunctions.output += f"\nNumber of Iterations: {str(answer[1])}\n\n"
          for ans in answer[0]:
-            output += f"𝑥{commonfunctions.subscript(i + 1)} = "
-            output += str(commonfunctions.round_to_sig_figs(ans, self.significant_digits))
+            commonfunctions.output += f"𝑥{commonfunctions.subscript(i + 1)} = "
+            commonfunctions.output += str(commonfunctions.round_to_sig_figs(ans, self.significant_digits))
             i += 1
-            output += "\n"
+            commonfunctions.output += "\n"
       
-         return output
+         return commonfunctions.output
          
       elif self.str_approach == "Doolittle" or self.str_approach == "Cholesky" or self.str_approach == "Crout":
          L = answer[0]
          U = answer[1]
-         output += "\nThe Upper triangular Matrix:\n"
+         commonfunctions.output += "\nThe Upper triangular Matrix:\n"
          for row in U:
-            output += " ".join(f"{value:.{self.significant_digits}f}" for value in row) + "\n"
+            commonfunctions.output += " ".join(f"{value:.{self.significant_digits}f}" for value in row) + "\n"
          
-         output += "\n\nThe Lower triangular Matrix:\n"
-         #output += pd.DataFrame(U)
-         for row in L:
-            output += " ".join(f"{value:.{self.significant_digits}f}" for value in row) + "\n"
-         # output += " " + str(U).replace("[", "").replace("]", "").replace(".,"," ").replace(". ", " ").replace(",", "")
-         # output = output.replace("-0.0 ", "0.0 ")
-         output += "\n\n"
+         commonfunctions.output += "\n\nThe Lower triangular Matrix:\n"
+         commonfunctions.output += commonfunctions.stringify_matrix(L, self.significant_digits)
+         commonfunctions.output += "\n\n"
          
          for ans in answer[2]:
-            output += f"𝑥{commonfunctions.subscript(i + 1)} = "
-            output += str(commonfunctions.round_to_sig_figs(ans, self.significant_digits))
+            commonfunctions.output += f"𝑥{commonfunctions.subscript(i + 1)} = "
+            commonfunctions.output += str(commonfunctions.round_to_sig_figs(ans, self.significant_digits))
             i += 1
-            output += "\n"
+            commonfunctions.output += "\n"
             
-         return output
+         return commonfunctions.output
 
       
       for ans in answer:
-         output += f"𝑥{commonfunctions.subscript(i + 1)} = "
-         output += str(commonfunctions.round_to_sig_figs(answer[i], self.significant_digits))
+         commonfunctions.output += f"𝑥{commonfunctions.subscript(i + 1)} = "
+         commonfunctions.output += str(commonfunctions.round_to_sig_figs(answer[i], self.significant_digits))
          i += 1
-         output += "\n"
+         commonfunctions.output += "\n"
       
-      return output
+      return commonfunctions.output
    
 
 
 def main():
    #test case
-   A, b = get_test_case(6)
+   A, b = get_test_case(3)
    
    solver = Solver()
    solver.setMatrix(A)
    solver.setB(b)
-   # solver.setSignificantDigits(20)
-   solver.setSolvingStrategy("Doolittle")
+   solver.setSignificantDigits(2)
+   
+   solver.setSolvingStrategy("Gauss Jordan")
    solver.check_solvability()
 
-   # print(solver.solvability)
    print(solver.solve())
    
 
