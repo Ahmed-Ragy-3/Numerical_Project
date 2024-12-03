@@ -550,202 +550,119 @@ QTableWidget::item:selected {
        </spacer>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="mainLayout">
-        <item>
-         <widget class="QPushButton" name="methodButton">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>16777215</height>
-           </size>
-          </property>
+       <widget class="QWidget" name="widget_2" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>140</width>
+          <height>300</height>
+         </size>
+        </property>
+        <widget class="QComboBox" name="comboBox">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>10</y>
+           <width>140</width>
+           <height>40</height>
+          </rect>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>140</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QComboBox {
+    background-color: #ff69b4; /* Hot pink */
+    border: 2px solid #ff69b4; /* Hot pink */
+    border-radius: 5px;
+    padding: 5px;
+    color: #000000; /* Black text */
+    font: bold 14px Arial;
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 20px;
+    border-left: 1px solid #ff69b4; /* Hot pink */
+}
+
+QComboBox::down-arrow {
+    border: none;
+    color: #000000; /* Black arrow color */
+}
+
+QComboBox QAbstractItemView {
+    background-color: #ffc0cb; /* Light pink dropdown */
+    border: 1px solid #ff69b4; /* Hot pink border for dropdown */
+    selection-background-color: #ff69b4; /* Highlighted item in dropdown */
+    selection-color: #ffffff; /* Highlighted text color */
+    color: #000000; /* Black text for items */
+}
+</string>
+         </property>
+         <item>
           <property name="text">
            <string>Method</string>
           </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QWidget" name="methodDrawer" native="true">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
+         </item>
+         <item>
+          <property name="text">
+           <string>Gauss</string>
           </property>
-          <property name="minimumSize">
-           <size>
-            <width>200</width>
-            <height>400</height>
-           </size>
+         </item>
+         <item>
+          <property name="text">
+           <string>Gauss-Jordan</string>
           </property>
-          <widget class="QWidget" name="verticalLayoutWidget">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>4</y>
-             <width>202</width>
-             <height>388</height>
-            </rect>
-           </property>
-           <layout class="QVBoxLayout" name="methodDrawerLayout">
-            <property name="spacing">
-             <number>2</number>
-            </property>
-            <item>
-             <widget class="QPushButton" name="directButton">
-              <property name="text">
-               <string>Direct</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QWidget" name="directOptions" native="true">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>200</width>
-                <height>200</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>200</width>
-                <height>170</height>
-               </size>
-              </property>
-              <widget class="QWidget" name="layoutWidget">
-               <property name="geometry">
-                <rect>
-                 <x>0</x>
-                 <y>0</y>
-                 <width>201</width>
-                 <height>200</height>
-                </rect>
-               </property>
-               <layout class="QVBoxLayout" name="directOptionsLayout">
-                <item>
-                 <widget class="QPushButton" name="gaussButton">
-                  <property name="text">
-                   <string>Gauss</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="gaussJordanButton">
-                  <property name="text">
-                   <string>Gauss-Jordan</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="CroutDecomposition">
-                  <property name="text">
-                   <string>Cout Decomposition</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="CholeskyDecomposition">
-                  <property name="text">
-                   <string>Cholesky Decomposition</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="DoolittleDecomposition">
-                  <property name="text">
-                   <string>Doolittle Decomposition</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </widget>
-            </item>
-            <item>
-             <spacer name="verticalSpacer_3">
-              <property name="orientation">
-               <enum>Qt::Orientation::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <widget class="QPushButton" name="iterativeButton">
-              <property name="text">
-               <string>Iterative</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QWidget" name="iterativeOptions" native="true">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>100</width>
-                <height>110</height>
-               </size>
-              </property>
-              <widget class="QWidget" name="layoutWidget">
-               <property name="geometry">
-                <rect>
-                 <x>0</x>
-                 <y>20</y>
-                 <width>199</width>
-                 <height>92</height>
-                </rect>
-               </property>
-               <layout class="QVBoxLayout" name="iterativeOptionsLayout">
-                <item>
-                 <widget class="QPushButton" name="jacobiButton">
-                  <property name="text">
-                   <string>Jacobi</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="sedielButton">
-                  <property name="text">
-                   <string>Gauss-Seidel</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </widget>
-        </item>
-       </layout>
+         </item>
+         <item>
+          <property name="text">
+           <string>Crout LU</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Cholesky LU</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Doolittle LU</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Jacobi</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Gauss-Seidel</string>
+          </property>
+         </item>
+        </widget>
+       </widget>
       </item>
      </layout>
     </item>
@@ -801,7 +718,7 @@ QTableWidget::item:selected {
      <x>0</x>
      <y>0</y>
      <width>838</width>
-     <height>24</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
