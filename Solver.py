@@ -207,14 +207,14 @@ class Solver:
 
 def main():
    #test case
-   A, b = get_test_case(8)
+   A, b = get_test_case(2)
    
    solver = Solver()
    solver.setMatrix(A)
    solver.setB(b)
    solver.setSignificantDigits(2)
    
-   solver.setSolvingStrategy("Gauss Jordan")
+   solver.setSolvingStrategy("Jacobi")
    solver.check_solvability()
 
    print(solver.solve())
