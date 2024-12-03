@@ -16,7 +16,7 @@ def backward_elimination(u, b, sig_fig=20):
 
       for k in range(j+1, n):
          u[i][k] = commonfunctions.round_to_sig_figs(u[i][k] / pivot, sig_fig)
-      commonfunctions.output += f"\nR{i + 1} ←− R{i + 1} / {pivot}\n"
+      commonfunctions.output += f"\nR{i + 1} ← R{i + 1} / {pivot}\n"
       
 
       b[i] = commonfunctions.round_to_sig_figs(b[i] / pivot, sig_fig)
@@ -32,7 +32,7 @@ def backward_elimination(u, b, sig_fig=20):
                u[r][c] = 0
                continue
             u[r][c] = commonfunctions.round_to_sig_figs(u[r][c]-mult*u[r][c], sig_fig)
-         commonfunctions.output += f"\nR{i + 1} ←− R{i + 1} - {temp} * R{r + 1}"
+         commonfunctions.output += f"\nR{i + 1} ← R{i + 1} - {temp} * R{r + 1}"
          commonfunctions.output += "\n" + commonfunctions.stringify_matrix(u,sig_fig) + "\n"
    commonfunctions.output += "\n" + commonfunctions.stringify_matrix(u,sig_fig) + "\n"
    return u, b

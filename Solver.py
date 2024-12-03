@@ -207,7 +207,7 @@ class Solver:
 
 def main():
    #test case
-   A, b = get_test_case(3)
+   A, b = get_test_case(8)
    
    solver = Solver()
    solver.setMatrix(A)
@@ -299,6 +299,15 @@ def get_test_case(test_case_number):
          [1, 5, 1]
       ], dtype=float)
       b = np.array([9, 13, 7], dtype=float)
+
+   elif test_case_number == 8:
+      A = np.array([
+         [5, 0, 0],
+         [0, 3, 0],
+         [0, 0, 2]
+      ], dtype=float)
+      b = np.array([15, 6, 7], dtype=float)
+      
    else:
       raise ValueError("Invalid test case number. Please choose a number between 1 and 7.")
     

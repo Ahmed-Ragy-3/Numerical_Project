@@ -33,7 +33,7 @@ def pivot(matrix, b, rows_order, row, sig_figs):
             b[[row, max_row]] = b[[max_row, row]]
         rows_order[[row, max_row]] = rows_order[[max_row, row]]
         
-        commonfunctions.output += f"\nR{row + 1} ←−→ R{max_row + 1}"
+        commonfunctions.output += f"\nR{row + 1} ←→ R{max_row + 1}"
         commonfunctions.output += "\n" + commonfunctions.stringify_matrix(matrix, sig_figs) + "\n\n"
         
 
@@ -73,7 +73,7 @@ def forward_elimination(matrixA, vectorB, sig_figs=15):
 
             temp = matrixA[i, r]
             matrixA[i, r] = 0.0
-            commonfunctions.output += f"\nR{i + 1} ←− R{i + 1} - ({temp} / {matrixA[r, r]}) * R{r + 1}"
+            commonfunctions.output += f"\nR{i + 1} ← R{i + 1} - ({temp} / {matrixA[r, r]}) * R{r + 1}"
             commonfunctions.output += "\n" + commonfunctions.stringify_matrix(matrixA, sig_figs) + "\n"
 
     multipliers = np.array(multipliers, dtype=float)
