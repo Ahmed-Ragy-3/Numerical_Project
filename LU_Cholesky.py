@@ -30,7 +30,7 @@ class Cholesky:
                     else:
                         self.L[i][j] = (self.A[i][j] - sum_val) / self.L[j][j]
             # Set U = L.T
-            applySignificantFigure = np.vectorize(lambda x: round_to_sig_figs(x, self.significant_digits))
+            applySignificantFigure = np.vectorize(lambda x: round_to_sig_figs(x, self.sig_figs))
             self.L = applySignificantFigure(self.L)
             self.U = self.L.T
         else:

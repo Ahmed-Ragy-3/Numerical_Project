@@ -25,7 +25,7 @@ class Doolittle:
       
       order = np.arange(len(self.b))
       for r in range(rows):
-         pivot(self.A, self.b, rows_order=order, row=r)
+         pivot(self.A, self.b, rows_order=order, row=r, sig_figs = self.sig_figs)
       
       
       for i in range(rows):

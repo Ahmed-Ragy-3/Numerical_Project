@@ -216,9 +216,9 @@ def main():
    solver = Solver()
    solver.setMatrix(A)
    solver.setB(b)
-   solver.setSignificantDigits(2)
+   solver.setSignificantDigits(5)
    
-   solver.setSolvingStrategy("Jacobi")
+   solver.setSolvingStrategy("Gauss Seidel")
    solver.check_solvability()
 
    print(solver.solve())

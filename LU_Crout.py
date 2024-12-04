@@ -25,7 +25,7 @@ class Crout:
          
          for k in range(j + 1, self.n):
             self.U[j, k] = (self.A[j, k] - np.dot(self.L[j, :j], self.U[:j, k])) / self.L[j, j]
-      applySignificantFigure = np.vectorize(lambda x: round_to_sig_figs(x, self.significant_digits))
+      applySignificantFigure = np.vectorize(lambda x: round_to_sig_figs(x, self.sig_figs))
       self.L = applySignificantFigure(self.L)
       self.U =  applySignificantFigure(self.U)
    def solve(self):
