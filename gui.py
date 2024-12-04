@@ -182,13 +182,13 @@ class MainWindow(QtWidgets.QMainWindow):
         tolrence = self.toleranceNumber.text()
         itertations = self.iterationsNumber.text()
         try:
-            tolrence = float(itertations)
+            tolrence = float(tolrence)
         except:
             tolrence = None
         if sigFigs.isdigit():
             solver.setSignificantDigits(int(sigFigs))
         if isFloat(tolrence):
-            solver.setTolerance(int(tolrence))
+            solver.setTolerance(float(tolrence))
         if itertations.isdigit():
             solver.setMaxIterations(int(itertations))
         if (self.method == "Jacobi" or self.method == "Gauss Seidel"):

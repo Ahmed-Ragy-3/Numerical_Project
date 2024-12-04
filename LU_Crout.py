@@ -1,7 +1,7 @@
 import numpy as np
 from backwardSubstitution import backward_substitution
 from forwardSubstitution import forward_substitution
-
+from commonfunctions import round_to_sig_figs
 class Crout:
    def __init__(self, A, b, sig_figs=20):
       self.b = b
@@ -25,7 +25,9 @@ class Crout:
          
          for k in range(j + 1, self.n):
             self.U[j, k] = (self.A[j, k] - np.dot(self.L[j, :j], self.U[:j, k])) / self.L[j, j]
-
+      applySignificantFigure = np.vectorize(lambda x: round_to_sig_figs(x, self.significant_digits))
+      self.L = applySignificantFigure(self.L)
+      self.U =  applySignificantFigure(self.U)
    def solve(self):
       if self.L == None or self.U == None:
          self.decompose()

@@ -5,6 +5,8 @@ import Gauss, GaussJordan, LU_Crout, LU_Doolittle, LU_Cholesky
 import Jacobi, GaussSeidel
 import commonfunctions
 import time
+
+from commonfunctions import round_to_sig_figs, significant_digits
 from forwardElimination import forward_elimination
 
 
@@ -132,9 +134,11 @@ class Solver:
       if self.approach is None:
          commonfunctions.output = "Method is not selected yet"
          return commonfunctions.output
+      applySignificantFigure = np.vectorize(lambda x: round_to_sig_figs(x, self.significant_digits))
+      self.matrix = applySignificantFigure(self.matrix)
       commonfunctions.output += "The Matrix:\n"
       commonfunctions.output += commonfunctions.stringify_matrix(self.matrix, self.significant_digits)
-      
+
       commonfunctions.output += "\n\nThe Vector:\n"
       for row in self.b.reshape(-1, 1):
          commonfunctions.output += " ".join(f" {value:.{self.significant_digits}f}" for value in row) + "\n"

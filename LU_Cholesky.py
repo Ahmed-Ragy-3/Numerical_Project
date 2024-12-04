@@ -1,7 +1,7 @@
 import numpy as np
 from forwardSubstitution import forward_substitution
 from backwardSubstitution import backward_substitution
-
+from commonfunctions import round_to_sig_figs
 class Cholesky:
     def __init__(self, A, b, sig_figs=20):
         self.b = b
@@ -30,6 +30,8 @@ class Cholesky:
                     else:
                         self.L[i][j] = (self.A[i][j] - sum_val) / self.L[j][j]
             # Set U = L.T
+            applySignificantFigure = np.vectorize(lambda x: round_to_sig_figs(x, self.significant_digits))
+            self.L = applySignificantFigure(self.L)
             self.U = self.L.T
         else:
             raise ValueError("Matrix is not symmetric. Cholesky decomposition requires a symmetric matrix.")
