@@ -44,6 +44,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setMinimumWidth(900)
         # buttonsWidth = int(self.width() / 5)
         self.method = None
+        self.prevMethod = None
 
         self.significantFiguresNumber.setValidator(QIntValidator(1,20))
         self.significantFiguresNumber.setVisible(True)
@@ -63,34 +64,59 @@ class MainWindow(QtWidgets.QMainWindow):
             self.method = None
         elif text == "Gauss":
             self.method = "Gauss"
+            if (self.prevMethod == "Jacobi" or self.prevMethod == "Gauss Seidel" or self.prevMethod == None):
+                self.prevMethod =  self.method = "Gauss"
+                self.create_matrix()
+            self.prevMethod = self.method = "Gauss"
         elif text == "Gauss-Jordan":
             self.method = "Gauss Jordan"
+            if (self.prevMethod == "Jacobi" or self.prevMethod == "Gauss Seidel" or self.prevMethod == None):
+                self.prevMethod = self.method = "Gauss Jordan"
+                self.create_matrix()
+            self.prevMethod = self.method = "Gauss Jordan"
         elif text == "Crout LU":
             self.method = "Crout"
+            if (self.prevMethod == "Jacobi" or self.prevMethod == "Gauss Seidel" or self.prevMethod == None):
+                self.prevMethod = self.method = "Crout"
+                self.create_matrix()
+            self.prevMethod = self.method = "Crout"
         elif text == "Cholesky LU":
             self.method = "Cholesky"
+            if (self.prevMethod == "Jacobi" or self.prevMethod == "Gauss Seidel" or self.prevMethod == None):
+                self.prevMethod = self.method = "Cholesky"
+                self.create_matrix()
+            self.prevMethod = self.method = "Cholesky"
         elif text == "Doolittle LU":
             self.method = "Doolittle"
+            if (self.prevMethod == "Jacobi" or self.prevMethod == "Gauss Seidel" or self.prevMethod == None):
+                self.prevMethod = self.method = "Doolittle"
+                self.create_matrix()
+            self.prevMethod = self.method = "Doolittle"
         elif text == "Jacobi":
             self.method = "Jacobi"
+            if (self.prevMethod != "Gauss Seidel" or self.prevMethod == None):
+                self.prevMethod = self.method = "Jacobi"
+                self.create_matrix()
+            self.prevMethod = self.method = "Jacobi"
         elif text == "Gauss-Seidel":
             self.method = "Gauss Seidel"
+            if (self.prevMethod != "Jacobi" or self.prevMethod == None):
+                self.prevMethod = self.method = "Gauss Seidel"
+                self.create_matrix()
+            self.prevMethod = self.method = "Gauss Seidel"
 
         if (self.method == "Jacobi" or self.method == "Gauss Seidel"):
             self.toleranceNumber.setVisible(True)
             self.toleranceLabel.setVisible(True)
             self.iterationsNumber.setVisible(True)
             self.iterationsLabel.setVisible(True)
-            self.create_matrix()
         else :
             self.toleranceNumber.setVisible(False)
             self.toleranceLabel.setVisible(False)
             self.iterationsNumber.setVisible(False)
             self.iterationsLabel.setVisible(False)
-            self.create_matrix()
 
-        if (self.method != None and self.tableWidget.rowCount() != 0):
-            self.setSolve()
+        self.setSolve()
 
     def create_matrix(self):
         rows = self.numberOfEquations.text()
