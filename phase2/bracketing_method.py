@@ -94,7 +94,7 @@ def bisection_method(function, low: float, high: float, significant_figures=sys.
             if absolute_error != 0:
                 steps.append(f"the number of correct significant digits = floor(2 - log10(2 * absolute_error)) = floor(2 - log10(2 * {absolute_error})) = {int(np.floor(2 - np.log10(2 * absolute_error)))}")
             table_str = tabulate(table, headers=["Iteration", "Low", "High", "Root", "Relative Error", "Absolute Error", "function(root)"], tablefmt="grid")
-            graph = plot_bisection_results(function, min_low, max_high, lines)
+            graph = plot_bisection_results(function, 0, 5, lines)
             return root, "\n".join(steps), table_str, graph, iteration
 
         steps.append(f"function(low) * function(root) = function({low}) * function({root}) = {fun_low} * {fun_root}")

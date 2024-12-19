@@ -26,6 +26,7 @@ def false_position_method(function, low: float, high: float, significant_figures
     Returns:
         root: float, steps: str, table: str, lines: array[line]
     """
+    
     min_low = low
     max_high = high
     previous_root = None
@@ -59,7 +60,7 @@ def false_position_method(function, low: float, high: float, significant_figures
         steps.append(f"\nIteration {iteration}:\n")
         steps.append(f"low = {low}, high = {high}")
         root = round_significant((low * fun_high - high * fun_low) / (fun_high - fun_low), significant_figures)
-        steps.append(f"Estimated root = (low * fun(high) - high * fun(low)) / (fun(high) - fun(low)) = ({low} * {fun_high} - {high} * {fun_low}) / ({fun_high} - {fun_low})= {root}")
+        steps.append(f"Estimated root = (low * fun(high) - high * fun(low)) / (fun(high) - fun(low)) = ({low} * {fun_high} - {high} * {fun_low}) / ({fun_high} - {fun_low}) = {root}")
         fun_root = round_significant(function(root), significant_figures)
         steps.append(f"function(estimated_root) = function({root}) = {fun_root}")
 
@@ -118,6 +119,7 @@ def false_position_method(function, low: float, high: float, significant_figures
     steps.append(f"Maximum iterations reached. Root not found within {max_iterations} iterations.")
     table_str = tabulate(table, headers=["Iteration", "Low", "High", "Root", "Relative Error", "Absolute Error",
                                          "function(root)"], tablefmt="grid")
+    
     graph = plot_interpolation_lines(function, min_low, max_high, lines)
     return root, "\n".join(steps), table_str, graph, max_iterations
 
