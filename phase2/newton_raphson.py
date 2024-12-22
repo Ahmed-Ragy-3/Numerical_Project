@@ -69,6 +69,7 @@ def newton_raphson(functionString, initial_guess=0, max_iterations=50, error_tol
       
       correct_digits = 2 - log(2 * abs(relative_error))
       steps.append(f"Correct Digits Error = {correct_digits}")
+      # steps.append(f"the number of correct significant digits = floor(2 - log10(2 * absolute_error)) = floor(2 - log10(2 * {absolute_error})) = {int(np.floor(2 - np.log10(2 * absolute_error)))}")
       
       steps.append("\n")
       # Check if relative error reached tolerance

@@ -25,12 +25,15 @@ def modified_raphson(inputString, initial_guess, max_iterations=50,
    for i in range(max_iterations):  
       steps.append("\n")
       steps.append(f"Iteration {i + 1}")
+      
       f = pf.evaluate(x, significant_figures)
       steps.append(f"f({x}) = {f}")
+      
       f_dash = pf.evaluate_first_derivative(x, significant_figures)
       steps.append(f"f'({x}) = {f_dash}")
+      
       f_double_dash = pf.evaluate_second_derivative(x, significant_figures)
-      steps.append(f"f'({x}) = {f_double_dash}")
+      steps.append(f"f''({x}) = {f_double_dash}")
 
   
       # to avoid division by zero
