@@ -20,6 +20,7 @@ def modified_raphson(inputString, initial_guess, max_iterations=50,
     x = initial_guess
     steps = []
     table = []
+    relative_error = float('inf')
     for i in range(max_iterations):
         steps.append("\n")
         steps.append(f"Iteration {i + 1}")
@@ -53,6 +54,7 @@ def modified_raphson(inputString, initial_guess, max_iterations=50,
                 correct_digits = floor(2 - log(2 * abs(relative_error)))
             else:
                 correct_digits = float('inf')
+        
         steps.append("\n")
         table.append([i + 1,
                       f"{x}",
@@ -80,8 +82,8 @@ def modified_raphson(inputString, initial_guess, max_iterations=50,
     
 def main():
 
-   x, steps, iterations, correct_digits, relative_error, absolute_error, table_str = modified_raphson("x-1e-10", 
-                                                                                    initial_guess=1, significant_figures=12)
+   x, steps, iterations, correct_digits, relative_error, absolute_error, table_str = modified_raphson("ln(x) - 1", 
+                                                                                    initial_guess=0.9, significant_figures=12)
    
    print(x)
    print(steps)

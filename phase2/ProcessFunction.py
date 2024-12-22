@@ -1,6 +1,10 @@
 import sys
 from sympy import symbols, sympify, diff, lambdify
 import math
+import numpy as np
+from tabulate import tabulate
+import plotly.graph_objects as go
+
 
 class ProcessFunction:
    def __init__(self, inputString):
@@ -35,28 +39,56 @@ class ProcessFunction:
 
    @staticmethod
    def round_significant(value, significant_figures=sys.float_info.dig):
-      print(significant_figures)
       if value == 0:
          return 0
       else:
          return round(value, significant_figures - 1 - int(math.floor(math.log10(abs(value)))))
 
-# def main():
-#    # Create an instance of ProcessFunction
-#    func = ProcessFunction("x**2 + 2*x + 1")
-   
-#    # Evaluate function and derivatives
-#    x_value = 2
-#    significant_figures = 5
+   def plot_function(self, low, high, lines):
+      """
+      Plots the interpolation lines and the function for False Position Method using Plotly.
 
-#    func_value = func.evaluate(x_value, significant_figures)
-#    first_derivative = func.evaluate_first_derivative(x_value, significant_figures)
-#    second_derivative = func.evaluate_second_derivative(x_value, significant_figures)
+      Parameters:
+         lines (list): List of [low, fun_low, high, fun_high] at each iteration.
+         low (float): The lower bound for plotting.
+         high (float): The upper bound for plotting.
+      """
+      # Evaluate the function at x values
+      func = self.evaluateFunction()
+      x_vals = np.linspace(low, high, 2000)
+      y_vals = func(x_vals)
 
-#    # Print results
-#    print(f"f({x_value}) = {func_value}")
-#    print(f"f'({x_value}) = {first_derivative}")
-#    print(f"f''({x_value}) = {second_derivative}")
+      fig = go.Figure()
 
-# if __name__ == "__main__":
-#    main()
+      # Plot the main function
+      fig.add_trace(go.Scatter(x=x_vals, y=y_vals, mode='lines', name="Function", line=dict(color='blue')))
+
+      # Plot interpolation lines
+      for line in lines:
+         low_point, fun_low_point, high_point, fun_high_point = line
+         fig.add_trace(go.Scatter(
+            x=[low_point, high_point], 
+            y=[fun_low_point, fun_high_point], 
+            mode='lines', 
+            name=f"Interpolation: {low_point} - {high_point}", 
+            line=dict(width=3)
+         ))
+
+      # Add reference lines at x=0 and y=0
+      fig.add_trace(go.Scatter(x=[low, high], y=[0, 0], mode='lines', name='y=0', line=dict(color='black', width=2)))
+      fig.add_trace(go.Scatter(x=[0, 0], y=[min(y_vals), max(y_vals)], mode='lines', name='x=0', line=dict(color='black', width=1)))
+
+      # Update layout
+      fig.update_layout(
+         title="False Position Method Interpolation Lines",
+         xaxis_title="x",
+         yaxis_title="f(x)",
+         showlegend=True,
+         plot_bgcolor='white',
+         paper_bgcolor='white',
+         xaxis=dict(showgrid=True, gridcolor='lightgray'),
+         yaxis=dict(showgrid=True, gridcolor='lightgray'),
+         font=dict(color='black')
+      )
+
+      fig.show()
