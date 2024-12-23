@@ -65,11 +65,11 @@ def modified_raphson(inputString, initial_guess, max_iterations=50,
                       f"{correct_digits}",
                       f"{relative_error}%" if relative_error != float("inf") else "_",
                       f"{absolute_error}" if relative_error != float("inf") else "_",
-                      ])
+                    ])
 
         # Check error
         if relative_error < max(error,1e-12):
-            steps.append(f"Correct Digits Error = {correct_digits}")
+            steps.append(f"Correct Digits = {correct_digits}")
             table_str = tabulate(table, headers=["Iteration", "Previous Root", "Root", "f(x)", "f'(x)", "f''(x)",
                                                  "Correct Digits", "Relative Error", "Absolute Error"],
                                  tablefmt="grid")

@@ -61,9 +61,10 @@ def newton_raphson(functionString, initial_guess=0, max_iterations=50, error_tol
       steps.append(f"f({previous_root}) = {f}")
       
       f_dash = function.evaluate_first_derivative(previous_root, significant_figures)
+      
       # f_dash = slope = (y2 - y1) / (x2 - x1)
       lines.append([root, 0, previous_root, function.evaluate(previous_root)])
-      # lines.append([previous_root, 0, previous_root, function.evaluate(previous_root)])
+      lines.append([previous_root, 0, previous_root, function.evaluate(previous_root)])
       
       steps.append(f"f'({previous_root}) = {f_dash}")
       
@@ -91,7 +92,7 @@ def newton_raphson(functionString, initial_guess=0, max_iterations=50, error_tol
       steps.append(f"Relative error = abs(({root} - {previous_root}) / {root}) * 100 % = {relative_error}%")
       
       correct_digits = 2 - log(2 * abs(relative_error))
-      steps.append(f"Correct Digits Error = {correct_digits}")
+      steps.append(f"Correct Digits = {correct_digits}")
       # steps.append(f"the number of correct significant digits = floor(2 - log10(2 * absolute_error)) = floor(2 - log10(2 * {absolute_error})) = {int(np.floor(2 - np.log10(2 * absolute_error)))}")
       
       steps.append("\n")
@@ -108,6 +109,7 @@ def newton_raphson(functionString, initial_guess=0, max_iterations=50, error_tol
             f"{Fore.MAGENTA}{relative_error}%{Style.RESET_ALL}" if relative_error != float("inf") else "_"
          ]
       )
+      
       # table.append(
       #    [
       #       i + 1,
@@ -119,6 +121,7 @@ def newton_raphson(functionString, initial_guess=0, max_iterations=50, error_tol
       #       f"{relative_error}%" if relative_error != float("inf") else "_"
       #    ]
       # )
+      
       print(f"root = {root}, relative error = ", relative_error)
       if relative_error < error_tol:
          table_str = tabulate(table, headers=["Iteration", "Previous Root", "Root", "f(x)", "f'(x)",
@@ -127,14 +130,13 @@ def newton_raphson(functionString, initial_guess=0, max_iterations=50, error_tol
          function.plot_function(-10, 10, lines)
          return root, "\n".join(steps), table_str, i + 1, correct_digits, relative_error, absolute_error
       
-      
 
    raise ValueError("Newton Rapshon method failed to solve this function")
       
       
 def main():
    x, steps, iterations, correct_digits, relative_error, absolute_error, table_str = newton_raphson("sin(x)", 
-                                                                                    initial_guess=0.8, significant_figures=10)
+                                                                                     initial_guess=0.8, significant_figures=10)
    
    print(x)
    print(steps)

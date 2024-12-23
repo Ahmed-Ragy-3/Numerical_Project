@@ -44,7 +44,7 @@ class ProcessFunction:
       else:
          return round(value, significant_figures - 1 - int(math.floor(math.log10(abs(value)))))
 
-   def plot_function(self, low, high, lines):
+   def plot_function(self, low, high, lines, method):
       """
       Plots the interpolation lines and the function for False Position Method using Plotly.
 
@@ -80,7 +80,7 @@ class ProcessFunction:
 
       # Update layout
       fig.update_layout(
-         title="False Position Method Interpolation Lines",
+         title=f"{method}",
          xaxis_title="x",
          yaxis_title="f(x)",
          showlegend=True,
