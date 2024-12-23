@@ -36,7 +36,7 @@ def fixed_point(function_string, initial_guess=0, max_iterations=50, error_tol=1
             correct_digits = floor(2 - log(2 * abs(relative_error)))
             if correct_digits < 0:
                 correct_digits = 0
-            steps.append(f"Correct Digits Error = {correct_digits}")
+            steps.append(f"Correct Digits = {correct_digits}")
         else:
             absolute_error = float('inf')
             relative_error = float('inf')
