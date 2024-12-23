@@ -5,6 +5,9 @@ from PyQt6 import QtWidgets, uic,QtCore
 from PyQt6.QtGui import QIntValidator, QBrush, QColor
 import numpy as np
 
+
+from SolutionWindow import SolutionWindow
+
 from Solver import Solver
 
 subscripts = {0: '₀', 1: '₁', 2: '₂', 3: '₃', 4: '₄', 5: '₅', 6: '₆', 7: '₇', 8: '₈', 9: '₉'}
@@ -29,10 +32,10 @@ def isFloat(value):
     except :
         return False
 
-class MainWindow(QtWidgets.QMainWindow):
+class LinearSolverPage(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi("mixed.ui", self)  # Load the UI
+        uic.loadUi("LinearSolver.ui", self)  # Load the UI
         self.numberOfEquations.setValidator(QIntValidator(1,99))
         self.numberOfEquations.textChanged.connect(self.create_matrix)
         self.solve.clicked.connect(self.get_matrix)
@@ -48,12 +51,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.significantFiguresNumber.setValidator(QIntValidator(1,20))
         self.significantFiguresNumber.setVisible(True)
-        self.significantFiguresLabel.setVisible(True)
         self.toleranceNumber.setVisible(False)
-        self.toleranceLabel.setVisible(False)
         self.iterationsNumber.setValidator(QIntValidator(1,999))
         self.iterationsNumber.setVisible(False)
-        self.iterationsLabel.setVisible(False)
 
         self.comboBox.currentTextChanged.connect(
             lambda text: self.handle_method_selection(text)
@@ -107,14 +107,11 @@ class MainWindow(QtWidgets.QMainWindow):
 
         if (self.method == "Jacobi" or self.method == "Gauss Seidel"):
             self.toleranceNumber.setVisible(True)
-            self.toleranceLabel.setVisible(True)
             self.iterationsNumber.setVisible(True)
-            self.iterationsLabel.setVisible(True)
         else :
             self.toleranceNumber.setVisible(False)
-            self.toleranceLabel.setVisible(False)
             self.iterationsNumber.setVisible(False)
-            self.iterationsLabel.setVisible(False)
+
 
         self.setSolve()
 
@@ -234,13 +231,19 @@ class MainWindow(QtWidgets.QMainWindow):
         self.openSolutionWindow(solver.solve())
 
     def openSolutionWindow(self, solutionString):
-        self.solutionWindow = QtWidgets.QMainWindow()
-        uic.loadUi("SolutionWindow.ui", self.solutionWindow)
+        self.solutionWindow = SolutionWindow()
         self.solutionWindow.solutionString.setText(solutionString)
-        self.solutionWindow.show()
+        self.solutionWindow.findChild(QtWidgets.QPushButton, "backButton").clicked.connect(self.showLinear)
+        mainWindow = self.parent()  # Assuming the parent is MainApp
+        mainWindow.addWidget(self.solutionWindow)
+        mainWindow.setCurrentWidget(self.solutionWindow)  # Switch to the solution page
+
+    def showLinear(self):
+        self.parent().setCurrentWidget(self)
+
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    window = MainWindow()
+    window = LinearSolverPage()
     window.show()
     sys.exit(app.exec())
