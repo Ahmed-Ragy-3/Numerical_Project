@@ -82,7 +82,7 @@ class RootFinderPage(QtWidgets.QMainWindow):
             self.param1.setVisible(False)
             self.param2.setPlaceholderText("Initial Guess")
         elif text == "Secant":
-            self.method = "False-Position"
+            self.method = "Secant"
             self.param1.setVisible(True)
             self.param2.setVisible(True)
             self.param1.setPlaceholderText("Lower")

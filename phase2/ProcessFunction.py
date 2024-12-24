@@ -12,6 +12,8 @@ class ProcessFunction:
       self.f_symbolic = sympify(inputString)
       self.f_prime_symbolic = diff(self.f_symbolic, self.x)  # First derivative
       self.f_double_prime_symbolic = diff(self.f_prime_symbolic, self.x)  # Second derivative
+      
+      # print(self.f_double_prime_symbolic.__str__())
 
    def evaluateFunction(self):
       return lambdify(self.x, self.f_symbolic)
@@ -39,14 +41,17 @@ class ProcessFunction:
 
    @staticmethod
    def round_significant(value, significant_figures=sys.float_info.dig):
+      # print("value = ", value)
       if value == 0:
          return 0
+      elif value == float('inf') or value == -float('inf'):
+         return float('inf')
       else:
          return round(value, significant_figures - 1 - int(math.floor(math.log10(abs(value)))))
 
-   def plot_function(self, low, high, lines, method):
+   def plot_function(self, low, high, lines, method="Newton Raphson"):
       """
-      Plots the interpolation lines and the function for False Position Method using Plotly.
+      Plots the graph using Plotly.
 
       Parameters:
          lines (list): List of [low, fun_low, high, fun_high] at each iteration.
@@ -56,6 +61,7 @@ class ProcessFunction:
       # Evaluate the function at x values
       func = self.evaluateFunction()
       x_vals = np.linspace(low, high, 2000)
+      # x_vals = np.linspace(low, high, 20)
       y_vals = func(x_vals)
 
       fig = go.Figure()
@@ -71,12 +77,24 @@ class ProcessFunction:
             y=[fun_low_point, fun_high_point], 
             mode='lines', 
             name=f"Interpolation: {low_point} - {high_point}", 
-            line=dict(width=3)
+            line=dict(width=2)
          ))
 
       # Add reference lines at x=0 and y=0
       fig.add_trace(go.Scatter(x=[low, high], y=[0, 0], mode='lines', name='y=0', line=dict(color='black', width=2)))
       fig.add_trace(go.Scatter(x=[0, 0], y=[min(y_vals), max(y_vals)], mode='lines', name='x=0', line=dict(color='black', width=1)))
+
+      # Adjust the range for better zooming
+      # y_range1 = [min(y_vals) - abs(min(y_vals)) * 0.1, max(y_vals) + abs(max(y_vals)) * 0.1]  # Add some padding
+      # x_range1 = [low - abs(low) * 0.1, high + abs(high) * 0.1]
+      FACTOR = 2 / 3
+      x_range1 = [low * FACTOR , high * FACTOR]
+
+      # print(x_range1)
+      # print(y_range1)
+
+      # x_range1 = 10
+      y_range1 = x_range1
 
       # Update layout
       fig.update_layout(
@@ -86,8 +104,10 @@ class ProcessFunction:
          showlegend=True,
          plot_bgcolor='white',
          paper_bgcolor='white',
-         xaxis=dict(showgrid=True, gridcolor='lightgray'),
-         yaxis=dict(showgrid=True, gridcolor='lightgray'),
+         # xaxis=dict(showgrid=True, gridcolor='lightgray'),
+         # yaxis=dict(scaleanchor="x", showgrid=True, gridcolor='lightgray'),
+         xaxis=dict(showgrid=True, gridcolor='lightgray', range=x_range1),
+         yaxis=dict(scaleanchor="x", showgrid=True, gridcolor='lightgray', range=y_range1),
          font=dict(color='black')
       )
 
