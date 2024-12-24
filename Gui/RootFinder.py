@@ -4,7 +4,7 @@ import sys
 from PyQt6 import QtWidgets, uic,QtCore
 from PyQt6.QtGui import QIntValidator, QBrush, QColor
 
-from Solver import Solver
+from Solver2 import Solver
 
 from SolutionWindow import SolutionWindow
 

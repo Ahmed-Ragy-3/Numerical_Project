@@ -1,12 +1,11 @@
 import numpy as np
 import copy
-import pandas as pd
 import Gauss, GaussJordan, LU_Crout, LU_Doolittle, LU_Cholesky
 import Jacobi, GaussSeidel
 import commonfunctions
 import time
 
-from commonfunctions import round_to_sig_figs, significant_digits
+from commonfunctions import round_to_sig_figs
 from forwardElimination import forward_elimination
 
 
@@ -121,11 +120,11 @@ class Solver:
          case "Jacobi":
             self.str_approach = "Jacobi"
             self.approach = Jacobi.Jacobi(self.matrix, self.b, self.significant_digits,
-                                   self.max_iterations, self.tolerance, self.initial_guess)
+                                          self.max_iterations, self.tolerance, self.initial_guess)
          case "Gauss Seidel":
             self.str_approach = "Gauss Seidel"
             self.approach = GaussSeidel.GaussSeidel(self.matrix, self.b, self.significant_digits,
-                                    self.max_iterations, self.tolerance, self.initial_guess)
+                                                    self.max_iterations, self.tolerance, self.initial_guess)
          case _:
             print("8ayro asm el method")
    
