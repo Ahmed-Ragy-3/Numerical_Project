@@ -100,26 +100,26 @@ def secant(function: ProcessFunction, X0=0, X1=0,  max_iterations=50, error_tol=
       steps.append(f"Correct Digits = {correct_digits}")
       steps.append("\n")
       
-      table.append([
-         i + 1,
-         f"{Fore.BLUE}{round_significant(previous_root, significant_figures)}{Style.RESET_ALL}",
-         f"{Fore.GREEN}{round_significant(current_root, significant_figures)}{Style.RESET_ALL}",
-         f"{Fore.RED}{round_significant(f_xi_minus_1, significant_figures)}{Style.RESET_ALL}",
-         f"{Fore.YELLOW}{round_significant(f_xi, significant_figures)}{Style.RESET_ALL}",
-         f"{Fore.CYAN}{round_significant(following_root, significant_figures)}{Style.RESET_ALL}",
-         f"{Fore.MAGENTA}{round_significant(absolute_error, significant_figures)}{Style.RESET_ALL}" if relative_error != float("inf") else "_",
-         f"{Fore.MAGENTA}{round_significant(relative_error, significant_figures)}%{Style.RESET_ALL}" if relative_error != float("inf") else "_"
-      ])
       # table.append([
-      #       i + 1,
-      #       round_significant(previous_root, significant_figures),
-      #       round_significant(current_root, significant_figures),
-      #       round_significant(f_xi_minus_1, significant_figures),
-      #       round_significant(f_xi, significant_figures),
-      #       round_significant(following_root, significant_figures),
-      #       round_significant(absolute_error, significant_figures),
-      #       round_significant(relative_error, significant_figures)
-      #   ])
+      #    i + 1,
+      #    f"{Fore.BLUE}{round_significant(previous_root, significant_figures)}{Style.RESET_ALL}",
+      #    f"{Fore.GREEN}{round_significant(current_root, significant_figures)}{Style.RESET_ALL}",
+      #    f"{Fore.RED}{round_significant(f_xi_minus_1, significant_figures)}{Style.RESET_ALL}",
+      #    f"{Fore.YELLOW}{round_significant(f_xi, significant_figures)}{Style.RESET_ALL}",
+      #    f"{Fore.CYAN}{round_significant(following_root, significant_figures)}{Style.RESET_ALL}",
+      #    f"{Fore.MAGENTA}{round_significant(absolute_error, significant_figures)}{Style.RESET_ALL}" if relative_error != float("inf") else "_",
+      #    f"{Fore.MAGENTA}{round_significant(relative_error, significant_figures)}%{Style.RESET_ALL}" if relative_error != float("inf") else "_"
+      # ])
+      table.append([
+            i + 1,
+            round_significant(previous_root, significant_figures),
+            round_significant(current_root, significant_figures),
+            round_significant(f_xi_minus_1, significant_figures),
+            round_significant(f_xi, significant_figures),
+            round_significant(following_root, significant_figures),
+            round_significant(absolute_error, significant_figures),
+            round_significant(relative_error, significant_figures)
+        ])
       
       previous_root = current_root
       current_root = following_root

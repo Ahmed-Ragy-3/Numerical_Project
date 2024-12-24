@@ -1,10 +1,10 @@
 import sys
 # from crypt import methods
+# from PyQt6 import QtWidgets, uic,QtCore
+# from PyQt6.QtGui import QIntValidator, QBrush, QColor
 
-from PyQt6 import QtWidgets, uic,QtCore
-from PyQt6.QtGui import QIntValidator, QBrush, QColor
-from numpy.core.defchararray import upper
-from soupsieve.util import lower
+from PyQt6.QtGui import QIntValidator
+from PyQt6 import QtWidgets, uic
 
 from Solver2 import Solver
 
@@ -78,8 +78,8 @@ class RootFinderPage(QtWidgets.QMainWindow):
             self.param2.setVisible(True)
             self.param1.setVisible(False)
             self.param2.setPlaceholderText("Initial Guess")
-        elif text == "Modifed Newton-Raphson":
-            self.method = "Modifed Newton-Raphson"
+        elif text == "Modified Newton-Raphson":
+            self.method = "Modified Newton-Raphson"
             self.param2.setVisible(True)
             self.param1.setVisible(False)
             self.param2.setPlaceholderText("Initial Guess")
@@ -90,6 +90,7 @@ class RootFinderPage(QtWidgets.QMainWindow):
             self.param1.setPlaceholderText("Lower")
             self.param2.setPlaceholderText("Upper")
         self.setSolve()
+
     def setSolve(self):
         if self.method != None and self.Equation.text() != "":
             self.solve.setEnabled(True)
@@ -98,69 +99,57 @@ class RootFinderPage(QtWidgets.QMainWindow):
             self.solve.setEnabled(False)
             self.plot.setEnabled(False)
 
-
-
     def handlePlot(self):
 
         eqn = self.Equation.text()
         try:
             solver = Solver(eqn)
-            solver.setApproach(self.method)
-            solver.plot()
+            solver.plot(eqn)
         except ValueError as e:
             QtWidgets.QMessageBox.warning(self, "Input Error"," Invalid Function")
             return
-        print(eqn)
 
     def handleSolve(self):
         eqn = self.Equation.text()
-        print(eqn)
 
         try:
             solver = Solver(eqn)
-            solver.setApproach(self.method)
+            solver.set_approach(self.method)
         except ValueError as e:
             QtWidgets.QMessageBox.warning(self, "Input Error"," : Invalid Function")
             return
 
-
-    # if bi or false l->p1 , u->p2
-        # else inital->p2
         sigFigs = self.significantFiguresNumber.text()
-        tolrence = self.toleranceNumber.text()
-        itertations = self.iterationsNumber.text()
+        tolerance = self.toleranceNumber.text()
+        iterations = self.iterationsNumber.text()
         lower = self.param1.text()
         upper = self.param2.text()
-        # print(sigFigs)
-        # print(tolrence)
-        # print(itertations)
-        # print(lower)
-        # print(upper)
+
         try:
-            tolrence = float(tolrence)
+            tolerance = float(tolerance)
         except:
-            tolrence = None
+            tolerance = None
         if sigFigs.isdigit():
-            solver.setSignificantDigits(int(sigFigs))
-        if isFloat(tolrence):
-            solver.setTolerance(float(tolrence))
-        if itertations.isdigit():
-            solver.setMaxIterations(int(itertations))
+            solver.set_significant_figures(int(sigFigs))
+        if isFloat(tolerance):
+            solver.set_tolerance(float(tolerance))
+        if iterations.isdigit():
+            solver.set_max_iterations(int(iterations))
 
-        if (self.method == "secant" or self.method == "Bisection" or self.method == "False-Position"):
+        if self.method == "Secant" or self.method == "Bisection" or self.method == "False-Position" :
 
-            if(not isFloat(lower) or not isFloat(upper)):
+            if not isFloat(lower) or not isFloat(upper):
                 QtWidgets.QMessageBox.warning(self, "Input Error ","should state initial guess")
                 return
-            solver.set_initial_guess_1(lower)
-            solver.set_initial_guess_2(upper)
+            solver.set_initial_guess_1(float(lower))
+            solver.set_initial_guess_2(float(upper))
             try:
                 self.openSolutionWindow(solver.solve())
             except ValueError as e:
                 QtWidgets.QMessageBox.warning(self, "Input Error", " : Solve error")
                 return
         else:
-            if(not isFloat(upper)):
+            if not isFloat(upper):
                 QtWidgets.QMessageBox.warning(self, "Input Error","should state initial guess")
                 return
             solver.set_initial_guess_1(upper)
@@ -169,7 +158,6 @@ class RootFinderPage(QtWidgets.QMainWindow):
             except ValueError as e:
                 QtWidgets.QMessageBox.warning(self, "Input Error", " : Solve error")
                 return
-
 
 
     def openSolutionWindow(self, solutionString):

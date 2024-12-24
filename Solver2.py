@@ -27,9 +27,9 @@ class Solver:
          self.function = ProcessFunction(functionString)
       except SympifyError as e:
          self.function = None
-         raise ValueError("Invalid function string.")
+         raise ValueError(f"Invalid function string. {e}")
  
-   def setApproach(self, approach: str) -> None:
+   def set_approach(self, approach: str) -> None:
       match approach:
          case "Bisection":
             self.approach = "Bisection"
@@ -43,8 +43,8 @@ class Solver:
          case "Original Newton-Raphson":
             self.approach = "Newton Raphson"
          
-         case "Modifed Newton-Raphson":
-            self.approach = "Modified Newton Rapshon"
+         case "Modified Newton-Raphson":
+            self.approach = "Modified Newton Raphson"
          
          case "Secant":
             self.approach = "Secant"
@@ -53,10 +53,16 @@ class Solver:
            raise ValueError("Invalid Method Name") 
           
    def set_initial_guess_1(self, initial_guess_1):
-      self.initial_guess_1 = initial_guess_1
+      if initial_guess_1 != "":
+         self.initial_guess_1 = initial_guess_1
+      else:
+         raise ValueError("Invalid initial guess 1")
 
    def set_initial_guess_2(self, initial_guess_2):
-      self.initial_guess_2 = initial_guess_2
+      if initial_guess_2 != "":
+         self.initial_guess_2 = initial_guess_2
+      else:
+         raise ValueError("Invalid initial guess 2")
 
    def set_significant_figures(self, significant_figures):
       if significant_figures <= 0:
@@ -73,16 +79,30 @@ class Solver:
          raise ValueError("Error tolerance must be greater than 0.")
       self.tolerance = tolerance
 
-   # the boundries needs to be changed 
-   def plot(self):
+   # the boundaries need to be changed
+   def plot(self, displayedString):
       if self.function != None:
-         self.function.plot_function(-10, 10, [], self.approach)
+          self.function.plot_function(-10, 10, [], displayedString)
 
    def solve(self):
+      # delete me
+      # print(self.approach)
+      # print(type(self.approach))
+      # print(self.initial_guess_1)
+      # print(type(self.initial_guess_1))
+      # print(self.initial_guess_2)
+      # print(type(self.initial_guess_2))
+      # print(self.max_iterations)
+      # print(type(self.max_iterations))
+      # print(self.significant_figures)
+      # print(type(self.significant_figures))
+      # print(self.tolerance)
+      # print(type(self.tolerance))
+
       root = None
       steps = None
       table = None
-      graph = None # nour akram should plot inside this function :)
+      graph = None
       iterations_done = None
       correct_digits = None
       relative_error = None
@@ -104,24 +124,25 @@ class Solver:
             case "Newton Raphson": # root, steps, table , iterations_done, correct_digits, relative_error, absolute_error
                root, steps, table, iterations_done, correct_digits, relative_error, absolute_error = newton_raphson(self.function, self.initial_guess_1, self.max_iterations, self.tolerance, self.significant_figures)
             
-            case "Modified Newton Rapshon": # root, steps, iterations_done, correct_digits, relative_error, absolute_error, table
+            case "Modified Newton Raphson": # root, steps, iterations_done, correct_digits, relative_error, absolute_error, table
                root, steps, iterations_done, correct_digits, relative_error, absolute_error, table = modified_raphson(self.function, self.initial_guess_1, self.max_iterations, self.tolerance, self.significant_figures)
             
             case "Secant": # root, steps, table iterations_done, correct_digits, relative_error, absolute_error
                root, steps, table, iterations_done, correct_digits, relative_error, absolute_error = secant(self.function, self.initial_guess_1, self.initial_guess_2,  self.max_iterations, self.tolerance, self.significant_figures)
+
+         solution = ""
+         solution += f"Root: {root}\n"
+         solution += f"Iterations: {iterations_done}\n"
+         solution += f"Correct Digits: {correct_digits}\n"
+         solution += f"Relative Error: {relative_error}\n"
+         solution += f"Absolute Error: {absolute_error}\n"
+         solution += f"{table}\n"
+         solution += f"{steps}\n"
+
+         return solution
+
       except SympifyError as e:
-         raise ValueError(f"{e}.")
-
-      solution = ""
-      solution += f"Root: {root}\n"
-      solution += f"Iterations: {iterations_done}\n"
-      solution += f"Correct Digits: {correct_digits}\n"
-      solution += f"Relative Error: {relative_error}\n"
-      solution += f"Absolute Error: {absolute_error}\n"
-      solution += f"{table}\n"
-      solution += f"{steps}\n"
-
-      return solution
+         raise ValueError(f"error 1{e}.")
 
 if __name__ == "__main__":
    
@@ -130,14 +151,12 @@ if __name__ == "__main__":
    try:
       solver = Solver(function_string)
 
-      solver.setApproach("Secant")
+      solver.set_approach("Secant")
       solver.set_initial_guess_1(-3.5)
       solver.set_initial_guess_2(-3)
       solver.set_significant_figures(6)
       solver.set_max_iterations(10)
       solver.set_tolerance(1e-5)
-
-      # solver.plot()
 
       solution = solver.solve()
 
