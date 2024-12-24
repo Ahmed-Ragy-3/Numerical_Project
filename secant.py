@@ -68,7 +68,7 @@ def secant(function: ProcessFunction, X0=0, X1=0,  max_iterations=50, error_tol=
       denominator = round_significant(denominator, significant_figures)
 
       if denominator == 0:
-         raise ValueError("Division by zero in the formula!")
+         raise ValueError("Division by zero in the formula !")
 
       following_root = current_root - (numerator / denominator)
       following_root = round_significant(following_root, significant_figures)
@@ -79,6 +79,9 @@ def secant(function: ProcessFunction, X0=0, X1=0,  max_iterations=50, error_tol=
 
       absolute_error = abs(following_root - current_root)
       absolute_error = round_significant(absolute_error, significant_figures)
+      
+      if following_root == 0:
+         raise ValueError("Division by zero on calculating the relative error !")
 
       relative_error = abs((following_root - current_root) / following_root) * 100
       relative_error = round_significant(relative_error, significant_figures)
@@ -136,7 +139,7 @@ def secant(function: ProcessFunction, X0=0, X1=0,  max_iterations=50, error_tol=
       
 def main():
    root, steps, table_str, iterations, correct_digits, relative_error, absolute_error = secant(
-      " x ^ 3 - x ^ 2 - 10 * x + 7",
+      ProcessFunction("x ^ 3 - x ^ 2 - 10 * x + 7"),
       X0=-3.5,
       X1=-3,
       max_iterations=10,
@@ -153,3 +156,4 @@ def main():
 
 if __name__ == "__main__":
    main()
+
