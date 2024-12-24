@@ -3,6 +3,8 @@ import sys
 
 from PyQt6 import QtWidgets, uic,QtCore
 from PyQt6.QtGui import QIntValidator, QBrush, QColor
+from numpy.core.defchararray import upper
+from soupsieve.util import lower
 
 from Solver2 import Solver
 
@@ -91,37 +93,84 @@ class RootFinderPage(QtWidgets.QMainWindow):
     def setSolve(self):
         if self.method != None and self.Equation.text() != "":
             self.solve.setEnabled(True)
+            self.plot.setEnabled(True)
         else :
             self.solve.setEnabled(False)
-
-        if(self.Equation.text() == ""):
             self.plot.setEnabled(False)
-        else:
-            self.plot.setEnabled(True)
+
 
 
     def handlePlot(self):
-        print("hello")
+
+        eqn = self.Equation.text()
+        try:
+            solver = Solver(eqn)
+            solver.setApproach(self.method)
+            solver.plot()
+        except ValueError as e:
+            QtWidgets.QMessageBox.warning(self, "Input Error"," Invalid Function")
+            return
+        print(eqn)
+
     def handleSolve(self):
         eqn = self.Equation.text()
-        solver = Solver()
-        # if bi or false l->p1 , u->p2
+        print(eqn)
+
+        try:
+            solver = Solver(eqn)
+            solver.setApproach(self.method)
+        except ValueError as e:
+            QtWidgets.QMessageBox.warning(self, "Input Error"," : Invalid Function")
+            return
+
+
+    # if bi or false l->p1 , u->p2
         # else inital->p2
-        # sigFigs = self.significantFiguresNumber.text()
-        # tolrence = self.toleranceNumber.text()
-        # itertations = self.iterationsNumber.text()
-        # try:
-        #     tolrence = float(tolrence)
-        # except:
-        #     tolrence = None
-        # if sigFigs.isdigit():
-        #     solver.setSignificantDigits(int(sigFigs))
-        # if isFloat(tolrence):
-        #     solver.setTolerance(float(tolrence))
-        # if itertations.isdigit():
-        #     solver.setMaxIterations(int(itertations))
-        # #QtWidgets.QMessageBox.warning(self, "Input Error", f"Cell ({row}, {col}) is empty.")
-        # self.openSolutionWindow(solver.solve())
+        sigFigs = self.significantFiguresNumber.text()
+        tolrence = self.toleranceNumber.text()
+        itertations = self.iterationsNumber.text()
+        lower = self.param1.text()
+        upper = self.param2.text()
+        # print(sigFigs)
+        # print(tolrence)
+        # print(itertations)
+        # print(lower)
+        # print(upper)
+        try:
+            tolrence = float(tolrence)
+        except:
+            tolrence = None
+        if sigFigs.isdigit():
+            solver.setSignificantDigits(int(sigFigs))
+        if isFloat(tolrence):
+            solver.setTolerance(float(tolrence))
+        if itertations.isdigit():
+            solver.setMaxIterations(int(itertations))
+
+        if (self.method == "secant" or self.method == "Bisection" or self.method == "False-Position"):
+
+            if(not isFloat(lower) or not isFloat(upper)):
+                QtWidgets.QMessageBox.warning(self, "Input Error ","should state initial guess")
+                return
+            solver.set_initial_guess_1(lower)
+            solver.set_initial_guess_2(upper)
+            try:
+                self.openSolutionWindow(solver.solve())
+            except ValueError as e:
+                QtWidgets.QMessageBox.warning(self, "Input Error", " : Solve error")
+                return
+        else:
+            if(not isFloat(upper)):
+                QtWidgets.QMessageBox.warning(self, "Input Error","should state initial guess")
+                return
+            solver.set_initial_guess_1(upper)
+            try:
+                self.openSolutionWindow(solver.solve())
+            except ValueError as e:
+                QtWidgets.QMessageBox.warning(self, "Input Error", " : Solve error")
+                return
+
+
 
     def openSolutionWindow(self, solutionString):
         self.solutionWindow = SolutionWindow()
