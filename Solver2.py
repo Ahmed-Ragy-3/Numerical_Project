@@ -6,6 +6,7 @@ from modified_raphson import modified_raphson
 from fixed_point import fixed_point
 from secant import secant
 from sympy import SympifyError
+import time
 
 # names = {
 #    "raphson" : "Original Newton-Raphson",
@@ -109,6 +110,8 @@ class Solver:
          # tuple contains the common parameters of the all approaches
          params = (self.function, self.max_iterations, self.tolerance, self.significant_figures)
          
+         start_time = time.perf_counter()
+         
          match self.approach:
             case "Bisection":
                answer, lines = bisection_method(*params, self.initial_guess_1, self.initial_guess_2)
@@ -133,6 +136,8 @@ class Solver:
          root, steps, table, iterations_done, correct_digits, relative_error, absolute_error = answer
          # root, "\n".join(steps), "\n" + table_str, i + 1, correct_digits, relative_error, absolute_error, lines
 
+         end_time = time.perf_counter()
+
          solution = ""
          solution += f"Root: {root}\n"
          solution += f"Iterations: {iterations_done}\n"
@@ -140,8 +145,8 @@ class Solver:
          solution += f"Relative Error: {relative_error}\n"
          solution += f"Absolute Error: {absolute_error}\n"
          solution += f"{table}\n"
-         solution += f"{steps}\n"
-         solution += f"{table}\n"
+         solution += f"{steps}\n\n"
+         solution += f"Time taken: {(end_time - start_time) * 1000:.8f} ms\n"
 
          # print(steps)
          # return solution

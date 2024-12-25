@@ -4,7 +4,6 @@ from commonfunctions import round_to_sig_figs
 
 
 
-
 def convert_to_diagonally_dominant(input_matrix,input_B):
 
     n = len(input_matrix)  # Size of the matrix
