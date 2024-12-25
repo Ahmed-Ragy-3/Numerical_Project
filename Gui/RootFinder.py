@@ -1,10 +1,13 @@
 import sys
+from curses.ascii import isdigit
+
 # from crypt import methods
 # from PyQt6 import QtWidgets, uic,QtCore
 # from PyQt6.QtGui import QIntValidator, QBrush, QColor
 
 from PyQt6.QtGui import QIntValidator
 from PyQt6 import QtWidgets, uic
+from scipy.linalg import solve
 
 from Solver2 import Solver
 
@@ -38,8 +41,10 @@ class RootFinderPage(QtWidgets.QMainWindow):
         self.method = None
         self.solve.clicked.connect(self.handleSolve)
         self.plot.clicked.connect(self.handlePlot)
+        self.plotSteps.clicked.connect(self.handlePlotSteps)
         self.solve.setEnabled(False)
         self.plot.setEnabled(False)
+        self.plotSteps.setEnabled(False)
         self.setMinimumHeight(600)
         self.setMinimumWidth(900)
         self.Equation.textChanged.connect(self.setSolve)
@@ -50,6 +55,7 @@ class RootFinderPage(QtWidgets.QMainWindow):
         self.comboBox.currentTextChanged.connect(
             lambda text: self.handle_method_selection(text)
         )
+        self.solver = Solver()
 
     def handle_method_selection(self, text):
         if text == "Method":
@@ -95,16 +101,24 @@ class RootFinderPage(QtWidgets.QMainWindow):
         if self.method != None and self.Equation.text() != "":
             self.solve.setEnabled(True)
             self.plot.setEnabled(True)
+            self.plotSteps.setEnabled(True)
+
         else :
             self.solve.setEnabled(False)
             self.plot.setEnabled(False)
+            self.plotSteps.setEnabled(False)
 
     def handlePlot(self):
 
         eqn = self.Equation.text()
+        xmin = self.graphx.text()
+        xmax = self.graphy.text()
         try:
-            solver = Solver(eqn)
-            solver.plot(eqn)
+            self.solver.set_function(eqn)
+            if xmin.isdigit() and xmax.isdigit():
+                self.solver.plot(float(xmin),float(xmax))
+            else:
+                self.solver.plot()
         except ValueError as e:
             QtWidgets.QMessageBox.warning(self, "Input Error"," Invalid Function")
             return
@@ -113,8 +127,8 @@ class RootFinderPage(QtWidgets.QMainWindow):
         eqn = self.Equation.text()
 
         try:
-            solver = Solver(eqn)
-            solver.set_approach(self.method)
+            self.solver.set_function(eqn)
+            self.solver.set_approach(self.method)
         except ValueError as e:
             QtWidgets.QMessageBox.warning(self, "Input Error"," : Invalid Function")
             return
@@ -130,21 +144,21 @@ class RootFinderPage(QtWidgets.QMainWindow):
         except:
             tolerance = None
         if sigFigs.isdigit():
-            solver.set_significant_figures(int(sigFigs))
+            self.solver.set_significant_figures(int(sigFigs))
         if isFloat(tolerance):
-            solver.set_tolerance(float(tolerance))
+            self.solver.set_tolerance(float(tolerance))
         if iterations.isdigit():
-            solver.set_max_iterations(int(iterations))
+            self.solver.set_max_iterations(int(iterations))
 
         if self.method == "Secant" or self.method == "Bisection" or self.method == "False-Position" :
 
             if not isFloat(lower) or not isFloat(upper):
                 QtWidgets.QMessageBox.warning(self, "Input Error ","should state initial guess")
                 return
-            solver.set_initial_guess_1(float(lower))
-            solver.set_initial_guess_2(float(upper))
+            self.solver.set_initial_guess_1(float(lower))
+            self.solver.set_initial_guess_2(float(upper))
             try:
-                self.openSolutionWindow(solver.solve())
+                self.openSolutionWindow(self.solver.solve())
             except ValueError as e:
                 QtWidgets.QMessageBox.warning(self, "Input Error", " : Solve error")
                 return
@@ -152,12 +166,20 @@ class RootFinderPage(QtWidgets.QMainWindow):
             if not isFloat(upper):
                 QtWidgets.QMessageBox.warning(self, "Input Error","should state initial guess")
                 return
-            solver.set_initial_guess_1(upper)
+            self.solver.set_initial_guess_1(upper)
             try:
-                self.openSolutionWindow(solver.solve())
+                self.openSolutionWindow(self.solver.solve())
             except ValueError as e:
                 QtWidgets.QMessageBox.warning(self, "Input Error", " : Solve error")
                 return
+
+    def handlePlotSteps(self):
+        xmin = self.graphx.text()
+        xmax = self.graphy.text()
+        if xmin.isdigit() and xmax.isdigit():
+            self.solver.plot_solution(float(xmin), float(xmax))
+        else:
+            self.solver.plot_solution()
 
 
     def openSolutionWindow(self, solutionString):

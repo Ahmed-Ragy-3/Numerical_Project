@@ -17,11 +17,9 @@ from sympy import SympifyError
 # }
 
 class Solver:
-   def __init__(self, functionString):
-      try:
-         self.function = ProcessFunction(functionString)
-      except SympifyError as e:
-         raise ValueError("Invalid function string.")
+   def __init__(self):
+
+      self.function = None
       
       self.approach = None
       self.initial_guess_1 = None
@@ -73,12 +71,9 @@ class Solver:
       if self.function != None:
          self.function.plot_function(low, high, lines)
    
-   # def plot_solution(self, low, high, lines):
-   def plot_solution(self, low=-10, high=10):
-      if self.lines == None:
-         return
-      self.plot(low, high, self.lines)
-
+   def plot_solution(self, low=-10, high=10, lines=[] ):
+      self.plot(low, high, lines)
+      
 
    def solve(self):
       # delete me
