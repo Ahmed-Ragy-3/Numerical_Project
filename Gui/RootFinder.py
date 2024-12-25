@@ -1,5 +1,5 @@
 import sys
-from curses.ascii import isdigit
+# from curses.ascii import isdigit
 
 # from crypt import methods
 # from PyQt6 import QtWidgets, uic,QtCore
@@ -118,7 +118,7 @@ class RootFinderPage(QtWidgets.QMainWindow):
             if xmin.isdigit() and xmax.isdigit():
                 self.solver.plot(float(xmin),float(xmax))
             else:
-                self.solver.plot()
+                self.solver.plot(float(xmin),float(xmax))
         except ValueError as e:
             QtWidgets.QMessageBox.warning(self, "Input Error"," Invalid Function")
             return
@@ -179,7 +179,7 @@ class RootFinderPage(QtWidgets.QMainWindow):
         if xmin.isdigit() and xmax.isdigit():
             self.solver.plot_solution(float(xmin), float(xmax))
         else:
-            self.solver.plot_solution()
+            self.solver.plot_solution(float(xmin), float(xmax))
 
 
     def openSolutionWindow(self, solutionString):

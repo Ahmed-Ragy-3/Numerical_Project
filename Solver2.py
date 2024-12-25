@@ -67,12 +67,14 @@ class Solver:
       self.tolerance = tolerance
 
    # the boundaries need to be changed
-   def plot(self, low=-10, high=10, lines=[]):
-      if self.function != None:
-         self.function.plot_function(low, high, lines)
+   def plot(self, low=-10, high=10):
+      if self.function is not None:
+         self.function.plot_function(low, high, [])
    
-   def plot_solution(self, low=-10, high=10, lines=[] ):
-      self.plot(low, high, lines)
+   def plot_solution(self, low=-10, high=10):
+      if self.lines == None:
+         return
+      self.plot(low, high, self.lines)
       
 
    def solve(self):
@@ -170,19 +172,21 @@ if __name__ == "__main__":
    function_string = "(x^2 - 2)"
 
    try:
-      solver = Solver(function_string)
+      solver = Solver()
+
+      solver.set_function("x^3- 5*x^2+3*x-1")
 
       solver.plot(-10, 10)
 
       # solver.set_approach("Bisection")
       # solver.set_approach("False Position")
-      solver.set_approach("Fixed Point")
+      solver.set_approach("Bisection")
       # solver.set_approach("Newton Raphson")
       # solver.set_approach("Modified Newton Raphson")
       # solver.set_approach("Secant")
       
-      solver.set_initial_guess_1(2.1) # اهلا
-      solver.set_initial_guess_2(3)
+      solver.set_initial_guess_1(4)
+      solver.set_initial_guess_2(5)
       solver.set_significant_figures(5)
       solver.set_max_iterations(20)
       solver.set_tolerance(1e-5)
