@@ -2,18 +2,43 @@ import sys
 import numpy as np
 from tabulate import tabulate
 import plotly.graph_objects as go
+from ProcessFunction import ProcessFunction
+from math import log
+import math
+
+def round_significant(value, significant_figures=sys.float_info.dig):
+    """
+    Rounds the given value to the specified number of significant figures.
+
+    :param value: The float number to round.
+    :param significant_figures: The number of significant figures to retain.
+    :return: The rounded value.
+    """
+    # print("value = ", value)
+    try:
+        if value == 0 or abs(value) < 1e-13:
+            return 0
+        
+        if math.isinf(value):
+            return float('inf')
+
+        decimal_places = significant_figures - 1 - int(math.floor(math.log10(abs(value))))
+        return round(value, decimal_places)
+    except (ValueError, OverflowError) as e:
+        raise ValueError("Error occurred during rounding calculation.") from e 
 
 
-def round_significant(value, sig_figs):
-    if value == 0:
-        return 0
-    elif value == float('inf') or value == -float('inf'):
-        return float('inf')
-    else:
-        return round(value, sig_figs - int(np.floor(np.log10(abs(value)))) - 1)
+# def round_significant(value, sig_figs):
+#     if abs(value) < 1e-12:
+#         return 0
+#     elif value == float('inf') or value == -float('inf'):
+#         return float('inf')
+#     else:
+#         return round(value, sig_figs - int(np.floor(np.log10(abs(value)))) - 1)
 
-
-def bisection_method(function, low: float, high: float, significant_figures=sys.float_info.dig, error=0.00001, max_iterations=50):
+# params = (self.function, self.max_iterations, self.tolerance, self.significant_figures)
+def bisection_method(function: ProcessFunction, max_iterations=50, error=0.00001, significant_figures=sys.float_info.dig,
+                    low=-10.0, high=10.0):
     """
     Parameters:
         function (callable): The function for which to find the root.
@@ -32,11 +57,20 @@ def bisection_method(function, low: float, high: float, significant_figures=sys.
     table = []
     steps = []
     lines = []
+    
+    # print(function)
+    # print(max_iterations)
+    print("e ", error)
+    # print(significant_figures)
+    # print(low)
+    # print(high)
+    
 
+    # print(f"low = {low}, sig = {significant_figures}")
     low = round_significant(low, significant_figures)
     high = round_significant(high, significant_figures)
-    fun_low = round_significant(function(low), significant_figures)
-    fun_high = round_significant(function(high), significant_figures)
+    fun_low = round_significant(function.evaluate(low), significant_figures)
+    fun_high = round_significant(function.evaluate(high), significant_figures)
 
 
     steps.append("Check if the function changes sign between low and high:")
@@ -44,26 +78,27 @@ def bisection_method(function, low: float, high: float, significant_figures=sys.
 
     if fun_low * fun_high > 0:
         steps.append("Which is greater than 0. Can't be solved: no bracketing found.")
-        graph = plot_bisection_results(function, min_low, max_high, lines)
-        return None, "\n".join(steps), "", graph, 0
+        raise ValueError(f"It can't be solved by bisection method, there f({low}) * f({high}) > 0")
 
     steps.append("Which is less than 0. So there is at least one root between the bounds.")
-    steps.append(f"the number of iterations needed is = ceil(log2((high - low) / error)) = ceil(log2(({high} - {low}) / {error})) = {int(np.ceil(np.log2((high - low) / error)))}")
-
+    print(error)
+    # steps.append(f"the number of iterations needed is = ceil(log2((high - low) / error)) = ceil(log2(({high} - {low}) / {error})) = {int(np.ceil(np.log2((high - low) / error)))}")
+    correct_digits = 0
+    print(low)
     for iteration in range(1, max_iterations + 1):
         low = round_significant(low, significant_figures)
         high = round_significant(high, significant_figures)
-        round_significant(function(low), significant_figures)
-        round_significant(function(high), significant_figures)
+        round_significant(function.evaluate(low), significant_figures)
+        round_significant(function.evaluate(high), significant_figures)
 
         steps.append(f"\nIteration {iteration}:\n")
         steps.append(f"low = {low}, high = {high}")
         root = round_significant((low + high) / 2.0, significant_figures)
         steps.append(f"Estimated root = (low + high) / 2 = ({low} + {high}) / 2 = {root}")
-        fun_root = round_significant(function(root), significant_figures)
+        fun_root = round_significant(function.evaluate(root), significant_figures)
         steps.append(f"function(estimated_root) = function({root}) = {fun_root}")
 
-        lines.append(root)
+        lines.append([root, -10, root ,10])
 
         if previous_root is not None:
             absolute_error = round_significant(abs(root - previous_root), significant_figures)
@@ -85,18 +120,23 @@ def bisection_method(function, low: float, high: float, significant_figures=sys.
                       f"{absolute_error}"if relative_error != float("inf") else "_",
                       f"{fun_root}"])
 
-        if function(root) == 0 or absolute_error < error:
-            if function(root) == 0:
+        if function.evaluate(root) == 0 or absolute_error < error:
+            if function.evaluate(root) == 0:
                 steps.append(f"function(root) = function({root}) = 0")
+            
             if absolute_error < error:
                 steps.append(f"absolute_error < error as {absolute_error} < {error}")
+            
             steps.append(f"Root found: {root} after {iteration} iterations with {significant_figures} significant figures and {error} error.")
+  
             if absolute_error != 0:
-                steps.append(f"the number of correct significant digits = floor(2 - log10(2 * absolute_error)) = floor(2 - log10(2 * {absolute_error})) = {int(np.floor(2 - np.log10(2 * absolute_error)))}")
+                correct_digits = int(np.floor(2 - np.log10(2 * absolute_error)))
+                steps.append(f"the number of correct significant digits = floor(2 - log10(2 * absolute_error)) = floor(2 - log10(2 * {absolute_error})) = {correct_digits}")
+            
             table_str = tabulate(table, headers=["Iteration", "Low", "High", "Root", "Relative Error", "Absolute Error", "function(root)"], tablefmt="grid")
-            graph = plot_bisection_results(function, 0, 5, lines)
-            return root, "\n".join(steps), table_str, graph, iteration
-
+            
+            return (root, "\n".join(steps), table_str, iteration, correct_digits, relative_error, absolute_error), lines
+            
         steps.append(f"function(low) * function(root) = function({low}) * function({root}) = {fun_low} * {fun_root}")
         if fun_low * fun_root < 0:
             steps.append(f"Which is less than 0, hence the root is between low and root.")
@@ -110,11 +150,12 @@ def bisection_method(function, low: float, high: float, significant_figures=sys.
             low = root
 
         previous_root = root
-
+    
+    correct_digits = int(np.floor(2 - np.log10(2 * absolute_error)))
     steps.append(f"Maximum iterations reached. Root not found within {max_iterations} iterations.")
     table_str = tabulate(table, headers=["Iteration", "Low", "High", "Root", "Relative Error", "Absolute Error", "function(root)"], tablefmt="grid")
-    graph = plot_bisection_results(function, min_low, max_high, lines)
-    return root, "\n".join(steps), table_str, graph, max_iterations
+    return (root, "\n".join(steps), table_str, iteration, correct_digits, relative_error, absolute_error), lines
+
 
 def plot_bisection_results(function, low, high, vertical_lines):
     """

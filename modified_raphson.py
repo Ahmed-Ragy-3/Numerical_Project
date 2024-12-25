@@ -13,9 +13,9 @@ def round_significant(value, sig_figs):
    else:
       return round(value, sig_figs - int(np.floor(np.log10(abs(value)))) - 1)
 
-
-def modified_raphson(pf: ProcessFunction, initial_guess, max_iterations=50, 
-                     error=1e-5, significant_figures=sys.float_info.dig):
+# self.function, self.max_iterations, self.tolerance, self.significant_figures
+def modified_raphson(pf: ProcessFunction, max_iterations=50, error=1e-5, 
+                    significant_figures=sys.float_info.dig, initial_guess=0):
     # pf = ProcessFunction(inputString)
     x = initial_guess
     steps = []
@@ -73,7 +73,7 @@ def modified_raphson(pf: ProcessFunction, initial_guess, max_iterations=50,
             table_str = tabulate(table, headers=["Iteration", "Previous Root", "Root", "f(x)", "f'(x)", "f''(x)",
                                                  "Correct Digits", "Relative Error", "Absolute Error"],
                                  tablefmt="grid")
-            return x, "\n".join(steps), i + 1, correct_digits, relative_error, absolute_error, table_str
+            return x, "\n".join(steps), table_str, i + 1, correct_digits, relative_error, absolute_error
 
         x = x_new
     

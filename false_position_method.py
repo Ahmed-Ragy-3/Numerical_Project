@@ -2,6 +2,7 @@ import sys
 import numpy as np
 from tabulate import tabulate
 import plotly.graph_objects as go
+from ProcessFunction import ProcessFunction
 
 
 def round_significant(value, sig_figs):
@@ -12,8 +13,9 @@ def round_significant(value, sig_figs):
     else:
         return round(value, sig_figs - int(np.floor(np.log10(abs(value)))) - 1)
 
-
-def false_position_method(function, low: float, high: float, significant_figures=sys.float_info.dig, error=0.00001, max_iterations=50):
+# self.function, self.max_iterations, self.tolerance, self.significant_figures, initialguess1
+def false_position_method(function: ProcessFunction, max_iterations=50, error=0.00001, significant_figures=sys.float_info.dig,
+                     low=-10.0, high=10.0):
     """
     Parameters:
         function (callable): The function for which to find the root.
@@ -36,32 +38,30 @@ def false_position_method(function, low: float, high: float, significant_figures
 
     low = round_significant(low, significant_figures)
     high = round_significant(high, significant_figures)
-    fun_low = round_significant(function(low), significant_figures)
-    fun_high = round_significant(function(high), significant_figures)
+    fun_low = round_significant(function.evaluate(low), significant_figures)
+    fun_high = round_significant(function.evaluate(high), significant_figures)
 
     steps.append("Check if the function changes sign between low and high:")
     steps.append(f"function(low) * function(high) = function({low}) * function({high}) = {fun_low} * {fun_high}")
 
     if fun_low * fun_high > 0:
         steps.append("Which is greater than 0. Can't be solved: no bracketing found.")
-        graph = plot_interpolation_lines(function, min_low, max_high, lines)
-        return None, "\n".join(steps), "", graph, 0
+        raise ValueError(f"It can't be solved by false position method, there f({low}) * f({high}) > 0")
 
     steps.append("Which is less than 0. So there is at least one root between the bounds.")
-    steps.append(f"the number of iterations needed is = ceil(log2((high - low) / error)) = ceil(log2(({high} - {low}) / {error})) = {int(np.ceil(np.log2((high - low) / error)))}")
 
     for iteration in range(1, max_iterations + 1):
         low = round_significant(low, significant_figures)
         high = round_significant(high, significant_figures)
-        fun_low = round_significant(function(low), significant_figures)
-        fun_high = round_significant(function(high), significant_figures)
+        fun_low = round_significant(function.evaluate(low), significant_figures)
+        fun_high = round_significant(function.evaluate(high), significant_figures)
         lines.append([low, fun_low, high, fun_high])
 
         steps.append(f"\nIteration {iteration}:\n")
         steps.append(f"low = {low}, high = {high}")
         root = round_significant((low * fun_high - high * fun_low) / (fun_high - fun_low), significant_figures)
         steps.append(f"Estimated root = (low * fun(high) - high * fun(low)) / (fun(high) - fun(low)) = ({low} * {fun_high} - {high} * {fun_low}) / ({fun_high} - {fun_low}) = {root}")
-        fun_root = round_significant(function(root), significant_figures)
+        fun_root = round_significant(function.evaluate(root), significant_figures)
         steps.append(f"function(estimated_root) = function({root}) = {fun_root}")
 
         if previous_root is not None:
@@ -86,8 +86,8 @@ def false_position_method(function, low: float, high: float, significant_figures
                       f"{absolute_error}" if relative_error != float("inf") else "_",
                       f"{fun_root}"])
 
-        if function(root) == 0 or absolute_error < error:
-            if function(root) == 0:
+        if function.evaluate(root) == 0 or absolute_error < error:
+            if function.evaluate(root) == 0:
                 steps.append(f"function(root) = function({root}) = 0")
             if absolute_error < error:
                 steps.append(f"absolute_error < error as {absolute_error} < {error}")
@@ -98,9 +98,9 @@ def false_position_method(function, low: float, high: float, significant_figures
                     f"the number of correct significant digits = floor(2 - log10(2 * absolute_error)) = floor(2 - log10(2 * {absolute_error})) = {int(np.floor(2 - np.log10(2 * absolute_error)))}")
             table_str = tabulate(table, headers=["Iteration", "Low", "High", "Root", "Relative Error", "Absolute Error",
                                                  "function(root)"], tablefmt="grid")
-            graph = plot_interpolation_lines(function, min_low, max_high, lines)
+            return root, "\n".join(steps), table_str,iteration, lines, relative_error, absolute_error
 
-            return root, "\n".join(steps), table_str, graph, iteration
+
 
         steps.append(f"function(root) = function({root}) = {fun_root}")
         if fun_root < 0:
@@ -120,8 +120,8 @@ def false_position_method(function, low: float, high: float, significant_figures
     table_str = tabulate(table, headers=["Iteration", "Low", "High", "Root", "Relative Error", "Absolute Error",
                                          "function(root)"], tablefmt="grid")
     
-    graph = plot_interpolation_lines(function, min_low, max_high, lines)
-    return root, "\n".join(steps), table_str, graph, max_iterations
+    return root, "\n".join(steps), table_str,iteration, lines, relative_error, absolute_error
+    
 
 
 def plot_interpolation_lines(function, low, high, lines):

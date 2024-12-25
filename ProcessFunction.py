@@ -12,7 +12,6 @@ class ProcessFunction:
       self.f_symbolic = sympify(inputString)
       self.f_prime_symbolic = diff(self.f_symbolic, self.x)  # First derivative
       self.f_double_prime_symbolic = diff(self.f_prime_symbolic, self.x)  # Second derivative
-      
       # print(self.f_double_prime_symbolic.__str__())
 
    def evaluateFunction(self):
@@ -41,15 +40,27 @@ class ProcessFunction:
 
    @staticmethod
    def round_significant(value, significant_figures=sys.float_info.dig):
-      # print("value = ", value)
-      if value == 0:
-         return 0
-      elif value == float('inf') or value == -float('inf'):
-         return float('inf')
-      else:
-         return round(value, significant_figures - 1 - int(math.floor(math.log10(abs(value)))))
-
-   def plot_function(self, low, high, lines, method="Newton Raphson"):
+      """
+      Rounds the given value to the specified number of significant figures.
+      
+      :param value: The float number to round.
+      :param significant_figures: The number of significant figures to retain.
+      :return: The rounded value.
+      """
+      # print("value = ",value)
+      try:
+         if value == 0:
+            return 0
+         
+         if math.isinf(value):
+            return float('inf')
+         
+         decimal_places = significant_figures - 1 - int(math.floor(math.log10(abs(value))))
+         return round(value, decimal_places)
+      except (ValueError, OverflowError) as e:
+         raise ValueError("Error occurred during rounding calculation.") from e
+      
+   def plot_function(self, low, high, lines, method="Function"):
       """
       Plots the graph using Plotly.
 
@@ -58,6 +69,10 @@ class ProcessFunction:
          low (float): The lower bound for plotting.
          high (float): The upper bound for plotting.
       """
+      print(low)
+      print(high)
+      print(lines)
+      print(method)
       # Evaluate the function at x values
       func = self.evaluateFunction()
       x_vals = np.linspace(low, high, 2000)

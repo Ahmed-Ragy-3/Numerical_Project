@@ -7,6 +7,15 @@ from fixed_point import fixed_point
 from secant import secant
 from sympy import SympifyError
 
+# names = {
+#    "raphson" : "Original Newton-Raphson",
+#    "modified_raphson" : "Original Newton-Raphson",
+#    "raphson" : "Original Newton-Raphson",
+#    "raphson" : "Original Newton-Raphson",
+#    "raphson" : "Original Newton-Raphson",
+#    "raphson" : "Original Newton-Raphson",
+# }
+
 class Solver:
    def __init__(self, functionString):
       try:
@@ -21,7 +30,6 @@ class Solver:
       self.max_iterations = 50
       self.tolerance = 1e-5
       
-      
    def set_function(self, functionString):
       try:
          self.function = ProcessFunction(functionString)
@@ -30,27 +38,7 @@ class Solver:
          raise ValueError(f"Invalid function string. {e}")
  
    def set_approach(self, approach: str) -> None:
-      match approach:
-         case "Bisection":
-            self.approach = "Bisection"
-         
-         case "False-Position":
-            self.approach = "False Position"
-         
-         case "Fixed-Point":
-            self.approach = "Fixed Point"
-         
-         case "Original Newton-Raphson":
-            self.approach = "Newton Raphson"
-         
-         case "Modified Newton-Raphson":
-            self.approach = "Modified Newton Raphson"
-         
-         case "Secant":
-            self.approach = "Secant"
-
-         case _:
-           raise ValueError("Invalid Method Name") 
+      self.approach = approach
           
    def set_initial_guess_1(self, initial_guess_1):
       if initial_guess_1 != "":
@@ -80,9 +68,13 @@ class Solver:
       self.tolerance = tolerance
 
    # the boundaries need to be changed
-   def plot(self, displayedString):
+   def plot(self, low=-10, high=10, lines=[]):
       if self.function != None:
-          self.function.plot_function(-10, 10, [], displayedString)
+         self.function.plot_function(low, high, lines)
+   
+   def plot_solution(self, low, high, lines):
+      self.plot(low, high, lines)
+      
 
    def solve(self):
       # delete me
@@ -109,26 +101,34 @@ class Solver:
       absolute_error = None
 
       try:
+         # All methods has root, steps, table, iterations_done, correct_digits, relative_error, absolute_error
+         # tuple contains common returned elements for all methods
+         answer = tuple()
+         
+         # tuple contains the common parameters of the all approaches
+         params = (self.function, self.max_iterations, self.tolerance, self.significant_figures)
+         
          match self.approach:
-            case "Bisection": # root, steps, table, graph, iterations_done
-               root, steps, table, graph, iterations_done = bisection_method(self.function, self.initial_guess_1, self. initial_guess_2, self.significant_figures, self.tolerance, self.max_iterations)
-
+            case "Bisection":
+               answer, lines = bisection_method(*params, self.initial_guess_1, self.initial_guess_2)
+               print("--------------------------")
+            case "False Position":
+               answer, lines = false_position_method(*params, self.initial_guess_1, self.initial_guess_2)
                
-            case "False Position": # root, steps, table, graph, iterations_done
-               root, steps, table, graph, iterations_done = false_position_method(self.function, self.initial_guess_1, self. initial_guess_2, self.significant_figures, self.tolerance, self.max_iterations)
+            case "Fixed Point":
+               answer, lines = fixed_point(*params, self.initial_guess_1)
+            
+            case "Newton Raphson":
+               answer, lines = newton_raphson(*params, self.initial_guess_1)
+            
+            case "Modified Newton Raphson":
+               answer = modified_raphson(*params, self.initial_guess_1)
+            
+            case "Secant":
+               answer = secant(*params, self.initial_guess_1, self.initial_guess_2)
 
-               
-            case "Fixed Point": # root, steps, table, iterations_done, correct_digits, relative_error, absolute_error
-               root, steps, table, iterations_done, correct_digits, relative_error, absolute_error = fixed_point(self.function, self.initial_guess_1, self. max_iterations,self.tolerance, self.significant_figures)
-            
-            case "Newton Raphson": # root, steps, table , iterations_done, correct_digits, relative_error, absolute_error
-               root, steps, table, iterations_done, correct_digits, relative_error, absolute_error = newton_raphson(self.function, self.initial_guess_1, self.max_iterations, self.tolerance, self.significant_figures)
-            
-            case "Modified Newton Raphson": # root, steps, iterations_done, correct_digits, relative_error, absolute_error, table
-               root, steps, iterations_done, correct_digits, relative_error, absolute_error, table = modified_raphson(self.function, self.initial_guess_1, self.max_iterations, self.tolerance, self.significant_figures)
-            
-            case "Secant": # root, steps, table iterations_done, correct_digits, relative_error, absolute_error
-               root, steps, table, iterations_done, correct_digits, relative_error, absolute_error = secant(self.function, self.initial_guess_1, self.initial_guess_2,  self.max_iterations, self.tolerance, self.significant_figures)
+         root, steps, table, iterations_done, correct_digits, relative_error, absolute_error = answer
+         # root, "\n".join(steps), "\n" + table_str, i + 1, correct_digits, relative_error, absolute_error, lines
 
          solution = ""
          solution += f"Root: {root}\n"
@@ -139,28 +139,50 @@ class Solver:
          solution += f"{table}\n"
          solution += f"{steps}\n"
 
-         return solution
+         # print(steps)
+         # return solution
+         
+         return solution, lines
 
       except SympifyError as e:
          raise ValueError(f"error 1{e}.")
+      
+      # except ValueError as e:
+      #    raise ValueError(f"{e}.")
 
 if __name__ == "__main__":
    
-   function_string = "x ^ 3 - x ^ 2 - 10 * x + 7"
+   function_string = "x^4 - 1"
    
    try:
       solver = Solver(function_string)
 
-      solver.set_approach("Bisection")
-      solver.set_initial_guess_1(3)
-      solver.set_initial_guess_2(4)
-      solver.set_significant_figures(6)
-      solver.set_max_iterations(10)
-      solver.set_tolerance(1e-5)
+      # solver.plot(-10, 10)
 
-      solution = solver.solve()
+      solver.set_approach("Bisection")
+      # solver.set_approach("False Position")
+      # solver.set_approach("Fixed Point")
+      # solver.set_approach('Newton Raphson')
+      # solver.set_approach('Modified Newton Raphson')
+      # solver.set_approach("Secant")
+      
+      solver.set_initial_guess_1(0)
+      solver.set_initial_guess_2(2)
+      solver.set_significant_figures(5)
+      solver.set_max_iterations(50)
+      solver.set_tolerance(1e-5)
+      
+      solution, lines = solver.solve()
+      solver.plot_solution(-10, 10, lines)
 
       print(solution)
-   except ValueError as e:
-      error = f"An error occurred: {e}"
-      print(error)
+   except Exception as e:
+      print(f"An error occurred: {e}")
+   # except ValueError as e:
+   #    error = f"An error occurred: {e}"
+   #    print(error)
+   # except TypeError as e:
+   #    error = f"An error occurred: {e}"
+   #    print(error)
+      
+   

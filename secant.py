@@ -1,5 +1,5 @@
 import math
-from colorama import Fore, Style, init
+# from colorama import Fore, Style, init
 
 import sys
 from math import log
@@ -10,17 +10,39 @@ from tabulate import tabulate
 
 EPSILON = 1e-15
 
-def round_significant(value, sig_figs=sys.float_info.dig):
-   if value == 0:
-      return 0
-   elif value == float('inf') or value == -float('inf'):
-      return float('inf')
-   else:
-      return round(value, sig_figs - int(np.floor(np.log10(abs(value)))) - 1)
+def round_significant(value, significant_figures=sys.float_info.dig):
+   """
+   Rounds the given value to the specified number of significant figures.
+   
+   :param value: The float number to round.
+   :param significant_figures: The number of significant figures to retain.
+   :return: The rounded value.
+   """
+   # print("value = ",value)
+   try:
+      if value == 0:
+         return 0
+      
+      if math.isinf(value):
+         return float('inf')
+      
+      decimal_places = significant_figures - 1 - int(math.floor(math.log10(abs(value))))
+      return round(value, decimal_places)
+   except (ValueError, OverflowError) as e:
+      raise ValueError("Error occurred during rounding calculation.") from e
+
+# def round_significant(value, sig_figs=sys.float_info.dig):
+#    if value == 0:
+#       return 0
+#    elif value == float('inf') or value == -float('inf'):
+#       return float('inf')
+#    else:
+#       return round(value, sig_figs - int(np.floor(np.log10(abs(value)))) - 1)
 
 
-def secant(function: ProcessFunction, X0=0, X1=0,  max_iterations=50, error_tol=1e-5, 
-                  significant_figures=sys.float_info.dig):
+# self.function, self.max_iterations, self.tolerance, self.significant_figures, initialguess1
+def secant(function: ProcessFunction, max_iterations=50, error_tol=1e-5, 
+         significant_figures=sys.float_info.dig, X0=0, X1=0):
    """
    Parameters:
       functionString (str): The function for which to find the root.
@@ -39,7 +61,7 @@ def secant(function: ProcessFunction, X0=0, X1=0,  max_iterations=50, error_tol=
       number of correct significant figures
       approximate relative error: float
    """
-   init()
+   # init()
    #                          ( f(x[i]) * (x[i-1] - x[i]) )
    # rule: x[i + 1] = x[i] -  ----------------------------  
    #                            ( f(x[i-1]) - f(x[i]) )   
@@ -87,7 +109,7 @@ def secant(function: ProcessFunction, X0=0, X1=0,  max_iterations=50, error_tol=
       relative_error = round_significant(relative_error, significant_figures)
 
       if relative_error <= 0:
-         correct_digits = float('inf')
+         correct_digits = significant_figures
       else:
          correct_digits = math.floor(2 - math.log10(2 * relative_error / 100))
          correct_digits = max(correct_digits, 0)
@@ -99,17 +121,7 @@ def secant(function: ProcessFunction, X0=0, X1=0,  max_iterations=50, error_tol=
       steps.append(f"Relative Error = {relative_error}%")
       steps.append(f"Correct Digits = {correct_digits}")
       steps.append("\n")
-      
-      # table.append([
-      #    i + 1,
-      #    f"{Fore.BLUE}{round_significant(previous_root, significant_figures)}{Style.RESET_ALL}",
-      #    f"{Fore.GREEN}{round_significant(current_root, significant_figures)}{Style.RESET_ALL}",
-      #    f"{Fore.RED}{round_significant(f_xi_minus_1, significant_figures)}{Style.RESET_ALL}",
-      #    f"{Fore.YELLOW}{round_significant(f_xi, significant_figures)}{Style.RESET_ALL}",
-      #    f"{Fore.CYAN}{round_significant(following_root, significant_figures)}{Style.RESET_ALL}",
-      #    f"{Fore.MAGENTA}{round_significant(absolute_error, significant_figures)}{Style.RESET_ALL}" if relative_error != float("inf") else "_",
-      #    f"{Fore.MAGENTA}{round_significant(relative_error, significant_figures)}%{Style.RESET_ALL}" if relative_error != float("inf") else "_"
-      # ])
+
       table.append([
             i + 1,
             round_significant(previous_root, significant_figures),
@@ -128,11 +140,12 @@ def secant(function: ProcessFunction, X0=0, X1=0,  max_iterations=50, error_tol=
       if relative_error < error_tol or absolute_error < EPSILON or f_xi_plus_1 == 0:
          table_str = tabulate(
             table,
-            headers=["Iteration", "xᵢ₋₁", "xᵢ", "f(xᵢ₋₁)", "f(xᵢ)", "xᵢ₊₁", "Abs Error", "Rel Error"],
+            headers=["Iteration", "xᵢ₋₁", "xᵢ", "f(xᵢ₋₁)", "f(xᵢ)", "xᵢ₊₁", "Absolute Error", "Relative Error"],
             tablefmt="grid"
          )
          #function.plot_function(-10, 10, lines, method="Secant")
          return current_root, "\n".join(steps), table_str, i + 1, correct_digits, relative_error, absolute_error
+         #root, steps, table, iterations_done, correct_digits, relative_error, absolute_error
 
    raise ValueError("Secant Method failed to converge within the maximum number of iterations.")
       
