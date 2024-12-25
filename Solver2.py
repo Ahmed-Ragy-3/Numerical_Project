@@ -112,11 +112,11 @@ class Solver:
          match self.approach:
             case "Bisection": # root, steps, table, graph, iterations_done
                root, steps, table, graph, iterations_done = bisection_method(self.function, self.initial_guess_1, self. initial_guess_2, self.significant_figures, self.tolerance, self.max_iterations)
-               graph.show()
+
                
             case "False Position": # root, steps, table, graph, iterations_done
                root, steps, table, graph, iterations_done = false_position_method(self.function, self.initial_guess_1, self. initial_guess_2, self.significant_figures, self.tolerance, self.max_iterations)
-               graph.show()
+
                
             case "Fixed Point": # root, steps, table, iterations_done, correct_digits, relative_error, absolute_error
                root, steps, table, iterations_done, correct_digits, relative_error, absolute_error = fixed_point(self.function, self.initial_guess_1, self. max_iterations,self.tolerance, self.significant_figures)
@@ -151,9 +151,9 @@ if __name__ == "__main__":
    try:
       solver = Solver(function_string)
 
-      solver.set_approach("Secant")
-      solver.set_initial_guess_1(-3.5)
-      solver.set_initial_guess_2(-3)
+      solver.set_approach("Bisection")
+      solver.set_initial_guess_1(3)
+      solver.set_initial_guess_2(4)
       solver.set_significant_figures(6)
       solver.set_max_iterations(10)
       solver.set_tolerance(1e-5)

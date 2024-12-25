@@ -131,7 +131,7 @@ def secant(function: ProcessFunction, X0=0, X1=0,  max_iterations=50, error_tol=
             headers=["Iteration", "xᵢ₋₁", "xᵢ", "f(xᵢ₋₁)", "f(xᵢ)", "xᵢ₊₁", "Abs Error", "Rel Error"],
             tablefmt="grid"
          )
-         function.plot_function(-10, 10, lines, method="Secant")
+         #function.plot_function(-10, 10, lines, method="Secant")
          return current_root, "\n".join(steps), table_str, i + 1, correct_digits, relative_error, absolute_error
 
    raise ValueError("Secant Method failed to converge within the maximum number of iterations.")

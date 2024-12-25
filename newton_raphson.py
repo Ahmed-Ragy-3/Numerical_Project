@@ -58,7 +58,7 @@ def newton_raphson(function: ProcessFunction, initial_guess=0, max_iterations=50
       table_str = tabulate(table, headers=["Iteration", "Previous Root", "Root", "f(x)", "f'(x)",
                                           "Absolute Error", "Relative Error"], tablefmt="grid")
       
-      function.plot_function(-3, 3, lines, method="Newton Raphson")
+      #function.plot_function(-3, 3, lines, method="Newton Raphson")
       return root, "\n".join(steps), "\n" + table_str, i + 1, correct_digits, relative_error, absolute_error 
    
    # rule: x[i + 1] = x[i] - (f(x[i]) / f'(x[i]))

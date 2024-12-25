@@ -72,7 +72,7 @@ def fixed_point(function_string, initial_guess=0, max_iterations=50, error_tol=1
             table_str = tabulate(table, headers=[f"Iteration", f"{Fore.BLUE}Root{Style.RESET_ALL}", f"{Fore.GREEN}g(x){Style.RESET_ALL}",f"{Fore.RED}Next Root{Style.RESET_ALL}",
                                                  f"{Fore.YELLOW}Absolute Error{Style.RESET_ALL}", f"{Fore.CYAN}Relative Error{Style.RESET_ALL}", f"{Fore.MAGENTA}Correct Digits{Style.RESET_ALL}"], tablefmt="grid")
             lines.append([0, 0, 10, 10])
-            function.plot_function(-10, 10, lines, method="Fixed Point")
+            #function.plot_function(-10, 10, lines, method="Fixed Point")
             return next_root, "\n".join(steps), table_str, i+1, correct_digits, relative_error, absolute_error
 
     raise ValueError(f"Fixed Point method failed to solve this function with max iterations : {max_iterations} ")
