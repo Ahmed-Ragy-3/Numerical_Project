@@ -29,6 +29,7 @@ class Solver:
       self.significant_figures = 15
       self.max_iterations = 50
       self.tolerance = 1e-5
+      self.lines = None
       
    def set_function(self, functionString):
       try:
@@ -72,9 +73,12 @@ class Solver:
       if self.function != None:
          self.function.plot_function(low, high, lines)
    
-   def plot_solution(self, low, high, lines):
-      self.plot(low, high, lines)
-      
+   # def plot_solution(self, low, high, lines):
+   def plot_solution(self, low=-10, high=10):
+      if self.lines == None:
+         return
+      self.plot(low, high, self.lines)
+
 
    def solve(self):
       # delete me
@@ -114,12 +118,14 @@ class Solver:
                print("--------------------------")
             case "False Position":
                answer, lines = false_position_method(*params, self.initial_guess_1, self.initial_guess_2)
-               
+               self.lines = lines
             case "Fixed Point":
                answer, lines = fixed_point(*params, self.initial_guess_1)
+               self.lines = lines
             
             case "Newton Raphson":
                answer, lines = newton_raphson(*params, self.initial_guess_1)
+               self.lines = lines
             
             case "Modified Newton Raphson":
                answer = modified_raphson(*params, self.initial_guess_1)
@@ -138,11 +144,12 @@ class Solver:
          solution += f"Absolute Error: {absolute_error}\n"
          solution += f"{table}\n"
          solution += f"{steps}\n"
+         solution += f"{table}\n"
 
          # print(steps)
          # return solution
          
-         return solution, lines
+         return solution
 
       except SympifyError as e:
          raise ValueError(f"error 1{e}.")
@@ -150,39 +157,52 @@ class Solver:
       # except ValueError as e:
       #    raise ValueError(f"{e}.")
 
+
+test_cases = [
+   "x^3- 5*x^2+3*x-1",
+   "exp(-x) -x",
+   "x^2",
+   "x^4+3*x-4",
+   "(x^2-3)/2",
+   "(x-1)^3 +0.512",
+   "sin(x)"
+]
+
+
 if __name__ == "__main__":
    
-   function_string = "x^4 - 1"
-   
+   function_string = test_cases[5]
+   function_string = "(x^2 - 2)"
+
    try:
       solver = Solver(function_string)
 
-      # solver.plot(-10, 10)
+      solver.plot(-10, 10)
 
-      solver.set_approach("Bisection")
+      # solver.set_approach("Bisection")
       # solver.set_approach("False Position")
-      # solver.set_approach("Fixed Point")
-      # solver.set_approach('Newton Raphson')
-      # solver.set_approach('Modified Newton Raphson')
+      solver.set_approach("Fixed Point")
+      # solver.set_approach("Newton Raphson")
+      # solver.set_approach("Modified Newton Raphson")
       # solver.set_approach("Secant")
       
-      solver.set_initial_guess_1(0)
-      solver.set_initial_guess_2(2)
+      solver.set_initial_guess_1(2.1) # اهلا
+      solver.set_initial_guess_2(3)
       solver.set_significant_figures(5)
-      solver.set_max_iterations(50)
+      solver.set_max_iterations(20)
       solver.set_tolerance(1e-5)
       
-      solution, lines = solver.solve()
-      solver.plot_solution(-10, 10, lines)
+      solution = solver.solve()
+      # print(solution[0])
+      solver.plot_solution(-10, 10)
 
       print(solution)
    except Exception as e:
       print(f"An error occurred: {e}")
+      
    # except ValueError as e:
    #    error = f"An error occurred: {e}"
    #    print(error)
    # except TypeError as e:
    #    error = f"An error occurred: {e}"
    #    print(error)
-      
-   

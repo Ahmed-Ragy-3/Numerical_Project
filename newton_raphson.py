@@ -12,26 +12,13 @@ from tabulate import tabulate
 EPSILON = 1e-15
 # EPSILON = sys.f
 
-def round_significant(value, significant_figures=sys.float_info.dig):
-   """
-   Rounds the given value to the specified number of significant figures.
-
-   :param value: The float number to round.
-   :param significant_figures: The number of significant figures to retain.
-   :return: The rounded value.
-   """
-    # print("value = ",value)
-   try:
-      if value == 0:
-         return 0
-
-      if math.isinf(value):
-         return float('inf')
-
-      decimal_places = significant_figures - 1 - int(math.floor(math.log10(abs(value))))
-      return round(value, decimal_places)
-   except (ValueError, OverflowError) as e:
-      raise ValueError("Error occurred during rounding calculation.") from e 
+def round_significant(value, sig_figs):
+    if value == 0:
+        return 0
+    elif value == float('inf') or value == -float('inf'):
+        return float('inf')
+    else:
+        return round(value, sig_figs - int(np.floor(np.log10(abs(value)))) - 1)
 
 def newton_raphson(function: ProcessFunction, max_iterations=50, error_tol=1e-5, 
                   significant_figures=sys.float_info.dig, initial_guess=0):
@@ -138,8 +125,8 @@ def newton_raphson(function: ProcessFunction, max_iterations=50, error_tol=1e-5,
          return end()
       
       # Calculate correct significant digits for root 
-      correct_digits = 2 - log(2 * abs(relative_error))
-      steps.append(f"{'No Correct Digits' if correct_digits <= 0 else f'Number of Correct Significant Digits = {int(correct_digits)}'}")
+      correct_digits = np.floor(2 - log(2 * abs(relative_error)))
+      steps.append(f"{'No Correct Digits' if correct_digits <= 0 else f'Number of Correct Significant Digits = {correct_digits}'}")
       # steps.append(f"the number of correct significant digits = floor(2 - log10(2 * absolute_error)) = 
       # floor(2 - log10(2 * {absolute_error})) = {int(np.floor(2 - np.log10(2 * absolute_error)))}")
       

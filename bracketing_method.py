@@ -6,35 +6,14 @@ from ProcessFunction import ProcessFunction
 from math import log
 import math
 
-def round_significant(value, significant_figures=sys.float_info.dig):
-    """
-    Rounds the given value to the specified number of significant figures.
+def round_significant(value, sig_figs):
+    if value == 0:
+        return 0
+    elif value == float('inf') or value == -float('inf'):
+        return float('inf')
+    else:
+        return round(value, sig_figs - int(np.floor(np.log10(abs(value)))) - 1)
 
-    :param value: The float number to round.
-    :param significant_figures: The number of significant figures to retain.
-    :return: The rounded value.
-    """
-    # print("value = ", value)
-    try:
-        if value == 0 or abs(value) < 1e-13:
-            return 0
-        
-        if math.isinf(value):
-            return float('inf')
-
-        decimal_places = significant_figures - 1 - int(math.floor(math.log10(abs(value))))
-        return round(value, decimal_places)
-    except (ValueError, OverflowError) as e:
-        raise ValueError("Error occurred during rounding calculation.") from e 
-
-
-# def round_significant(value, sig_figs):
-#     if abs(value) < 1e-12:
-#         return 0
-#     elif value == float('inf') or value == -float('inf'):
-#         return float('inf')
-#     else:
-#         return round(value, sig_figs - int(np.floor(np.log10(abs(value)))) - 1)
 
 # params = (self.function, self.max_iterations, self.tolerance, self.significant_figures)
 def bisection_method(function: ProcessFunction, max_iterations=50, error=0.00001, significant_figures=sys.float_info.dig,
@@ -98,7 +77,7 @@ def bisection_method(function: ProcessFunction, max_iterations=50, error=0.00001
         fun_root = round_significant(function.evaluate(root), significant_figures)
         steps.append(f"function(estimated_root) = function({root}) = {fun_root}")
 
-        lines.append([root, -10, root ,10])
+        lines.append([root, -5000, root ,5000])
 
         if previous_root is not None:
             absolute_error = round_significant(abs(root - previous_root), significant_figures)

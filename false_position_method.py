@@ -49,7 +49,7 @@ def false_position_method(function: ProcessFunction, max_iterations=50, error=0.
         raise ValueError(f"It can't be solved by false position method, there f({low}) * f({high}) > 0")
 
     steps.append("Which is less than 0. So there is at least one root between the bounds.")
-
+    correct_digits = 0
     for iteration in range(1, max_iterations + 1):
         low = round_significant(low, significant_figures)
         high = round_significant(high, significant_figures)
@@ -94,13 +94,13 @@ def false_position_method(function: ProcessFunction, max_iterations=50, error=0.
             steps.append(
                 f"Root found: {root} after {iteration} iterations with {significant_figures} significant figures and {error} error.")
             if absolute_error != 0:
+                correct_digits = int(np.floor(2 - np.log10(2 * absolute_error)))
                 steps.append(
-                    f"the number of correct significant digits = floor(2 - log10(2 * absolute_error)) = floor(2 - log10(2 * {absolute_error})) = {int(np.floor(2 - np.log10(2 * absolute_error)))}")
+                    f"the number of correct significant digits = floor(2 - log10(2 * absolute_error)) = floor(2 - log10(2 * {absolute_error})) = {correct_digits}")
             table_str = tabulate(table, headers=["Iteration", "Low", "High", "Root", "Relative Error", "Absolute Error",
                                                  "function(root)"], tablefmt="grid")
-            return root, "\n".join(steps), table_str,iteration, lines, relative_error, absolute_error
-
-
+            
+            return (root, "\n".join(steps), table_str, iteration, correct_digits, relative_error, absolute_error), lines
 
         steps.append(f"function(root) = function({root}) = {fun_root}")
         if fun_root < 0:
@@ -120,7 +120,8 @@ def false_position_method(function: ProcessFunction, max_iterations=50, error=0.
     table_str = tabulate(table, headers=["Iteration", "Low", "High", "Root", "Relative Error", "Absolute Error",
                                          "function(root)"], tablefmt="grid")
     
-    return root, "\n".join(steps), table_str,iteration, lines, relative_error, absolute_error
+    return (root, "\n".join(steps), table_str, iteration, correct_digits, relative_error, absolute_error), lines
+
     
 
 

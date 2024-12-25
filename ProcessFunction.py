@@ -4,6 +4,7 @@ import math
 import numpy as np
 from tabulate import tabulate
 import plotly.graph_objects as go
+import matplotlib.pyplot as plt
 
 
 class ProcessFunction:
@@ -127,3 +128,49 @@ class ProcessFunction:
       )
 
       fig.show()
+
+
+   # def plot_function(self, low, high, lines, method="Function"):
+   #    """
+   #    Plots the graph using matplotlib.
+
+   #    Parameters:
+   #       lines (list): List of [low, fun_low, high, fun_high] at each iteration.
+   #       low (float): The lower bound for plotting.
+   #       high (float): The upper bound for plotting.
+   #    """
+   #    print(low)
+   #    print(high)
+   #    print(lines)
+   #    print(method)
+      
+   #    # Evaluate the function at x values
+   #    func = self.evaluateFunction()
+   #    x_vals = np.linspace(low, high, 5000)
+   #    y_vals = func(x_vals)
+
+   #    plt.figure(figsize=(10, 6))
+
+   #    # Plot the main function
+   #    plt.plot(x_vals, y_vals, label="Function", color='blue', linewidth=2)
+
+   #    # Plot interpolation lines
+   #    for line in lines:
+   #       low_point, fun_low_point, high_point, fun_high_point = line
+   #       plt.plot([low_point, high_point], [fun_low_point, fun_high_point], 
+   #                label=f"Interpolation: {low_point:.2f} - {high_point:.2f}", linewidth=2)
+
+   #    # Add reference lines at x=0 and y=0
+   #    plt.axhline(0, color='black', linewidth=1, linestyle='--', label="y=0")
+   #    plt.axvline(0, color='black', linewidth=1, linestyle='--', label="x=0")
+
+   #    # Add labels, title, and legend
+   #    plt.title(f"{method}", fontsize=14)
+   #    plt.xlabel("x", fontsize=12)
+   #    plt.ylabel("f(x)", fontsize=12)
+   #    plt.grid(True, which='both', linestyle='--', linewidth=0.5)
+   #    plt.legend()
+   #    plt.tight_layout()
+
+   #    # Show the plot in a window
+   #    plt.show()

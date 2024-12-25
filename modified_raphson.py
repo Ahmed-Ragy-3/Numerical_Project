@@ -6,18 +6,19 @@ from false_position_method import round_significant
 from tabulate import tabulate
 
 def round_significant(value, sig_figs):
-   if value == 0:
-      return 0
-   elif value == float('inf') or value == -float('inf'):
-      return float('inf')
-   else:
-      return round(value, sig_figs - int(np.floor(np.log10(abs(value)))) - 1)
+    if value == 0:
+        return 0
+    elif value == float('inf') or value == -float('inf'):
+        return float('inf')
+    else:
+        return round(value, sig_figs - int(np.floor(np.log10(abs(value)))) - 1)
 
 # self.function, self.max_iterations, self.tolerance, self.significant_figures
 def modified_raphson(pf: ProcessFunction, max_iterations=50, error=1e-5, 
                     significant_figures=sys.float_info.dig, initial_guess=0):
     # pf = ProcessFunction(inputString)
     x = initial_guess
+    lines = []
     steps = []
     table = []
     correct_digits = 0
@@ -43,7 +44,9 @@ def modified_raphson(pf: ProcessFunction, max_iterations=50, error=1e-5,
             raise ValueError(f"Division by zero in denominator at iteration {i + 1}")
 
         x_new = round_significant(x - ((f * f_dash) / denominator), significant_figures)
-      
+        
+        # lines.append([x_new, function.evaluate(previous_root), root, 0])
+              
         # Absolute relative error
         absolute_error = round_significant(abs(x_new - x), significant_figures)
         steps.append(f"Absolute error = abs({x} - {x_new}) = {absolute_error}")
@@ -51,10 +54,13 @@ def modified_raphson(pf: ProcessFunction, max_iterations=50, error=1e-5,
         if x_new != 0:
             relative_error = round_significant((abs(absolute_error / x_new))*100, significant_figures)
             steps.append(f"Relative error = abs(({x_new} - {x}) / {x_new}) * 100 % = {relative_error}%")
+            
             if 2 * abs(relative_error) > 0:
                 correct_digits = floor(2 - log(2 * abs(relative_error)))
             else:
-                correct_digits = float('inf')
+                # correct_digits = float('inf')
+                correct_digits = 0
+                
         
         steps.append("\n")
         table.append([i + 1,
@@ -72,8 +78,7 @@ def modified_raphson(pf: ProcessFunction, max_iterations=50, error=1e-5,
         if relative_error < max(error,1e-12) or absolute_error < max(error,1e-12)  :
             steps.append(f"Correct Digits = {correct_digits}")
             table_str = tabulate(table, headers=["Iteration", "Previous Root", "Root", "f(x)", "f'(x)", "f''(x)",
-                                                 "Correct Digits", "Relative Error", "Absolute Error"],
-                                 tablefmt="grid")
+                                                 "Correct Digits", "Relative Error", "Absolute Error"], tablefmt="grid")
             return x_new, "\n".join(steps), table_str,i + 1, correct_digits, relative_error, absolute_error
 
         x = x_new

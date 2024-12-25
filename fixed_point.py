@@ -1,18 +1,19 @@
 
 import sys
 from math import log
+import math
 import numpy as np
 from ProcessFunction import ProcessFunction
 from false_position_method import round_significant
 from tabulate import tabulate
 
-def round_significant(value, sig_figs=sys.float_info.dig):
-   if abs(value) < 1e-12:
-      return 0
-   elif value == float('inf') or value == -float('inf'):
-      return float('inf')
-   else:
-      return round(value, sig_figs - int(np.floor(np.log10(abs(value)))) - 1)
+def round_significant(value, sig_figs):
+    if value == 0:
+        return 0
+    elif value == float('inf') or value == -float('inf'):
+        return float('inf')
+    else:
+        return round(value, sig_figs - int(np.floor(np.log10(abs(value)))) - 1)
 
 # self.function, self.max_iterations, self.tolerance, self.significant_figures, initialguess
 def fixed_point(function: ProcessFunction, max_iterations=50, error_tol=1e-5,
@@ -29,9 +30,9 @@ def fixed_point(function: ProcessFunction, max_iterations=50, error_tol=1e-5,
     for i in range(max_iterations):
         steps.append(f"Iteration {i+1}")
         root = next_root
-        print("root = ", root)
+        print("xᵢ = ", root)
         g = function.evaluate(root, significant_figures)
-        steps.append(f"Next Root = g({root}) = {g}")
+        steps.append(f"xᵢ₊₁ = g({root}) = {g}")
         next_root = g
         
         if i==0:
@@ -49,9 +50,16 @@ def fixed_point(function: ProcessFunction, max_iterations=50, error_tol=1e-5,
         relative_error = round_significant(abs((next_root - root) / root) * 100, significant_figures)
         steps.append(f"Relative error = abs(({next_root} - {root}) / {next_root}) * 100% = {relative_error}%")
         
-        correct_digits = np.floor(2 - log(2 * abs(relative_error)))
+        if relative_error == 0:
+            correct_digits = significant_figures
+            # return
+        else:
+           correct_digits = np.floor(2 - log(2 * abs(relative_error)))
+           
+        # correct_digits = 2 - log(2 * abs(relative_error))
         if correct_digits < 0:
             correct_digits = 0
+        
         steps.append(f"Correct Digits = floor(2 - log(2 * abs({relative_error})) = {correct_digits}")
 
         steps.append("\n")
@@ -73,10 +81,12 @@ def fixed_point(function: ProcessFunction, max_iterations=50, error_tol=1e-5,
                                                  "Absolute Error", "Relative Error", "Correct Digits"], tablefmt="grid")
             lines.append([0, 0, 10, 10])
             #function.plot_function(-10, 10, lines, method="Fixed Point")
-            return next_root, "\n".join(steps), table_str, i+1, correct_digits, relative_error, absolute_error, lines
+            return (next_root, "\n".join(steps), table_str, i+1, correct_digits, relative_error, absolute_error), lines
             #root, steps, table, iterations_done, correct_digits, relative_error, absolute_error
+        
         if abs(next_root) > 1e10:  # Prevent overflow
-            raise OverflowError("Value too large, possible divergence.")
+            # steps = "\n".join(steps)
+            raise OverflowError("Value too large, possible divergence.\n\n", steps)
     raise ValueError(f"Fixed Point method failed to solve this function with max iterations : {max_iterations} ")
 
 def main():
