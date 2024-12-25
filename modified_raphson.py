@@ -20,6 +20,8 @@ def modified_raphson(pf: ProcessFunction, max_iterations=50, error=1e-5,
     x = initial_guess
     steps = []
     table = []
+    correct_digits = 0
+
     relative_error = float('inf')
     for i in range(max_iterations):
         steps.append("\n")
@@ -41,8 +43,7 @@ def modified_raphson(pf: ProcessFunction, max_iterations=50, error=1e-5,
             raise ValueError(f"Division by zero in denominator at iteration {i + 1}")
 
         x_new = round_significant(x - ((f * f_dash) / denominator), significant_figures)
-        correct_digits = 0
-
+      
         # Absolute relative error
         absolute_error = round_significant(abs(x_new - x), significant_figures)
         steps.append(f"Absolute error = abs({x} - {x_new}) = {absolute_error}")
@@ -68,12 +69,12 @@ def modified_raphson(pf: ProcessFunction, max_iterations=50, error=1e-5,
                     ])
 
         # Check error
-        if relative_error < max(error,1e-12):
+        if relative_error < max(error,1e-12) or absolute_error < max(error,1e-12)  :
             steps.append(f"Correct Digits = {correct_digits}")
             table_str = tabulate(table, headers=["Iteration", "Previous Root", "Root", "f(x)", "f'(x)", "f''(x)",
                                                  "Correct Digits", "Relative Error", "Absolute Error"],
                                  tablefmt="grid")
-            return x, "\n".join(steps), table_str, i + 1, correct_digits, relative_error, absolute_error
+            return x_new, "\n".join(steps), table_str,i + 1, correct_digits, relative_error, absolute_error
 
         x = x_new
     
