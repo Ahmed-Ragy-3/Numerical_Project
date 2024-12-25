@@ -74,7 +74,7 @@ class Solver:
    def plot_solution(self, low=-10, high=10):
       if self.lines == None:
          return
-      self.plot(low, high, self.lines)
+      self.function.plot_function(low, high, self.lines)
       
 
    def solve(self):
@@ -113,18 +113,18 @@ class Solver:
             case "Bisection":
                answer, lines = bisection_method(*params, self.initial_guess_1, self.initial_guess_2)
                print("--------------------------")
-            case "False Position":
+            case "False-Position":
                answer, lines = false_position_method(*params, self.initial_guess_1, self.initial_guess_2)
                self.lines = lines
-            case "Fixed Point":
+            case "Fixed-point":
                answer, lines = fixed_point(*params, self.initial_guess_1)
                self.lines = lines
             
-            case "Newton Raphson":
+            case "Original Newton-Raphson":
                answer, lines = newton_raphson(*params, self.initial_guess_1)
                self.lines = lines
             
-            case "Modified Newton Raphson":
+            case "Modified Newton-Raphson":
                answer = modified_raphson(*params, self.initial_guess_1)
             
             case "Secant":
@@ -174,18 +174,18 @@ if __name__ == "__main__":
    try:
       solver = Solver()
 
-      solver.set_function("x^3- 5*x^2+3*x-1")
+      solver.set_function("x ^ 3 - x ^ 2 - 10 * x + 7")
 
-      solver.plot(-10, 10)
+      #solver.plot(-10, 10)
 
       # solver.set_approach("Bisection")
       # solver.set_approach("False Position")
-      solver.set_approach("Bisection")
+      solver.set_approach("Newton Raphson")
       # solver.set_approach("Newton Raphson")
       # solver.set_approach("Modified Newton Raphson")
       # solver.set_approach("Secant")
       
-      solver.set_initial_guess_1(4)
+      solver.set_initial_guess_1(3)
       solver.set_initial_guess_2(5)
       solver.set_significant_figures(5)
       solver.set_max_iterations(20)
@@ -193,7 +193,7 @@ if __name__ == "__main__":
       
       solution = solver.solve()
       # print(solution[0])
-      solver.plot_solution(-10, 10)
+      #solver.plot_solution(-10, 10)
 
       print(solution)
    except Exception as e:

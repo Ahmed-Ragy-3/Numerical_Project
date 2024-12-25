@@ -118,8 +118,8 @@ class RootFinderPage(QtWidgets.QMainWindow):
             if xmin.isdigit() and xmax.isdigit():
                 self.solver.plot(float(xmin),float(xmax))
             else:
-                self.solver.plot(float(xmin),float(xmax))
-        except ValueError as e:
+                self.solver.plot()
+        except Exception as e:
             QtWidgets.QMessageBox.warning(self, "Input Error"," Invalid Function")
             return
 
@@ -129,7 +129,7 @@ class RootFinderPage(QtWidgets.QMainWindow):
         try:
             self.solver.set_function(eqn)
             self.solver.set_approach(self.method)
-        except ValueError as e:
+        except Exception as e:
             QtWidgets.QMessageBox.warning(self, "Input Error"," : Invalid Function")
             return
 
@@ -159,14 +159,14 @@ class RootFinderPage(QtWidgets.QMainWindow):
             self.solver.set_initial_guess_2(float(upper))
             try:
                 self.openSolutionWindow(self.solver.solve())
-            except ValueError as e:
+            except Exception as e:
                 QtWidgets.QMessageBox.warning(self, "Input Error", " : Solve error")
                 return
         else:
             if not isFloat(upper):
                 QtWidgets.QMessageBox.warning(self, "Input Error","should state initial guess")
                 return
-            self.solver.set_initial_guess_1(upper)
+            self.solver.set_initial_guess_1(float(upper))
             try:
                 self.openSolutionWindow(self.solver.solve())
             except ValueError as e:
@@ -179,7 +179,7 @@ class RootFinderPage(QtWidgets.QMainWindow):
         if xmin.isdigit() and xmax.isdigit():
             self.solver.plot_solution(float(xmin), float(xmax))
         else:
-            self.solver.plot_solution(float(xmin), float(xmax))
+            self.solver.plot_solution()
 
 
     def openSolutionWindow(self, solutionString):
