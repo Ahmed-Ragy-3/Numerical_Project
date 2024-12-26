@@ -8,14 +8,14 @@ from secant import secant
 from sympy import SympifyError
 import time
 
-# names = {
-#    "raphson" : "Original Newton-Raphson",
-#    "modified_raphson" : "Original Newton-Raphson",
-#    "raphson" : "Original Newton-Raphson",
-#    "raphson" : "Original Newton-Raphson",
-#    "raphson" : "Original Newton-Raphson",
-#    "raphson" : "Original Newton-Raphson",
-# }
+names = {
+   "raphson" : "Original Newton-Raphson",
+   "modified_raphson" : "Original Newton-Raphson",
+   "raphson" : "Original Newton-Raphson",
+   "raphson" : "Original Newton-Raphson",
+   "raphson" : "Original Newton-Raphson",
+   "raphson" : "Original Newton-Raphson",
+}
 
 class Solver:
    def __init__(self):
@@ -188,20 +188,20 @@ if __name__ == "__main__":
       solver = Solver()
 
       # solver.set_function(test_cases[4])
-      solver.set_function("exp(-x)")
-      solver.set_approach("Fixed-Point")
+      solver.set_function("exp(-x)- x")
+      # solver.set_approach("Fixed-Point")
 
       solver.plot(-10, 10)
 
-      # solver.set_approach("Bisection")
+      solver.set_approach("False-Position")
       # solver.set_approach("False-Position")
 
       # solver.set_approach("Original Newton-Raphson")
       # solver.set_approach("Modified Newton-Raphson")
       # solver.set_approach("Secant")
       
-      solver.set_initial_guess_1(0.4)
-      solver.set_initial_guess_2(3.0416)
+      solver.set_initial_guess_1(0)
+      solver.set_initial_guess_2(5)
       solver.set_significant_figures(5)
       solver.set_max_iterations(50)
       solver.set_tolerance(1e-5)

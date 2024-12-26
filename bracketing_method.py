@@ -61,7 +61,7 @@ def bisection_method(function: ProcessFunction, max_iterations=50, error=0.00001
 
     steps.append("Which is less than 0. So there is at least one root between the bounds.")
     # print(error)
-    # steps.append(f"the number of iterations needed is = ceil(log2((high - low) / error)) = ceil(log2(({high} - {low}) / {error})) = {int(np.ceil(np.log2((high - low) / error)))}")
+    steps.append(f"the number of iterations needed is = ceil(log2((high - low) / error)) = ceil(log2(({high} - {low}) / {error})) = {int(np.ceil(np.log2((high - low) / error)))}")
     correct_digits = 0
     # print(low)
     for iteration in range(1, max_iterations + 1):
@@ -83,8 +83,14 @@ def bisection_method(function: ProcessFunction, max_iterations=50, error=0.00001
             absolute_error = round_significant(abs(root - previous_root), significant_figures)
             relative_error = round_significant(abs((root - previous_root) / root) * 100, significant_figures)
             steps.append(f"Absolute error = abs(root - previous_root) = abs({root} - {previous_root}) = {absolute_error}")
+
             if absolute_error > error:
                 steps.append(f"which is still greater than the error ({error})")
+            if absolute_error != 0:
+                correct_digits = int(np.floor(2 - np.log10(2 * absolute_error)))
+                steps.append(
+                    f"the number of correct significant digits = floor(2 - log10(2 * absolute_error)) = floor(2 - log10(2 * {absolute_error})) = {correct_digits}")
+
             steps.append(f"Relative error = abs((root - previous_root) / root) * 100% = abs(({root} - {previous_root}) / {root}) * 100% = {relative_error}%")
         else:
             absolute_error = float('inf')
@@ -99,7 +105,7 @@ def bisection_method(function: ProcessFunction, max_iterations=50, error=0.00001
                       f"{absolute_error}"if relative_error != float("inf") else "_",
                       f"{fun_root}"])
 
-        if function.evaluate(root) == 0 or absolute_error < error:
+        if function.evaluate(root) == 0 or absolute_error <= error:
             if function.evaluate(root) == 0:
                 steps.append(f"function(root) = function({root}) = 0")
             
