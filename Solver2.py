@@ -186,11 +186,11 @@ if __name__ == "__main__":
       solver = Solver()
 
       # solver.set_function(test_cases[2])
-      solver.set_function("1 / (2 - x)")
+      solver.set_function("x^2")
 
       solver.plot(-10, 10)
 
-      solver.set_approach("False-Position")
+      #solver.set_approach("False-Position")
       # solver.set_approach("False-Position")
 
       # solver.set_approach("Fixed-Point")
@@ -198,7 +198,7 @@ if __name__ == "__main__":
       solver.set_approach("Modified Newton-Raphson")
       # solver.set_approach("Secant")
       
-      solver.set_initial_guess_1(0)
+      solver.set_initial_guess_1(1)
       solver.set_initial_guess_2(1.5)
       solver.set_significant_figures(5)
       solver.set_max_iterations(50)

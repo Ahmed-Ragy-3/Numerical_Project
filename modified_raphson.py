@@ -37,12 +37,22 @@ def modified_raphson(pf: ProcessFunction, max_iterations=50, error=1e-5,
             f_double_dash = pf.evaluate_second_derivative(x, significant_figures)
             steps.append(f"f''({x}) = {f_double_dash}")
         except ZeroDivisionError as e:
-            raise ValueError(f"Division by zero occurred during evaluation: {e} at x = {x}")
+            steps.append(f"Correct Digits = {correct_digits}")
+            table_str = tabulate(table, headers=["Iteration", "Previous Root", "Root", "f(x)", "f'(x)", "f''(x)",
+                                                 "Correct Digits", "Relative Error", "Absolute Error"], tablefmt="grid")
+            steps.insert(0,
+                         f"\nModified Newton-Raphson method failed to solve this function with max iterations: {max_iterations}\n")
+            return x_new, "\n".join(steps), table_str, i + 1, correct_digits, relative_error, absolute_error
 
         # Avoid division by zero 
         denominator = round_significant(abs(f_dash ** 2 - f * f_double_dash), significant_figures)
         if denominator == 0:
-            raise ValueError(f"Division by zero in denominator at iteration {i + 1}")
+            steps.append(f"Correct Digits = {correct_digits}")
+            table_str = tabulate(table, headers=["Iteration", "Previous Root", "Root", "f(x)", "f'(x)", "f''(x)",
+                                                 "Correct Digits", "Relative Error", "Absolute Error"], tablefmt="grid")
+            steps.insert(0,
+                         f"\nModified Newton-Raphson method failed to solve this function with max iterations: {max_iterations}\n")
+            return x_new, "\n".join(steps), table_str, i + 1, correct_digits, relative_error, absolute_error
 
         x_new = round_significant(x - ((f * f_dash) / denominator), significant_figures)
         

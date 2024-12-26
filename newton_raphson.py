@@ -89,7 +89,7 @@ def newton_raphson(function: ProcessFunction, max_iterations=50, error_tol=1e-5,
         )
 
         if absolute_error < error_tol or relative_error < error_tol:
-            break
+           return end()
 
     steps.insert(0, "Newton failed to solve this function (Diverge)\n")
     return end()
