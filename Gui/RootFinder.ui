@@ -681,7 +681,7 @@ QComboBox QAbstractItemView {
          </item>
          <item>
           <property name="text">
-           <string>Modifed Newton-Raphson</string>
+           <string>Modified Newton-Raphson</string>
           </property>
          </item>
          <item>

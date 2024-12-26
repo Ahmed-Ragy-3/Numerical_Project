@@ -115,11 +115,12 @@ class RootFinderPage(QtWidgets.QMainWindow):
         xmax = self.graphy.text()
         try:
             self.solver.set_function(eqn)
+            self.solver.set_approach(self.method)
             if xmin.isdigit() and xmax.isdigit():
                 self.solver.plot(float(xmin),float(xmax))
             else:
                 self.solver.plot()
-        except Exception as e:
+        except ValueError as e:
             QtWidgets.QMessageBox.warning(self, "Input Error"," Invalid Function")
             return
 
@@ -127,9 +128,10 @@ class RootFinderPage(QtWidgets.QMainWindow):
         eqn = self.Equation.text()
 
         try:
+            self.solver = Solver()
             self.solver.set_function(eqn)
             self.solver.set_approach(self.method)
-        except Exception as e:
+        except ValueError as e:
             QtWidgets.QMessageBox.warning(self, "Input Error"," : Invalid Function")
             return
 
@@ -160,7 +162,7 @@ class RootFinderPage(QtWidgets.QMainWindow):
             try:
                 self.openSolutionWindow(self.solver.solve())
             except Exception as e:
-                QtWidgets.QMessageBox.warning(self, "Input Error", " : Solve error")
+                QtWidgets.QMessageBox.warning(self, "Input Error", str(e))
                 return
         else:
             if not isFloat(upper):
@@ -169,8 +171,8 @@ class RootFinderPage(QtWidgets.QMainWindow):
             self.solver.set_initial_guess_1(float(upper))
             try:
                 self.openSolutionWindow(self.solver.solve())
-            except ValueError as e:
-                QtWidgets.QMessageBox.warning(self, "Input Error", " : Solve error")
+            except Exception as e:
+                QtWidgets.QMessageBox.warning(self, "Input Error", f"{e}")
                 return
 
     def handlePlotSteps(self):

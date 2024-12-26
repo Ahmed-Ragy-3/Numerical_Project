@@ -69,7 +69,16 @@ class Solver:
    # the boundaries need to be changed
    def plot(self, low=-10, high=10):
       if self.function is not None:
-         self.function.plot_function(low, high, [])
+         if(self.approach == "Fixed-Point"):
+            print("fuck offfff")
+            liness = []
+            liness.append([-1000,-1000,1000,1000])
+            self.function.plot_function(low,high,liness)
+         else:
+            print("hello mina my friend")
+            self.function.plot_function(low, high, [])
+
+
    
    def plot_solution(self, low=-10, high=10):
       if self.lines == None:
@@ -79,18 +88,18 @@ class Solver:
 
    def solve(self):
       # delete me
-      # print(self.approach)
-      # print(type(self.approach))
-      # print(self.initial_guess_1)
-      # print(type(self.initial_guess_1))
-      # print(self.initial_guess_2)
-      # print(type(self.initial_guess_2))
-      # print(self.max_iterations)
-      # print(type(self.max_iterations))
-      # print(self.significant_figures)
-      # print(type(self.significant_figures))
-      # print(self.tolerance)
-      # print(type(self.tolerance))
+      print(self.approach)
+      print(type(self.approach))
+      print(self.initial_guess_1)
+      print(type(self.initial_guess_1))
+      print(self.initial_guess_2)
+      print(type(self.initial_guess_2))
+      print(self.max_iterations)
+      print(type(self.max_iterations))
+      print(self.significant_figures)
+      print(type(self.significant_figures))
+      print(self.tolerance)
+      print(type(self.tolerance))
 
       root = None
       steps = None
@@ -117,7 +126,7 @@ class Solver:
             case "False-Position":
                answer, lines = false_position_method(*params, self.initial_guess_1, self.initial_guess_2)
                self.lines = lines
-            case "Fixed-point":
+            case "Fixed-Point":
                answer, lines = fixed_point(*params, self.initial_guess_1)
                self.lines = lines
             
@@ -137,6 +146,7 @@ class Solver:
          end_time = time.perf_counter()
 
          solution = ""
+         solution+= self.approach+"\n"
          solution += f"Root: {root}\n"
          solution += f"Iterations: {iterations_done}\n"
          solution += f"Correct Digits: {correct_digits}\n"
@@ -152,7 +162,7 @@ class Solver:
          return solution
 
       except SympifyError as e:
-         raise ValueError(f"error 1{e}.")
+         raise ValueError(f"{e}.")
       
       # except ValueError as e:
       #    raise ValueError(f"{e}.")
@@ -178,18 +188,19 @@ if __name__ == "__main__":
       solver = Solver()
 
       # solver.set_function(test_cases[4])
-      solver.set_function("sqrt((1.7*x+2.5) / 0.9)")
+      solver.set_function("exp(-x)")
+      solver.set_approach("Fixed-Point")
 
-      # solver.plot(-10, 10)
+      solver.plot(-10, 10)
 
       # solver.set_approach("Bisection")
       # solver.set_approach("False-Position")
-      solver.set_approach("Fixed-point")
+
       # solver.set_approach("Original Newton-Raphson")
       # solver.set_approach("Modified Newton-Raphson")
       # solver.set_approach("Secant")
       
-      solver.set_initial_guess_1(4)
+      solver.set_initial_guess_1(0.4)
       solver.set_initial_guess_2(3.0416)
       solver.set_significant_figures(5)
       solver.set_max_iterations(50)
@@ -200,7 +211,7 @@ if __name__ == "__main__":
       solver.plot_solution(-10, 10)
 
       print(solution)
-   except Exception as e:
+   except ValueError as e:
       print(f"An error occurred: {e}")
       
    # except ValueError as e:

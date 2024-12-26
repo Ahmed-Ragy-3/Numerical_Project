@@ -116,11 +116,11 @@ def false_position_method(function: ProcessFunction, max_iterations=50, error=0.
 
         previous_root = root
 
-    steps.append(f"Maximum iterations reached. Root not found within {max_iterations} iterations.")
+    #steps.append(f"Maximum iterations reached. Root not found within {max_iterations} iterations.")
     table_str = tabulate(table, headers=["Iteration", "Low", "High", "Root", "Relative Error", "Absolute Error",
                                          "function(root)"], tablefmt="grid")
-    
-    return (root, "\n".join(steps), table_str, iteration, correct_digits, relative_error, absolute_error), lines
+
+    return (root, "\n".join(steps),f"Maximum iterations reached. Root not found within {max_iterations} iterations.\n" + table_str, iteration, correct_digits, relative_error, absolute_error), lines
 
     
 

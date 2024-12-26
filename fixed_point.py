@@ -77,7 +77,7 @@ def fixed_point(function: ProcessFunction, max_iterations=50, error_tol=1e-5,
             ]
         )
         
-        if relative_error <= error_tol:
+        if relative_error < error_tol:
             table_str = tabulate(table, headers=["Iteration", "xᵢ", "g(xᵢ)","xᵢ₊₁",
                                                  "Absolute Error", "Relative Error", "Correct Digits"], tablefmt="grid")
             lines.append([-1000, -1000, 1000, 1000])
