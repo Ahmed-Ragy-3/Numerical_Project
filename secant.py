@@ -105,7 +105,8 @@ def secant(function: ProcessFunction, max_iterations=50, error_tol=1e-5,
          )
          return (current_root, "\n".join(steps), "Secant Method failed to converge within the maximum number of iterations.\n" + table_str, i + 1, correct_digits, relative_error, absolute_error), lines
 
-      lines.append([previous_root, f_xi_minus_1, following_root, f_xi_plus_1])
+      # lines.append([previous_root, f_xi_minus_1, following_root, f_xi_plus_1])
+      
 
       absolute_error = abs(following_root - current_root)
       absolute_error = round_significant(absolute_error, significant_figures)
@@ -140,6 +141,9 @@ def secant(function: ProcessFunction, max_iterations=50, error_tol=1e-5,
             round_significant(absolute_error, significant_figures),
             round_significant(relative_error, significant_figures)
         ])
+
+      lines.append([previous_root, f_xi_minus_1, current_root, f_xi])
+      lines.append([current_root, f_xi, following_root, 0])
       
       previous_root = current_root
       current_root = following_root
