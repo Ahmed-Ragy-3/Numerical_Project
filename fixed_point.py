@@ -30,7 +30,7 @@ def fixed_point(function: ProcessFunction, max_iterations=50, error_tol=1e-5,
     for i in range(max_iterations):
         steps.append(f"Iteration {i+1}")
         root = next_root
-        print("xᵢ = ", root)
+        # print("xᵢ = ", root)
         g = function.evaluate(root, significant_figures)
         steps.append(f"xᵢ₊₁ = g({root}) = {g}")
         next_root = g
@@ -52,15 +52,16 @@ def fixed_point(function: ProcessFunction, max_iterations=50, error_tol=1e-5,
         
         if relative_error == 0:
             correct_digits = significant_figures
-            # return
         else:
-           correct_digits = np.floor(2 - log(2 * abs(relative_error)))
+            print("\nhi relative: ", )
+            print("\nhello correct: ", 2 - log(2 * abs(relative_error), 10))
+            correct_digits = np.floor(2 - log(2 * abs(relative_error), 10))
+            print("\nhi floor: ", correct_digits)
            
-        # correct_digits = 2 - log(2 * abs(relative_error))
         if correct_digits < 0:
             correct_digits = 0
         
-        steps.append(f"Correct Digits = floor(2 - log(2 * abs({relative_error})) = {correct_digits}")
+        steps.append(f"Correct Digits = floor(2 - log(2 * abs({relative_error}, 10)) = {correct_digits}")
 
         steps.append("\n")
         
@@ -76,18 +77,26 @@ def fixed_point(function: ProcessFunction, max_iterations=50, error_tol=1e-5,
             ]
         )
         
-        if relative_error < error_tol:
+        if relative_error <= error_tol:
             table_str = tabulate(table, headers=["Iteration", "xᵢ", "g(xᵢ)","xᵢ₊₁",
                                                  "Absolute Error", "Relative Error", "Correct Digits"], tablefmt="grid")
-            lines.append([0, 0, 10, 10])
-            #function.plot_function(-10, 10, lines, method="Fixed Point")
+            lines.append([-1000, -1000, 1000, 1000])
             return (next_root, "\n".join(steps), table_str, i+1, correct_digits, relative_error, absolute_error), lines
-            #root, steps, table, iterations_done, correct_digits, relative_error, absolute_error
         
-        if abs(next_root) > 1e10:  # Prevent overflow
-            # steps = "\n".join(steps)
-            raise OverflowError("Value too large, possible divergence.\n\n", steps)
-    raise ValueError(f"Fixed Point method failed to solve this function with max iterations : {max_iterations} ")
+
+        if abs(next_root) > 1e10:
+            table_str = tabulate(table, headers=["Iteration", "xᵢ", "g(xᵢ)","xᵢ₊₁",
+                                                 "Absolute Error", "Relative Error", "Correct Digits"], tablefmt="grid")
+            lines.append([-1000, -1000, 1000, 1000])
+            return (next_root, "\n".join(steps), "Fixed Point method failed to solve this function (divergence).\n" + table_str, i+1, correct_digits, relative_error, absolute_error), lines
+
+
+    table_str = tabulate(table, headers=["Iteration", "xᵢ", "g(xᵢ)","xᵢ₊₁",
+                                                 "Absolute Error", "Relative Error", "Correct Digits"], tablefmt="grid")
+    lines.append([-1000, -1000, 1000, 1000])
+    return (next_root, "\n".join(steps), "Fixed Point method failed to solve this function with this max iterations (divergence).\n\n" + table_str, i+1, correct_digits, relative_error, absolute_error), lines
+
+
 
 def main():
     

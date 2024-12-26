@@ -56,10 +56,10 @@ def modified_raphson(pf: ProcessFunction, max_iterations=50, error=1e-5,
             steps.append(f"Relative error = abs(({x_new} - {x}) / {x_new}) * 100 % = {relative_error}%")
             
             if 2 * abs(relative_error) > 0:
-                correct_digits = floor(2 - log(2 * abs(relative_error)))
+                correct_digits = floor(2 - log(2 * abs(relative_error), 10))
+                correct_digits = max(correct_digits, 0)
             else:
-                # correct_digits = float('inf')
-                correct_digits = 0
+                correct_digits = significant_figures
                 
         
         steps.append("\n")

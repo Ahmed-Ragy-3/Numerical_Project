@@ -39,7 +39,7 @@ def bisection_method(function: ProcessFunction, max_iterations=50, error=0.00001
     
     # print(function)
     # print(max_iterations)
-    print("e ", error)
+    # print("e ", error)
     # print(significant_figures)
     # print(low)
     # print(high)
@@ -60,10 +60,10 @@ def bisection_method(function: ProcessFunction, max_iterations=50, error=0.00001
         raise ValueError(f"It can't be solved by bisection method, there f({low}) * f({high}) > 0")
 
     steps.append("Which is less than 0. So there is at least one root between the bounds.")
-    print(error)
+    # print(error)
     # steps.append(f"the number of iterations needed is = ceil(log2((high - low) / error)) = ceil(log2(({high} - {low}) / {error})) = {int(np.ceil(np.log2((high - low) / error)))}")
     correct_digits = 0
-    print(low)
+    # print(low)
     for iteration in range(1, max_iterations + 1):
         low = round_significant(low, significant_figures)
         high = round_significant(high, significant_figures)

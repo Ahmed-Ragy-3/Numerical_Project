@@ -21,7 +21,6 @@ class Solver:
    def __init__(self):
 
       self.function = None
-      
       self.approach = None
       self.initial_guess_1 = None
       self.initial_guess_2 = None
@@ -63,7 +62,7 @@ class Solver:
       self.max_iterations = max_iterations
 
    def set_tolerance(self, tolerance):
-      if tolerance <= 0:
+      if tolerance < 0:
          raise ValueError("Error tolerance must be greater than 0.")
       self.tolerance = tolerance
 
@@ -96,7 +95,6 @@ class Solver:
       root = None
       steps = None
       table = None
-      graph = None
       iterations_done = None
       correct_digits = None
       relative_error = None
@@ -115,7 +113,7 @@ class Solver:
          match self.approach:
             case "Bisection":
                answer, lines = bisection_method(*params, self.initial_guess_1, self.initial_guess_2)
-               print("--------------------------")
+               self.lines = lines
             case "False-Position":
                answer, lines = false_position_method(*params, self.initial_guess_1, self.initial_guess_2)
                self.lines = lines
@@ -131,10 +129,10 @@ class Solver:
                answer = modified_raphson(*params, self.initial_guess_1)
             
             case "Secant":
-               answer = secant(*params, self.initial_guess_1, self.initial_guess_2)
+               answer, lines = secant(*params, self.initial_guess_1, self.initial_guess_2)
+               self.lines = lines
 
          root, steps, table, iterations_done, correct_digits, relative_error, absolute_error = answer
-         # root, "\n".join(steps), "\n" + table_str, i + 1, correct_digits, relative_error, absolute_error, lines
 
          end_time = time.perf_counter()
 
@@ -144,9 +142,9 @@ class Solver:
          solution += f"Correct Digits: {correct_digits}\n"
          solution += f"Relative Error: {relative_error}\n"
          solution += f"Absolute Error: {absolute_error}\n"
+         solution += f"Time taken: {(end_time - start_time) * 1000:.8f} ms\n"
          solution += f"{table}\n"
          solution += f"{steps}\n\n"
-         solution += f"Time taken: {(end_time - start_time) * 1000:.8f} ms\n"
 
          # print(steps)
          # return solution
@@ -173,32 +171,33 @@ test_cases = [
 
 if __name__ == "__main__":
    
-   function_string = test_cases[5]
-   function_string = "(x^2 - 2)"
+   # function_string = test_cases[5]
+   # function_string = "sqrt((1.7*x+2.5) / 0.9)"
 
    try:
       solver = Solver()
 
-      solver.set_function("x ^ 3 - x ^ 2 - 10 * x + 7")
+      # solver.set_function(test_cases[4])
+      solver.set_function("sqrt((1.7*x+2.5) / 0.9)")
 
-      #solver.plot(-10, 10)
+      # solver.plot(-10, 10)
 
       # solver.set_approach("Bisection")
-      # solver.set_approach("False Position")
-      solver.set_approach("Newton Raphson")
-      # solver.set_approach("Newton Raphson")
-      # solver.set_approach("Modified Newton Raphson")
+      # solver.set_approach("False-Position")
+      solver.set_approach("Fixed-point")
+      # solver.set_approach("Original Newton-Raphson")
+      # solver.set_approach("Modified Newton-Raphson")
       # solver.set_approach("Secant")
       
-      solver.set_initial_guess_1(3)
-      solver.set_initial_guess_2(5)
+      solver.set_initial_guess_1(4)
+      solver.set_initial_guess_2(3.0416)
       solver.set_significant_figures(5)
-      solver.set_max_iterations(20)
+      solver.set_max_iterations(50)
       solver.set_tolerance(1e-5)
       
       solution = solver.solve()
-      # print(solution[0])
-      #solver.plot_solution(-10, 10)
+
+      solver.plot_solution(-10, 10)
 
       print(solution)
    except Exception as e:

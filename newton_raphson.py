@@ -56,7 +56,7 @@ def newton_raphson(function: ProcessFunction, max_iterations=50, error_tol=1e-5,
       function that returns all the computed data
       """
       table_str = tabulate(table, headers=["Iteration", "xᵢ₋₁", "xᵢ", "f(xᵢ)", "f'(xᵢ)",
-                                          "Absolute Error", "Relative Error"], tablefmt="grid")
+                                          "Absolute Error", "Relative Error", "Correct Digits"], tablefmt="grid")
       
       # function.plot_function(-3, 3, lines, method="Newton Raphson")
       # root, steps, table, iterations_done, correct_digits, relative_error, absolute_error
@@ -125,7 +125,16 @@ def newton_raphson(function: ProcessFunction, max_iterations=50, error_tol=1e-5,
          return end()
       
       # Calculate correct significant digits for root 
-      correct_digits = np.floor(2 - log(2 * abs(relative_error)))
+      # Ensure relative_error is positive and non-zero to avoid math domain errors
+      # if relative_error <= 0:
+      #    raise ValueError("Relative error must be a positive non-zero value.")
+
+      # Calculate the correct digits
+      correct_digits = np.floor(2 - math.log10(2 * abs(relative_error)))
+
+      # Handle the case where correct_digits might be negative
+      if correct_digits < 0:
+         correct_digits = 0
       steps.append(f"{'No Correct Digits' if correct_digits <= 0 else f'Number of Correct Significant Digits = {correct_digits}'}")
       # steps.append(f"the number of correct significant digits = floor(2 - log10(2 * absolute_error)) = 
       # floor(2 - log10(2 * {absolute_error})) = {int(np.floor(2 - np.log10(2 * absolute_error)))}")
@@ -140,7 +149,8 @@ def newton_raphson(function: ProcessFunction, max_iterations=50, error_tol=1e-5,
             f"{f}",
             f"{f_dash}",
             f"{absolute_error}" if relative_error != float("inf") else "_",
-            f"{relative_error}%" if relative_error != float("inf") else "_"
+            f"{relative_error}%" if relative_error != float("inf") else "_",
+            f"{correct_digits}"
          ]
       )
    

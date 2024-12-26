@@ -186,10 +186,10 @@ class ProcessFunction:
            low (float): The lower bound for plotting.
            high (float): The upper bound for plotting.
        """
-       print(low)
-       print(high)
-       print(lines)
-       print(method)
+      #  print(low)
+      #  print(high)
+      #  print(lines)
+      #  print(method)
        # Evaluate the function at x values
        func = self.evaluateFunction()
        x_vals = np.linspace(low, high, 2000)

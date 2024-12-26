@@ -97,6 +97,14 @@ def secant(function: ProcessFunction, max_iterations=50, error_tol=1e-5,
 
       f_xi_plus_1 = function.evaluate(following_root, significant_figures)
 
+      if abs(following_root > 1e10):
+         table_str = tabulate(
+         table,
+         headers=["Iteration", "xᵢ₋₁", "xᵢ", "f(xᵢ₋₁)", "f(xᵢ)", "xᵢ₊₁", "Absolute Error", "Relative Error"],
+         tablefmt="grid"
+         )
+         return (current_root, "\n".join(steps), "Secant Method failed to converge within the maximum number of iterations.\n" + table_str, i + 1, correct_digits, relative_error, absolute_error), lines
+
       lines.append([previous_root, f_xi_minus_1, following_root, f_xi_plus_1])
 
       absolute_error = abs(following_root - current_root)
@@ -111,7 +119,7 @@ def secant(function: ProcessFunction, max_iterations=50, error_tol=1e-5,
       if relative_error <= 0:
          correct_digits = significant_figures
       else:
-         correct_digits = math.floor(2 - math.log10(2 * relative_error / 100))
+         correct_digits = math.floor(2 - math.log10(2 * relative_error))
          correct_digits = max(correct_digits, 0)
       
       steps.append(f"x[i-1] = {previous_root}, x[i] = {current_root}")
@@ -144,10 +152,16 @@ def secant(function: ProcessFunction, max_iterations=50, error_tol=1e-5,
             tablefmt="grid"
          )
          #function.plot_function(-10, 10, lines, method="Secant")
-         return current_root, "\n".join(steps), table_str, i + 1, correct_digits, relative_error, absolute_error
+         return (current_root, "\n".join(steps), table_str, i + 1, correct_digits, relative_error, absolute_error), lines
          #root, steps, table, iterations_done, correct_digits, relative_error, absolute_error
 
-   raise ValueError("Secant Method failed to converge within the maximum number of iterations.")
+   table_str = tabulate(
+      table,
+      headers=["Iteration", "xᵢ₋₁", "xᵢ", "f(xᵢ₋₁)", "f(xᵢ)", "xᵢ₊₁", "Absolute Error", "Relative Error"],
+      tablefmt="grid"
+   )
+   return (current_root, "\n".join(steps), "Secant Method failed to converge within the maximum number of iterations.\n" + table_str, i + 1, correct_digits, relative_error, absolute_error), lines
+   # raise ValueError("Secant Method failed to converge within the maximum number of iterations.")
       
       
 def main():
