@@ -53,10 +53,7 @@ def fixed_point(function: ProcessFunction, max_iterations=50, error_tol=1e-5,
         if relative_error == 0:
             correct_digits = significant_figures
         else:
-            print("\nhi relative: ", )
-            print("\nhello correct: ", 2 - log(2 * abs(relative_error), 10))
             correct_digits = np.floor(2 - log(2 * abs(relative_error), 10))
-            print("\nhi floor: ", correct_digits)
            
         if correct_digits < 0:
             correct_digits = 0

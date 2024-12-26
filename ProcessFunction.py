@@ -65,7 +65,7 @@ class ProcessFunction:
    # def plot_function(self, low, high, lines, method="Function"):
    #    """
    #    Plots the graph using Plotly.
-   #
+   
    #    Parameters:
    #       lines (list): List of [low, fun_low, high, fun_high] at each iteration.
    #       low (float): The lower bound for plotting.
@@ -80,12 +80,12 @@ class ProcessFunction:
    #    x_vals = np.linspace(low, high, 2000)
    #    # x_vals = np.linspace(low, high, 20)
    #    y_vals = func(x_vals)
-   #
+   
    #    fig = go.Figure()
-   #
+   
    #    # Plot the main function
    #    fig.add_trace(go.Scatter(x=x_vals, y=y_vals, mode='lines', name="Function", line=dict(color='blue')))
-   #
+   
    #    # Plot interpolation lines
    #    for line in lines:
    #       low_point, fun_low_point, high_point, fun_high_point = line
@@ -96,23 +96,23 @@ class ProcessFunction:
    #          name=f"Interpolation: {low_point} - {high_point}",
    #          line=dict(width=2)
    #       ))
-   #
+   
    #    # Add reference lines at x=0 and y=0
    #    fig.add_trace(go.Scatter(x=[low, high], y=[0, 0], mode='lines', name='y=0', line=dict(color='black', width=2)))
    #    fig.add_trace(go.Scatter(x=[0, 0], y=[min(y_vals), max(y_vals)], mode='lines', name='x=0', line=dict(color='black', width=1)))
-   #
+   
    #    # Adjust the range for better zooming
    #    # y_range1 = [min(y_vals) - abs(min(y_vals)) * 0.1, max(y_vals) + abs(max(y_vals)) * 0.1]  # Add some padding
    #    # x_range1 = [low - abs(low) * 0.1, high + abs(high) * 0.1]
    #    FACTOR = 2 / 3
    #    x_range1 = [low * FACTOR , high * FACTOR]
-   #
+   
    #    # print(x_range1)
    #    # print(y_range1)
-   #
+   
    #    # x_range1 = 10
    #    y_range1 = x_range1
-   #
+   
    #    # Update layout
    #    fig.update_layout(
    #       title=f"{method}",
@@ -127,14 +127,14 @@ class ProcessFunction:
    #       yaxis=dict(scaleanchor="x", showgrid=True, gridcolor='lightgray', range=y_range1),
    #       font=dict(color='black')
    #    )
-   #
+   
    #    fig.show()
 
 
    # def plot_function(self, low, high, lines, method="Function"):
    #    """
    #    Plots the graph using matplotlib.
-   #
+   
    #    Parameters:
    #       lines (list): List of [low, fun_low, high, fun_high] at each iteration.
    #       low (float): The lower bound for plotting.
@@ -144,27 +144,27 @@ class ProcessFunction:
    #    print(high)
    #    print(lines)
    #    print(method)
-   #
+   
    #    # Evaluate the function at x values
    #    func = self.evaluateFunction()
    #    x_vals = np.linspace(low, high, 5000)
    #    y_vals = func(x_vals)
-   #
+   
    #    plt.figure(figsize=(10, 6))
-   #
+   
    #    # Plot the main function
    #    plt.plot(x_vals, y_vals, label="Function", color='blue', linewidth=2)
-   #
+   
    #    # Plot interpolation lines
    #    for line in lines:
    #       low_point, fun_low_point, high_point, fun_high_point = line
    #       plt.plot([low_point, high_point], [fun_low_point, fun_high_point],
    #                label=f"Interpolation: {low_point:.2f} - {high_point:.2f}", linewidth=2)
-   #
+   
    #    # Add reference lines at x=0 and y=0
    #    plt.axhline(0, color='black', linewidth=1, linestyle='--', label="y=0")
    #    plt.axvline(0, color='black', linewidth=1, linestyle='--', label="x=0")
-   #
+   
    #    # Add labels, title, and legend
    #    plt.title(f"{method}", fontsize=14)
    #    plt.xlabel("x", fontsize=12)
@@ -172,60 +172,60 @@ class ProcessFunction:
    #    plt.grid(True, which='both', linestyle='--', linewidth=0.5)
    #    plt.legend()
    #    plt.tight_layout()
-   #
+   
    #    # Show the plot in a window
    #    plt.show()
 
 
    def plot_function(self, low, high, lines, method="Function"):
-       """
-       Plots the graph using matplotlib.
+      """
+      Plots the graph using matplotlib.
 
-       Parameters:
-           lines (list): List of [low, fun_low, high, fun_high] at each iteration.
-           low (float): The lower bound for plotting.
-           high (float): The upper bound for plotting.
-       """
+      Parameters:
+         lines (list): List of [low, fun_low, high, fun_high] at each iteration.
+         low (float): The lower bound for plotting.
+         high (float): The upper bound for plotting.
+      """
       #  print(low)
       #  print(high)
       #  print(lines)
       #  print(method)
-       # Evaluate the function at x values
-       func = self.evaluateFunction()
-       x_vals = np.linspace(low, high, 2000)
-       y_vals = func(x_vals)
+      # Evaluate the function at x values
+      func = self.evaluateFunction()
+      x_vals = np.linspace(low, high, 2000)
+      y_vals = func(x_vals)
 
-       # Create the plot
-       plt.figure(figsize=(10, 6))
+      # Create the plot
+      plt.figure(figsize=(10, 6))
 
-       # Plot the main function
-       plt.plot(x_vals, y_vals, label="Function", color='blue')
+      # Plot the main function
+      plt.plot(x_vals, y_vals, label="Function", color='blue')
 
-       # Plot interpolation lines
-       for line in lines:
-           low_point, fun_low_point, high_point, fun_high_point = line
-           plt.plot(
-               [low_point, high_point],
-               [fun_low_point, fun_high_point],
-               label=f"Interpolation: {low_point} - {high_point}",
-               linewidth=2
-           )
+      # Plot interpolation lines
+      for line in lines:
+         low_point, fun_low_point, high_point, fun_high_point = line
+         plt.plot(
+            [low_point, high_point],
+            [fun_low_point, fun_high_point],
+            # label=f"Interpolation: {low_point} - {high_point}",
+            linewidth=2
+         )
 
-       # Add reference lines
-       plt.axhline(0, color='black', linewidth=1, linestyle='--', label='y=0')
-       plt.axvline(0, color='black', linewidth=1, linestyle='--', label='x=0')
+      # Add reference lines
+      plt.axhline(0, color='black', linewidth=1, linestyle='--', label='y=0')
+      plt.axvline(0, color='black', linewidth=1, linestyle='--', label='x=0')
 
-       # Set ranges with some padding
-       FACTOR = 2 / 3
-       plt.xlim(low * FACTOR, high * FACTOR)
-       plt.ylim(low * FACTOR, high * FACTOR)
+      # Set ranges with some padding
+      FACTOR = 2 / 3
+      plt.xlim(low * FACTOR, high * FACTOR)
+      plt.ylim(low * FACTOR, high * FACTOR)
 
-       # Add labels, title, and legend
-       plt.title(f"{method}")
-       plt.xlabel("x")
-       plt.ylabel("f(x)")
-       plt.legend()
-       plt.grid(color='lightgray', linestyle='--', linewidth=0.5)
+      # Add labels, title, and legend
+      plt.title(f"{method}")
+      plt.xlabel("x")
+      plt.ylabel("f(x)")
+      plt.legend()
+      plt.grid(color='lightgray', linestyle='--', linewidth=0.5)
 
-       # Show the plot
-       plt.show()
+      # Show the plot
+      plt.show()

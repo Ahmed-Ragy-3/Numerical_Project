@@ -70,12 +70,10 @@ class Solver:
    def plot(self, low=-10, high=10):
       if self.function is not None:
          if(self.approach == "Fixed-Point"):
-            print("fuck offfff")
             liness = []
-            liness.append([-1000,-1000,1000,1000])
-            self.function.plot_function(low,high,liness)
+            liness.append([-1000, -1000, 1000, 1000])
+            self.function.plot_function(low, high, liness)
          else:
-            print("hello mina my friend")
             self.function.plot_function(low, high, [])
 
 
@@ -88,18 +86,18 @@ class Solver:
 
    def solve(self):
       # delete me
-      print(self.approach)
-      print(type(self.approach))
-      print(self.initial_guess_1)
-      print(type(self.initial_guess_1))
-      print(self.initial_guess_2)
-      print(type(self.initial_guess_2))
-      print(self.max_iterations)
-      print(type(self.max_iterations))
-      print(self.significant_figures)
-      print(type(self.significant_figures))
-      print(self.tolerance)
-      print(type(self.tolerance))
+      # print(self.approach)
+      # print(type(self.approach))
+      # print(self.initial_guess_1)
+      # print(type(self.initial_guess_1))
+      # print(self.initial_guess_2)
+      # print(type(self.initial_guess_2))
+      # print(self.max_iterations)
+      # print(type(self.max_iterations))
+      # print(self.significant_figures)
+      # print(type(self.significant_figures))
+      # print(self.tolerance)
+      # print(type(self.tolerance))
 
       root = None
       steps = None
@@ -181,27 +179,27 @@ test_cases = [
 
 if __name__ == "__main__":
    
-   # function_string = test_cases[5]
+   # function_string = test_cases[2]
    # function_string = "sqrt((1.7*x+2.5) / 0.9)"
 
    try:
       solver = Solver()
 
-      # solver.set_function(test_cases[4])
-      solver.set_function("exp(-x)")
-      solver.set_approach("Fixed-Point")
+      # solver.set_function(test_cases[2])
+      solver.set_function("x^2 - 1")
 
       solver.plot(-10, 10)
 
       # solver.set_approach("Bisection")
       # solver.set_approach("False-Position")
 
-      # solver.set_approach("Original Newton-Raphson")
+      # solver.set_approach("Fixed-Point")
+      solver.set_approach("Original Newton-Raphson")
       # solver.set_approach("Modified Newton-Raphson")
       # solver.set_approach("Secant")
       
-      solver.set_initial_guess_1(0.4)
-      solver.set_initial_guess_2(3.0416)
+      solver.set_initial_guess_1(0)
+      solver.set_initial_guess_2(1.5)
       solver.set_significant_figures(5)
       solver.set_max_iterations(50)
       solver.set_tolerance(1e-5)

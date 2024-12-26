@@ -99,9 +99,9 @@ def secant(function: ProcessFunction, max_iterations=50, error_tol=1e-5,
 
       if abs(following_root > 1e10):
          table_str = tabulate(
-         table,
-         headers=["Iteration", "xᵢ₋₁", "xᵢ", "f(xᵢ₋₁)", "f(xᵢ)", "xᵢ₊₁", "Absolute Error", "Relative Error"],
-         tablefmt="grid"
+            table,
+            headers=["Iteration", "xᵢ₋₁", "xᵢ", "f(xᵢ₋₁)", "f(xᵢ)", "xᵢ₊₁", "Absolute Error", "Relative Error"],
+            tablefmt="grid"
          )
          return (current_root, "\n".join(steps), "Secant Method failed to converge within the maximum number of iterations.\n" + table_str, i + 1, correct_digits, relative_error, absolute_error), lines
 

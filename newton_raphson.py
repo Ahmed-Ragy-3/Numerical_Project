@@ -29,6 +29,7 @@ def newton_raphson(function: ProcessFunction, max_iterations=50, error_tol=1e-5,
     steps = []
     lines = []
 
+    absolute_error = float('inf')
     relative_error = float('inf')
     table_str = ""
     correct_digits = 0
@@ -41,7 +42,7 @@ def newton_raphson(function: ProcessFunction, max_iterations=50, error_tol=1e-5,
     for i in range(max_iterations):
         steps.append(f"Iteration {i + 1}")
         previous_root = root
-        previous_root = round_significant(previous_root,significant_figures)
+        previous_root = round_significant(previous_root, significant_figures)
         print(f"Previous root: {previous_root}")
 
         f = function.evaluate(previous_root, significant_figures)
@@ -49,11 +50,13 @@ def newton_raphson(function: ProcessFunction, max_iterations=50, error_tol=1e-5,
         steps.append(f"f({round_significant(previous_root, significant_figures)}) = {f}")
 
         f_dash = function.evaluate_first_derivative(previous_root, significant_figures)
-        f_dash = round_significant(f_dash,significant_figures)
+        f_dash = round_significant(f_dash, significant_figures)
         steps.append(f"f'({previous_root}) = {f_dash}")
 
         if f_dash == 0:
-            raise ValueError("Newton Raphson cannot solve this method (f'(x) = 0)")
+            steps.insert(0, f"At iteration {i + 1}: Newton Raphson cannot solve this method (f'(x) = 0)\n")
+            return end()
+            # raise ValueError("Newton Raphson cannot solve this method (f'(x) = 0)")
 
         lines.append([root, 0, previous_root, function.evaluate(previous_root)])
         root = round_significant(previous_root - (f / f_dash), significant_figures)
@@ -88,6 +91,7 @@ def newton_raphson(function: ProcessFunction, max_iterations=50, error_tol=1e-5,
         if absolute_error < error_tol or relative_error < error_tol:
             break
 
+    steps.insert(0, "Newton failed to solve this function (Diverge)\n")
     return end()
 
 
