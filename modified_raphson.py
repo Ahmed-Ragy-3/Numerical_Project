@@ -22,6 +22,7 @@ def modified_raphson(pf: ProcessFunction, max_iterations=50, error=1e-5,
     steps = []
     table = []
     correct_digits = 0
+    table_str = ""
 
     relative_error = float('inf')
     for i in range(max_iterations):
@@ -83,7 +84,13 @@ def modified_raphson(pf: ProcessFunction, max_iterations=50, error=1e-5,
 
         x = x_new
     
-    raise ValueError(f"Modified Newton-Raphson method failed to solve this function with max iterations: {max_iterations}")
+    steps.append(f"Correct Digits = {correct_digits}")
+    table_str = tabulate(table, headers=["Iteration", "Previous Root", "Root", "f(x)", "f'(x)", "f''(x)",
+                                        "Correct Digits", "Relative Error", "Absolute Error"], tablefmt="grid")
+    steps.insert(0, f"\nModified Newton-Raphson method failed to solve this function with max iterations: {max_iterations}\n")
+    return x_new, "\n".join(steps), table_str,i + 1, correct_digits, relative_error, absolute_error
+    
+    # raise ValueError(f"Modified Newton-Raphson method failed to solve this function with max iterations: {max_iterations}")
 
     
 def main():
