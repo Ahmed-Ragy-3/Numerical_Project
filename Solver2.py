@@ -8,14 +8,14 @@ from secant import secant
 from sympy import SympifyError
 import time
 
-# names = {
-#    "raphson" : "Original Newton-Raphson",
-#    "modified_raphson" : "Original Newton-Raphson",
-#    "raphson" : "Original Newton-Raphson",
-#    "raphson" : "Original Newton-Raphson",
-#    "raphson" : "Original Newton-Raphson",
-#    "raphson" : "Original Newton-Raphson",
-# }
+names = {
+   "raphson" : "Original Newton-Raphson",
+   "modified_raphson" : "Original Newton-Raphson",
+   "raphson" : "Original Newton-Raphson",
+   "raphson" : "Original Newton-Raphson",
+   "raphson" : "Original Newton-Raphson",
+   "raphson" : "Original Newton-Raphson",
+}
 
 class Solver:
    def __init__(self):
@@ -190,7 +190,7 @@ if __name__ == "__main__":
 
       solver.plot(-10, 10)
 
-      # solver.set_approach("Bisection")
+      solver.set_approach("False-Position")
       # solver.set_approach("False-Position")
 
       # solver.set_approach("Fixed-Point")
